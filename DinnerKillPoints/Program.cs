@@ -139,6 +139,13 @@ namespace DinnerKillPoints
                 Console.WriteLine("\t{0} -> {1}: {2}", d.Debtor, d.Creditor, d.Amount);
             }
             Console.WriteLine();
+
+            Console.WriteLine("Greatest Debtors");
+            foreach (var tup in people.Select(p => new { Debtor = p, Amount = netMoney.Where(d => d.Debtor == p).Sum(d => d.Amount) }).OrderByDescending(obj => obj.Amount))
+            {
+                Console.WriteLine("\t{0}: {1}", tup.Debtor, tup.Amount);
+            }
+            Console.WriteLine();
         }
     }
 }
