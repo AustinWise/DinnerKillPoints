@@ -10,7 +10,7 @@ namespace DkpWeb.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Welcome to ASP.NET MVC!";
+            ViewBag.Message = "Welcome to Dinner Kill Points";
 
             return View();
         }
