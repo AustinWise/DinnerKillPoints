@@ -33,36 +33,6 @@ namespace DinnerKillPoints
         public DateTime When { get; set; }
     }
 
-    class Pair
-    {
-        public Pair(Person p1, Person p2)
-        {
-            if (p1 == null)
-                throw new ArgumentNullException();
-            if (p2 == null)
-                throw new ArgumentNullException();
-            P1 = p1;
-            P2 = p2;
-        }
-
-        public Person P1 { get; private set; }
-        public Person P2 { get; private set; }
-
-        public override bool Equals(object obj)
-        {
-            Pair other = obj as Pair;
-            if (other == null)
-                return false;
-
-            return (other.P1 == this.P1 && other.P2 == this.P2) || (other.P2 == this.P1 && other.P1 == this.P2);
-        }
-
-        public override int GetHashCode()
-        {
-            return P1.GetHashCode() ^ P2.GetHashCode();
-        }
-    }
-
     class Program
     {
         static void Main(string[] args)
