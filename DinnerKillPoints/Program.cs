@@ -5,8 +5,6 @@ using System.Text;
 
 namespace DinnerKillPoints
 {
-    //Additional algorithms needed:
-    // * Find who of a group owes the most money to the rest of the group.
     //Future GUI features:
     // * Let someone pay off another person's debt.
     // * A nice way to split a bill easily.
