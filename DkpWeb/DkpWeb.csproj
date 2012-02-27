@@ -61,13 +61,13 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="DkpData.cs">
-      <DependentUpon>DkpData.dbml</DependentUpon>
+    <Compile Include="Dkp.cs">
+      <DependentUpon>Dkp.dbml</DependentUpon>
     </Compile>
-    <Compile Include="DkpData.designer.cs">
+    <Compile Include="Dkp.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DkpData.dbml</DependentUpon>
+      <DependentUpon>Dkp.dbml</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -135,15 +135,15 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DkpData.dbml">
+    <None Include="Dkp.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>DkpData.designer.cs</LastGenOutput>
+      <LastGenOutput>Dkp.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DkpData.dbml.layout">
-      <DependentUpon>DkpData.dbml</DependentUpon>
+    <None Include="Dkp.dbml.layout">
+      <DependentUpon>Dkp.dbml</DependentUpon>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
