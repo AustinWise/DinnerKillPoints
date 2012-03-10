@@ -74,6 +74,14 @@ namespace DinnerKillPoints
     class Program
     {
         static DkpDataContext db;
+
+        static List<Tuple<Person, Person>> DebtFloaters = new List<Tuple<Person, Person>>();
+        private static void AddDebtFloater(Person p1, Person p2)
+        {
+            DebtFloaters.Add(new Tuple<Person, Person>(p1, p2));
+            DebtFloaters.Add(new Tuple<Person, Person>(p2, p1));
+        }
+
         static void Main(string[] args)
         {
             db = new DkpDataContext();
@@ -87,29 +95,34 @@ namespace DinnerKillPoints
             var andrea = GetPerson(7);
             var meredith = GetPerson(8);
 
-            var bs = new BillSpliter("Tied House", new DateTime(2012, 2, 19), maria);
-            bs.Party[austin] = 1130 + 700 + 500;
-            bs.Party[david] = 1335;
-            bs.Party[maria] = 1335;
-            bs.Tax = (int)Math.Round(bs.Party.Sum(p => p.Value) * 0.0875);
-            bs.Tip = (int)Math.Round(0.15 * (bs.Party.Sum(d => d.Value) + bs.Tip));
+            AddDebtFloater(wesley, maria);
+            AddDebtFloater(seanMc, meredith);
+
+            var bs = new BillSpliter("Tied House", DateTime.Now, caspar);
+            bs.Party[austin] = 1100 + 875 + 1745;
+            bs.Party[maria] = 995;
+            bs.Party[caspar] = 700;
+            bs.Party[wesley] = 900 + 100 + 100 + 100 + 150 + 1295;
+            bs.SharedFood = 1745;
+            bs.Tax = 809;
+            bs.Tip = 1500;
             //bs.Save(db);
 
             //var t = new Transaction()
             //{
             //    ID = Guid.NewGuid(),
-            //    Debtor = austin,
-            //    Creditor = andrea,
-            //    Amount = 1630,
+            //    Debtor = caspar,
+            //    Creditor = austin,
+            //    Amount = 1500,
             //    BillID = null,
-            //    Description = "Repayment",
-            //    Created = DateTime.Now,
+            //    Description = "Birthday",
+            //    Created = new DateTime(2012, 03, 06),
             //};
             //db.Transactions.InsertOnSubmit(t);
             //db.SubmitChanges();
 
-            var people = new Person[] { austin, caspar, wesley, david, maria };
-            //var people = db.People.ToArray();
+            //var people = new Person[] { austin, caspar, wesley, david, maria };
+            var people = db.People.ToArray();
 
             TestAlgo(db, people);
 
@@ -184,7 +197,7 @@ namespace DinnerKillPoints
             Console.WriteLine();
 
             Console.WriteLine("Greatest Debtors");
-            foreach (var tup in people.Select(p => new { Debtor = p, Amount = netMoney.Where(d => d.Debtor == p).Sum(d => d.Amount) }).OrderByDescending(obj => obj.Amount))
+            foreach (var tup in people.Select(p => new { Debtor = p, Amount = netMoney.Where(d => d.Debtor == p && !(DebtFloaters.Contains(new Tuple<Person, Person>(p, d.Creditor)))).Sum(d => d.Amount) }).OrderByDescending(obj => obj.Amount))
             {
                 Console.WriteLine("\t{0}: {1:c}", tup.Debtor, tup.Amount / 100d);
             }
