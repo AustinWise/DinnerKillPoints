@@ -27,5 +27,12 @@ namespace DinnerKillPoints
                 return false;
             return other.ID == this.ID;
         }
+
+        //for cycle removal
+        public bool Visited;
+        public void PrepareForCycleTesting()
+        {
+            Visited = false;
+        }
     }
 }
