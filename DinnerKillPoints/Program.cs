@@ -74,6 +74,7 @@ namespace DinnerKillPoints
 
     class Program
     {
+        static bool RemoveCycles = false;
         static DkpDataContext db;
 
         static List<Tuple<Person, Person>> DebtFloaters = new List<Tuple<Person, Person>>();
@@ -95,35 +96,41 @@ namespace DinnerKillPoints
             var seanMc = GetPerson(6);
             var andrea = GetPerson(7);
             var meredith = GetPerson(8);
+            var seanChen = GetPerson(9);
+            var arata = GetPerson(10);
+            var jeff = GetPerson(11);
+            var ryuho = GetPerson(12);
 
             AddDebtFloater(wesley, maria);
             AddDebtFloater(seanMc, meredith);
 
-            var bs = new BillSpliter("Tied House", DateTime.Now, caspar);
-            bs.Party[austin] = 1100 + 875 + 1745;
-            bs.Party[maria] = 995;
-            bs.Party[caspar] = 700;
-            bs.Party[wesley] = 900 + 100 + 100 + 100 + 150 + 1295;
-            bs.SharedFood = 1745;
-            bs.Tax = 809;
-            bs.Tip = 1500;
+            var bs = new BillSpliter("Parking", DateTime.Now, austin);
+            bs.SharedFood = 1050;
+            bs.Party[austin] = 0;
+            bs.Party[arata] = 0;
+            bs.Party[wesley] = 0;
+            bs.Party[maria] = 0;
+            //bs.Tax = 1086;
+            //bs.Tip = 2100;
             //bs.Save(db);
 
-            //var t = new Transaction()
-            //{
-            //    ID = Guid.NewGuid(),
-            //    Debtor = caspar,
-            //    Creditor = austin,
-            //    Amount = 1500,
-            //    BillID = null,
-            //    Description = "Birthday",
-            //    Created = new DateTime(2012, 03, 06),
-            //};
+            var t = new Transaction()
+            {
+                ID = Guid.NewGuid(),
+                Debtor = caspar, //owes money
+                Creditor = arata, //owed money
+                Amount = 250,
+                BillID = null,
+                Description = "Repayment",
+                Created = DateTime.Now
+            };
             //db.Transactions.InsertOnSubmit(t);
             //db.SubmitChanges();
 
+            var ran = new Random();
             //var people = new Person[] { austin, caspar, wesley, david, maria };
             var people = db.People.ToArray();
+            people = people.OrderBy(p => ran.Next()).ToArray();
 
             TestAlgo(db, people);
 
@@ -134,6 +141,15 @@ namespace DinnerKillPoints
         {
             var austin = db.People.Where(p => p.ID == i).Single();
             return austin;
+        }
+
+        private static void replace(Dictionary<Tuple<Person, Person>, int> summedDebts, Tuple<Person, Person> oldKey, Tuple<Person, Person> newKey)
+        {
+            var val = summedDebts[oldKey];
+            summedDebts.Remove(oldKey);
+            if (summedDebts.ContainsKey(newKey))
+                val += summedDebts[newKey];
+            summedDebts[newKey] = val;
         }
 
         private static void TestAlgo(DkpDataContext db, Person[] people)
@@ -156,6 +172,42 @@ namespace DinnerKillPoints
                 net += t.Amount;
                 summedDebts[tup] = net;
             }
+
+            if (RemoveCycles)
+            {
+                //combine debt floaters
+                while (DebtFloaters.Count != 0)
+                {
+                    var tup = DebtFloaters[0];
+                    var mainPerson = tup.Item1;
+                    var removedPerson = tup.Item2;
+
+                    if (summedDebts.ContainsKey(DebtFloaters[0]))
+                        summedDebts.Remove(DebtFloaters[0]);
+                    if (summedDebts.ContainsKey(DebtFloaters[1]))
+                        summedDebts.Remove(DebtFloaters[1]);
+
+                    foreach (var t in summedDebts.Keys.ToArray())
+                    {
+                        if (t.Item1 == removedPerson)
+                        {
+                            replace(summedDebts, t, new Tuple<Person, Person>(mainPerson, t.Item2));
+                        }
+                        else if (t.Item2 == removedPerson)
+                        {
+                            replace(summedDebts, t, new Tuple<Person, Person>(t.Item1, mainPerson));
+                        }
+                    }
+
+
+                    mainPerson.FirstName = mainPerson.FirstName + " " + mainPerson.LastName + ", ";
+                    mainPerson.LastName = removedPerson.FirstName + " " + removedPerson.LastName;
+                    removedPerson.FirstName += "<removed>";
+                    DebtFloaters.RemoveAt(0);
+                    DebtFloaters.RemoveAt(0);
+                }
+            }
+
 
             Console.WriteLine("Combined debts:");
             foreach (var n in summedDebts)
@@ -197,46 +249,49 @@ namespace DinnerKillPoints
             }
             Console.WriteLine();
 
-            Console.WriteLine("Cycles");
-            bool foundCycle;
-            do
+            if (RemoveCycles)
             {
-                foundCycle = false;
-                foreach (var cycle in FindCycles(people, netMoney))
+                Console.WriteLine("Cycles");
+                bool foundCycle;
+                do
                 {
-                    if (cycle.Count != 1)
-                        foundCycle = true;
-                    Console.WriteLine("->");
-                    foreach (var p in cycle)
+                    foundCycle = false;
+                    foreach (var cycle in FindCycles(people, netMoney))
                     {
-                        Console.WriteLine("\t{0}", p.FirstName);
+                        if (cycle.Count != 1)
+                            foundCycle = true;
+                        Console.WriteLine("->");
+                        foreach (var p in cycle)
+                        {
+                            Console.WriteLine("\t{0}", p.FirstName);
+                        }
+
+                        var cycleTrans = new List<Debt>();
+                        for (int i = 0; i < cycle.Count; i++)
+                        {
+                            var p1 = cycle[(i - 1 + cycle.Count) % cycle.Count];
+                            var p2 = cycle[i];
+                            Console.WriteLine("\t\t{0} -> {1}", p1, p2);
+                            var debt = netMoney.Where(d => d.Debtor == p1 && d.Creditor == p2).Single();
+                            cycleTrans.Add(debt);
+                        }
+
+                        var subAmount = cycleTrans.Select(c => c.Amount).Min();
+                        foreach (var d in cycleTrans)
+                        {
+                            d.Amount -= subAmount;
+                        }
                     }
 
-                    var cycleTrans = new List<Debt>();
-                    for (int i = 0; i < cycle.Count; i++)
+                    //remove 0-value debts
+                    foreach (var d in netMoney.Where(d => d.Amount == 0).ToList())
                     {
-                        var p1 = cycle[(i - 1 + cycle.Count) % cycle.Count];
-                        var p2 = cycle[i];
-                        Console.WriteLine("\t\t{0} -> {1}", p1, p2);
-                        var debt = netMoney.Where(d => d.Debtor == p1 && d.Creditor == p2).Single();
-                        cycleTrans.Add(debt);
-                    }
-
-                    var subAmount = cycleTrans.Select(c => c.Amount).Min();
-                    foreach (var d in cycleTrans)
-                    {
-                        d.Amount -= subAmount;
+                        netMoney.Remove(d);
                     }
                 }
-
-                //remove 0-value debts
-                foreach (var d in netMoney.Where(d => d.Amount == 0).ToList())
-                {
-                    netMoney.Remove(d);
-                }
+                while (foundCycle);
+                Console.WriteLine();
             }
-            while (foundCycle);
-            Console.WriteLine();
 
             Console.WriteLine("New net:");
             foreach (var d in netMoney.OrderBy(n => n.Debtor.FirstName))
