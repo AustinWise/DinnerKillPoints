@@ -1,4 +1,4 @@
-namespace DinnerKillPoints
+namespace Austin.DkpLib
 {
     partial class DkpDataContext
     {

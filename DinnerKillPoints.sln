@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DkpWeb", "DkpWeb\DkpWeb.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DkpWeb.Tests", "DkpWeb.Tests\DkpWeb.Tests.csproj", "{F659A15F-BC11-447E-98A7-15BD3F303A5D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DkpLib", "DkpLib\DkpLib.csproj", "{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,16 @@ Global
 		{F659A15F-BC11-447E-98A7-15BD3F303A5D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F659A15F-BC11-447E-98A7-15BD3F303A5D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F659A15F-BC11-447E-98A7-15BD3F303A5D}.Release|x86.ActiveCfg = Release|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EB0E5B15-C3D6-415A-9D95-DC46FF931D45}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
