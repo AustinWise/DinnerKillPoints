@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/RazorSite.cshtml";
+}
+<h2>
+    Index</h2>
+<table>
+    <thead>
+        <tr>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>
+                    @p.FirstName
+                </td>
+                <td>
+                    @p.LastName
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
