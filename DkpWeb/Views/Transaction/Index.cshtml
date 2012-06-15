@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/RazorSite.cshtml";
+}
+<h2>
+    Transactions</h2>
+<table>
+    <tr>
+        <th>
+            Debtor
+        </th>
+        <th>
+            Creditor
+        </th>
+        <th>
+            Amount
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Date
+        </th>
+    </tr>
+    @foreach (Austin.DkpLib.Transaction t in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(t.Debtor.FirstName + " " + t.Debtor.LastName, "Detail", "People", new { id = t.DebtorID }, null)
+            </td>
+            <td>
+                @Html.ActionLink(t.Creditor.FirstName + " " + t.Creditor.LastName, "Detail", "People", new { id = t.CreditorID }, null)
+            </td>
+            <td>
+                @(((double)t.Amount / 100d).ToString("c"))
+            </td>
+            <td>
+                @t.Description
+            </td>
+            <td>
+                @t.Created
+            </td>
+        </tr>
+    }
+</table>

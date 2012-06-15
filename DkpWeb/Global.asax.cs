@@ -27,11 +27,11 @@ namespace DkpWeb
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
 
-            routes.MapRoute(
-                "People",
-                "{controller}/{action}/{id}",
-                new { controller = "People", action = "Index", id = UrlParameter.Optional }
-            );
+            //routes.MapRoute(
+            //    "People",
+            //    "{controller}/{action}/{id}",
+            //    new { controller = "People", action = "Index", id = UrlParameter.Optional }
+            //);
 
         }
 

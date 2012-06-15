@@ -22,5 +22,14 @@ namespace DkpWeb.Controllers
             return View(people);
         }
 
+        public ActionResult Detail(int id)
+        {
+            Person person;
+            using (var dc = new DkpDataContext())
+            {
+                person = dc.People.Where(p => p.ID == id).Single();
+            }
+            return View(person);
+        }
     }
 }
