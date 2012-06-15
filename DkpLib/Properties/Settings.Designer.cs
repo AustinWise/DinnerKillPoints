@@ -26,7 +26,7 @@ namespace Austin.DkpLib.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=DKP;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=mssqloltp.wise.local;Initial Catalog=DKP;Integrated Security=True")]
         public string DKPConnectionString {
             get {
                 return ((string)(this["DKPConnectionString"]));
