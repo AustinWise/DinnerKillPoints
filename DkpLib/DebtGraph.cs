@@ -20,9 +20,10 @@ namespace Austin.DkpLib
         public static void TestAlgo(DkpDataContext db, Person[] people, List<Tuple<Person, Person>> DebtFloaters, bool RemoveCycles, string savePath)
         {
             Console.WriteLine("Raw tranactions:");
+            Console.WriteLine("\t{0,19},{1,15},{2,15},{3,8},  {4}", "Date", "Owes", "Owed", "Amount", "Description");
             foreach (var t in db.Transactions.OrderBy(t => t.Created))
             {
-                Console.WriteLine("\t{0} -> {1}: {2}", t.Debtor, t.Creditor, t.Amount);
+                Console.WriteLine("\t{0,19:s},{1,15},{2,15},{3,8:c},  {4}", t.Created, t.Debtor, t.Creditor, t.Amount / 100d, t.Description);
             }
             Console.WriteLine();
 
@@ -77,7 +78,7 @@ namespace Austin.DkpLib
             Console.WriteLine("Combined debts:");
             foreach (var n in summedDebts)
             {
-                Console.WriteLine("\t{0} -> {1}: {2}", n.Key.Item1, n.Key.Item2, n.Value);
+                Console.WriteLine("\t{0} -> {1}: {2:c}", n.Key.Item1, n.Key.Item2, n.Value / 100d);
             }
             Console.WriteLine();
 
