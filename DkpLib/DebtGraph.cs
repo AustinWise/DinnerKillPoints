@@ -80,6 +80,7 @@ namespace Austin.DkpLib
             {
                 Console.WriteLine("\t{0} -> {1}: {2:c}", n.Key.Item1, n.Key.Item2, n.Value / 100d);
             }
+            //Console.WriteLine("{0:c}", summedDebts.Sum(d => d.Value) / 100d);
             Console.WriteLine();
 
             //net up all the debts
@@ -137,12 +138,13 @@ namespace Austin.DkpLib
                         {
                             var p1 = cycle[(i - 1 + cycle.Count) % cycle.Count];
                             var p2 = cycle[i];
-                            Console.WriteLine("\t\t{0} -> {1}", p1, p2);
                             var debt = netMoney.Where(d => d.Debtor == p1 && d.Creditor == p2).Single();
+                            Console.WriteLine("\t\t{0} -> {1} ({2:c})", p1, p2, debt.Amount / 100d);
                             cycleTrans.Add(debt);
                         }
 
                         var subAmount = cycleTrans.Select(c => c.Amount).Min();
+                        Console.WriteLine("\t\t{0:c}", subAmount / 100d);
                         foreach (var d in cycleTrans)
                         {
                             d.Amount -= subAmount;
