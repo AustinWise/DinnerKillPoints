@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace Austin.DkpLib
 {
@@ -17,7 +18,7 @@ namespace Austin.DkpLib
             summedDebts[newKey] = val;
         }
 
-        public static void TestAlgo(DkpDataContext db, Person[] people, List<Tuple<Person, Person>> DebtFloaters, bool RemoveCycles, string savePath)
+        public static List<Debt> TestAlgo(DkpDataContext db, Person[] people, List<Tuple<Person, Person>> DebtFloaters, bool RemoveCycles)
         {
             Console.WriteLine("Raw tranactions:");
             Console.WriteLine("\t{0,19},{1,15},{2,15},{3,8},  {4}", "Date", "Owes", "Owed", "Amount", "Description");
@@ -175,18 +176,25 @@ namespace Austin.DkpLib
             }
             Console.WriteLine();
 
+            return netMoney;
+        }
 
-            Console.WriteLine("Graph");
-            using (var sw = new StreamWriter(savePath))
+        public static void WriteGraph(List<Debt> netMoney, TextWriter sw)
+        {
+            sw.WriteLine("digraph Test {");
+            foreach (var d in netMoney)
             {
-                sw.WriteLine("digraph Test {");
-                foreach (var d in netMoney)
-                {
-                    sw.WriteLine("\"{0} {1}\" -> \"{2} {3}\" [label=\"{4:c}\"];", d.Debtor.FirstName, d.Debtor.LastName, d.Creditor.FirstName, d.Creditor.LastName, d.Amount / 100d);
-                }
-                sw.WriteLine("}");
+                sw.WriteLine("\"{0} {1}\" -> \"{2} {3}\" [label=\"{4:c}\"];", d.Debtor.FirstName, d.Debtor.LastName, d.Creditor.FirstName, d.Creditor.LastName, d.Amount / 100d);
             }
-            Console.WriteLine();
+            sw.WriteLine("}");
+        }
+
+        public static void RenderGraphAsPng(string gvFile, string targetFile)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo("dot", string.Format("-Tpng -o \"{0}\" \"{1}\"", targetFile, gvFile));
+            var p = Process.Start(psi);
+            p.Start();
+            p.WaitForExit();
         }
 
         private static List<List<Person>> FindCycles(Person[] people, List<Debt> debts)

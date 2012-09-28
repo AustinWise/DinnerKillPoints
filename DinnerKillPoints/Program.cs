@@ -42,6 +42,7 @@ namespace DinnerKillPoints
             var arata = GetPerson(10);
             var jeff = GetPerson(11);
             var ryuho = GetPerson(12);
+            var laura = GetPerson(13);
 
             AddDebtFloater(wesley, maria);
             AddDebtFloater(seanMc, meredith);
@@ -72,9 +73,33 @@ namespace DinnerKillPoints
             var ran = new Random();
             //var people = new Person[] { austin, caspar, wesley, david, maria };
             var people = db.People.ToArray();
-            people = people.OrderBy(p => ran.Next()).ToArray();
+            people = people.OrderBy(p => ran.Next()).Where(p => !RemoveCycles || p != laura).ToArray();
 
-            DebtGraph.TestAlgo(db, people, DebtFloaters, RemoveCycles, @"C:\temp\graph\test.gv");
+            List<Debt> netMoney = null;
+            var oldConsole = Console.Out;
+            try
+            {
+                using (var sw = new StreamWriter(@"C:\Users\AustinWise\Dropbox\DKP\Info.txt"))
+                {
+                    Console.SetOut(sw);
+                    netMoney = DebtGraph.TestAlgo(db, people, DebtFloaters, RemoveCycles);
+
+                }
+            }
+            finally
+            {
+                Console.SetOut(oldConsole);
+            }
+
+            const string gvPath = @"c:\temp\graph\test.gv";
+            const string outDir = @"C:\Users\AustinWise\Dropbox\DKP\";
+            using (var sw = new StreamWriter(gvPath))
+            {
+                DebtGraph.WriteGraph(netMoney, sw);
+            }
+
+            DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, "current.png"));
+            DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, DateTime.Now.ToString("yyyy-MM-dd") + ".png"));
 
             db.Dispose();
         }
