@@ -16,14 +16,13 @@ namespace DinnerKillPoints
 
     class Program
     {
-        static bool RemoveCycles = false;
         static DkpDataContext db;
 
-        static List<Tuple<Person, Person>> DebtFloaters = new List<Tuple<Person, Person>>();
+        static List<Tuple<int, int>> DebtFloaters = new List<Tuple<int, int>>();
         private static void AddDebtFloater(Person p1, Person p2)
         {
-            DebtFloaters.Add(new Tuple<Person, Person>(p1, p2));
-            DebtFloaters.Add(new Tuple<Person, Person>(p2, p1));
+            DebtFloaters.Add(new Tuple<int, int>(p1.ID, p2.ID));
+            DebtFloaters.Add(new Tuple<int, int>(p2.ID, p1.ID));
         }
 
         static void Main(string[] args)
@@ -43,6 +42,7 @@ namespace DinnerKillPoints
             var jeff = GetPerson(11);
             var ryuho = GetPerson(12);
             var laura = GetPerson(13);
+            var minh = GetPerson(14);
 
             AddDebtFloater(wesley, maria);
             AddDebtFloater(seanMc, meredith);
@@ -71,43 +71,67 @@ namespace DinnerKillPoints
             //db.SubmitChanges();
 
             var ran = new Random();
-            //var people = new Person[] { austin, caspar, wesley, david, maria };
-            var people = db.People.ToArray();
-            people = people.OrderBy(p => ran.Next()).Where(p => !RemoveCycles || p != laura).ToArray();
+
+            db.Dispose();
+            db = new DkpDataContext();
+            WriteData(true, db.People.OrderBy(p => ran.Next()).Where(p => p != laura).ToArray());
+            db.Dispose();
+            db = new DkpDataContext();
+            WriteData(false, db.People.ToArray());
+
+            db.Dispose();
+        }
+
+        private static void WriteData(bool removeCycles, Person[] people)
+        {
+            const string outDir = @"C:\Users\AustinWise\Dropbox\DKP\";
 
             List<Debt> netMoney = null;
-            var oldConsole = Console.Out;
-            try
+            using (removeCycles ? new ConsoleSwapper(Path.Combine(outDir, "Info.txt")) : new ConsoleSwapper())
             {
-                using (var sw = new StreamWriter(@"C:\Users\AustinWise\Dropbox\DKP\Info.txt"))
-                {
-                    Console.SetOut(sw);
-                    netMoney = DebtGraph.TestAlgo(db, people, DebtFloaters, RemoveCycles);
-
-                }
-            }
-            finally
-            {
-                Console.SetOut(oldConsole);
+                netMoney = DebtGraph.TestAlgo(db, people, DebtFloaters, removeCycles);
             }
 
             const string gvPath = @"c:\temp\graph\test.gv";
-            const string outDir = @"C:\Users\AustinWise\Dropbox\DKP\";
             using (var sw = new StreamWriter(gvPath))
             {
                 DebtGraph.WriteGraph(netMoney, sw);
             }
 
-            DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, "current.png"));
-            DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, DateTime.Now.ToString("yyyy-MM-dd") + ".png"));
-
-            db.Dispose();
+            DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, removeCycles ? "current.png" : "nocycles.png"));
+            if (removeCycles)
+                DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, DateTime.Now.ToString("yyyy-MM-dd") + ".png"));
         }
 
         private static Person GetPerson(int i)
         {
             var austin = db.People.Where(p => p.ID == i).Single();
             return austin;
+        }
+
+        class ConsoleSwapper : IDisposable
+        {
+            private TextWriter oldConsole;
+            private StreamWriter sw;
+
+            public ConsoleSwapper()
+            {
+            }
+
+            public ConsoleSwapper(string path)
+            {
+                sw = new StreamWriter(path);
+                oldConsole = Console.Out;
+                Console.SetOut(sw);
+            }
+
+            public void Dispose()
+            {
+                if (oldConsole != null)
+                    Console.SetOut(oldConsole);
+                if (sw != null)
+                    sw.Dispose();
+            }
         }
     }
 }

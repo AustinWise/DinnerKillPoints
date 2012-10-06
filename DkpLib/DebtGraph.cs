@@ -18,8 +18,10 @@ namespace Austin.DkpLib
             summedDebts[newKey] = val;
         }
 
-        public static List<Debt> TestAlgo(DkpDataContext db, Person[] people, List<Tuple<Person, Person>> DebtFloaters, bool RemoveCycles)
+        public static List<Debt> TestAlgo(DkpDataContext db, Person[] people, List<Tuple<int, int>> debtFloaters, bool RemoveCycles)
         {
+            var DebtFloaters = debtFloaters.Select(tup => new Tuple<Person, Person>(db.People.Where(p => p.ID == tup.Item1).Single(), db.People.Where(p => p.ID == tup.Item2).Single())).ToList();
+
             Console.WriteLine("Raw tranactions:");
             Console.WriteLine("\t{0,19},{1,15},{2,15},{3,8},  {4}", "Date", "Owes", "Owed", "Amount", "Description");
             foreach (var t in db.Transactions.OrderBy(t => t.Created))
