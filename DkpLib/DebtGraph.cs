@@ -18,165 +18,177 @@ namespace Austin.DkpLib
             summedDebts[newKey] = val;
         }
 
-        public static List<Debt> TestAlgo(DkpDataContext db, Person[] people, List<Tuple<int, int>> debtFloaters, bool RemoveCycles)
+        public static List<Debt> TestAlgo(DkpDataContext db, Person[] people, List<Tuple<int, int>> debtFloaters, bool RemoveCycles, TextWriter logger)
         {
-            var DebtFloaters = debtFloaters.Select(tup => new Tuple<Person, Person>(db.People.Where(p => p.ID == tup.Item1).Single(), db.People.Where(p => p.ID == tup.Item2).Single())).ToList();
-
-            Console.WriteLine("Raw tranactions:");
-            Console.WriteLine("\t{0,19},{1,15},{2,15},{3,8},  {4}", "Date", "Owes", "Owed", "Amount", "Description");
-            foreach (var t in db.Transactions.OrderBy(t => t.Created))
-            {
-                Console.WriteLine("\t{0,19:s},{1,15},{2,15},{3,8:c},  {4}", t.Created, t.Debtor, t.Creditor, t.Amount / 100d, t.Description);
-            }
-            Console.WriteLine();
-
-            //sum all debts from one person to another
-            var summedDebts = new Dictionary<Tuple<Person, Person>, int>();
-            foreach (var t in db.Transactions)
-            {
-                var tup = new Tuple<Person, Person>(t.Debtor, t.Creditor);
-                int net = 0;
-                if (summedDebts.ContainsKey(tup))
-                    net = summedDebts[tup];
-                net += t.Amount;
-                summedDebts[tup] = net;
-            }
-
-            if (RemoveCycles)
-            {
-                //combine debt floaters
-                while (DebtFloaters.Count != 0)
-                {
-                    var tup = DebtFloaters[0];
-                    var mainPerson = tup.Item1;
-                    var removedPerson = tup.Item2;
-
-                    if (summedDebts.ContainsKey(DebtFloaters[0]))
-                        summedDebts.Remove(DebtFloaters[0]);
-                    if (summedDebts.ContainsKey(DebtFloaters[1]))
-                        summedDebts.Remove(DebtFloaters[1]);
-
-                    foreach (var t in summedDebts.Keys.ToArray())
-                    {
-                        if (t.Item1 == removedPerson)
-                        {
-                            replace(summedDebts, t, new Tuple<Person, Person>(mainPerson, t.Item2));
-                        }
-                        else if (t.Item2 == removedPerson)
-                        {
-                            replace(summedDebts, t, new Tuple<Person, Person>(t.Item1, mainPerson));
-                        }
-                    }
-
-
-                    mainPerson.FirstName = mainPerson.FirstName + " " + mainPerson.LastName + ", ";
-                    mainPerson.LastName = removedPerson.FirstName + " " + removedPerson.LastName;
-                    removedPerson.FirstName += "<removed>";
-                    DebtFloaters.RemoveAt(0);
-                    DebtFloaters.RemoveAt(0);
-                }
-            }
-
-
-            Console.WriteLine("Combined debts:");
-            foreach (var n in summedDebts)
-            {
-                Console.WriteLine("\t{0} -> {1}: {2:c}", n.Key.Item1, n.Key.Item2, n.Value / 100d);
-            }
-            //Console.WriteLine("{0:c}", summedDebts.Sum(d => d.Value) / 100d);
-            Console.WriteLine();
-
-            //net up all the debts
-            //what's this, O(2n) ?
             var netMoney = new List<Debt>();
-            for (int i = 0; i < people.Length - 1; i++)
+
+            logger = logger ?? TextWriter.Null;
+
+            try
             {
-                var p1 = people[i];
-                for (int j = i + 1; j < people.Length; j++)
+                var DebtFloaters = debtFloaters.Select(tup => new Tuple<Person, Person>(db.People.Where(p => p.ID == tup.Item1).Single(), db.People.Where(p => p.ID == tup.Item2).Single())).ToList();
+
+                logger.WriteLine("Raw tranactions:");
+                logger.WriteLine("\t{0,19},{1,15},{2,15},{3,8},  {4}", "Date", "Owes", "Owed", "Amount", "Description");
+                foreach (var t in db.Transactions.OrderBy(t => t.Created))
                 {
-                    var p2 = people[j];
-                    var net = 0;
-                    int temp = 0;
-                    if (summedDebts.TryGetValue(new Tuple<Person, Person>(p1, p2), out temp))
-                    {
-                        net = temp;
-                    }
-                    if (summedDebts.TryGetValue(new Tuple<Person, Person>(p2, p1), out temp))
-                    {
-                        net -= temp;
-                    }
-                    if (net > 0)
-                        netMoney.Add(new Debt() { Debtor = p1, Creditor = p2, Amount = net });
-                    else if (net < 0)
-                        netMoney.Add(new Debt() { Debtor = p2, Creditor = p1, Amount = -net });
+                    logger.WriteLine("\t{0,19:s},{1,15},{2,15},{3,8:c},  {4}", t.Created, t.Debtor, t.Creditor, t.Amount / 100d, t.Description);
                 }
-            }
+                logger.WriteLine();
 
-            Console.WriteLine("Net:");
-            foreach (var d in netMoney.OrderBy(n => n.Debtor.FirstName))
-            {
-                Console.WriteLine("\t{0} -> {1}: {2:c}", d.Debtor, d.Creditor, d.Amount / 100d);
-            }
-            Console.WriteLine();
-
-            if (RemoveCycles)
-            {
-                Console.WriteLine("Cycles");
-                bool foundCycle;
-                do
+                //sum all debts from one person to another
+                var summedDebts = new Dictionary<Tuple<Person, Person>, int>();
+                foreach (var t in db.Transactions)
                 {
-                    foundCycle = false;
-                    foreach (var cycle in FindCycles(people, netMoney))
+                    var tup = new Tuple<Person, Person>(t.Debtor, t.Creditor);
+                    int net = 0;
+                    if (summedDebts.ContainsKey(tup))
+                        net = summedDebts[tup];
+                    net += t.Amount;
+                    summedDebts[tup] = net;
+                }
+
+                if (RemoveCycles)
+                {
+                    //combine debt floaters
+                    while (DebtFloaters.Count != 0)
                     {
-                        if (cycle.Count != 1)
-                            foundCycle = true;
-                        Console.WriteLine("->");
-                        foreach (var p in cycle)
+                        var tup = DebtFloaters[0];
+                        var mainPerson = tup.Item1;
+                        var removedPerson = tup.Item2;
+
+                        if (summedDebts.ContainsKey(DebtFloaters[0]))
+                            summedDebts.Remove(DebtFloaters[0]);
+                        if (summedDebts.ContainsKey(DebtFloaters[1]))
+                            summedDebts.Remove(DebtFloaters[1]);
+
+                        foreach (var t in summedDebts.Keys.ToArray())
                         {
-                            Console.WriteLine("\t{0}", p.FirstName);
+                            if (t.Item1 == removedPerson)
+                            {
+                                replace(summedDebts, t, new Tuple<Person, Person>(mainPerson, t.Item2));
+                            }
+                            else if (t.Item2 == removedPerson)
+                            {
+                                replace(summedDebts, t, new Tuple<Person, Person>(t.Item1, mainPerson));
+                            }
                         }
 
-                        var cycleTrans = new List<Debt>();
-                        for (int i = 0; i < cycle.Count; i++)
-                        {
-                            var p1 = cycle[(i - 1 + cycle.Count) % cycle.Count];
-                            var p2 = cycle[i];
-                            var debt = netMoney.Where(d => d.Debtor == p1 && d.Creditor == p2).Single();
-                            Console.WriteLine("\t\t{0} -> {1} ({2:c})", p1, p2, debt.Amount / 100d);
-                            cycleTrans.Add(debt);
-                        }
 
-                        var subAmount = cycleTrans.Select(c => c.Amount).Min();
-                        Console.WriteLine("\t\t{0:c}", subAmount / 100d);
-                        foreach (var d in cycleTrans)
-                        {
-                            d.Amount -= subAmount;
-                        }
-                    }
-
-                    //remove 0-value debts
-                    foreach (var d in netMoney.Where(d => d.Amount == 0).ToList())
-                    {
-                        netMoney.Remove(d);
+                        mainPerson.FirstName = mainPerson.FirstName + " " + mainPerson.LastName + ", ";
+                        mainPerson.LastName = removedPerson.FirstName + " " + removedPerson.LastName;
+                        removedPerson.FirstName += "<removed>";
+                        DebtFloaters.RemoveAt(0);
+                        DebtFloaters.RemoveAt(0);
                     }
                 }
-                while (foundCycle);
-                Console.WriteLine();
-            }
 
-            Console.WriteLine("New net:");
-            foreach (var d in netMoney.OrderBy(n => n.Debtor.FirstName))
-            {
-                Console.WriteLine("\t{0} -> {1}: {2:c}", d.Debtor, d.Creditor, d.Amount / 100d);
-            }
-            Console.WriteLine();
 
-            Console.WriteLine("Greatest Debtors");
-            foreach (var tup in people.Select(p => new { Debtor = p, Amount = netMoney.Where(d => d.Debtor == p && !(DebtFloaters.Contains(new Tuple<Person, Person>(p, d.Creditor)))).Sum(d => d.Amount) }).OrderByDescending(obj => obj.Amount))
-            {
-                Console.WriteLine("\t{0}: {1:c}", tup.Debtor, tup.Amount / 100d);
+                logger.WriteLine("Combined debts:");
+                foreach (var n in summedDebts)
+                {
+                    logger.WriteLine("\t{0} -> {1}: {2:c}", n.Key.Item1, n.Key.Item2, n.Value / 100d);
+                }
+                //Console.WriteLine("{0:c}", summedDebts.Sum(d => d.Value) / 100d);
+                logger.WriteLine();
+
+                //net up all the debts
+                //what's this, O(2n) ?
+                for (int i = 0; i < people.Length - 1; i++)
+                {
+                    var p1 = people[i];
+                    for (int j = i + 1; j < people.Length; j++)
+                    {
+                        var p2 = people[j];
+                        var net = 0;
+                        int temp = 0;
+                        if (summedDebts.TryGetValue(new Tuple<Person, Person>(p1, p2), out temp))
+                        {
+                            net = temp;
+                        }
+                        if (summedDebts.TryGetValue(new Tuple<Person, Person>(p2, p1), out temp))
+                        {
+                            net -= temp;
+                        }
+                        if (net > 0)
+                            netMoney.Add(new Debt() { Debtor = p1, Creditor = p2, Amount = net });
+                        else if (net < 0)
+                            netMoney.Add(new Debt() { Debtor = p2, Creditor = p1, Amount = -net });
+                    }
+                }
+
+                logger.WriteLine("Net:");
+                foreach (var d in netMoney.OrderBy(n => n.Debtor.FirstName))
+                {
+                    logger.WriteLine("\t{0} -> {1}: {2:c}", d.Debtor, d.Creditor, d.Amount / 100d);
+                }
+                logger.WriteLine();
+
+                if (RemoveCycles)
+                {
+                    logger.WriteLine("Cycles");
+                    bool foundCycle;
+                    do
+                    {
+                        foundCycle = false;
+                        foreach (var cycle in FindCycles(people, netMoney))
+                        {
+                            if (cycle.Count != 1)
+                                foundCycle = true;
+                            logger.WriteLine("->");
+                            foreach (var p in cycle)
+                            {
+                                logger.WriteLine("\t{0}", p.FirstName);
+                            }
+
+                            var cycleTrans = new List<Debt>();
+                            for (int i = 0; i < cycle.Count; i++)
+                            {
+                                var p1 = cycle[(i - 1 + cycle.Count) % cycle.Count];
+                                var p2 = cycle[i];
+                                var debt = netMoney.Where(d => d.Debtor == p1 && d.Creditor == p2).Single();
+                                logger.WriteLine("\t\t{0} -> {1} ({2:c})", p1, p2, debt.Amount / 100d);
+                                cycleTrans.Add(debt);
+                            }
+
+                            var subAmount = cycleTrans.Select(c => c.Amount).Min();
+                            logger.WriteLine("\t\t{0:c}", subAmount / 100d);
+                            foreach (var d in cycleTrans)
+                            {
+                                d.Amount -= subAmount;
+                            }
+                        }
+
+                        //remove 0-value debts
+                        foreach (var d in netMoney.Where(d => d.Amount == 0).ToList())
+                        {
+                            netMoney.Remove(d);
+                        }
+                    }
+                    while (foundCycle);
+                    logger.WriteLine();
+                }
+
+                logger.WriteLine("New net:");
+                foreach (var d in netMoney.OrderBy(n => n.Debtor.FirstName))
+                {
+                    logger.WriteLine("\t{0} -> {1}: {2:c}", d.Debtor, d.Creditor, d.Amount / 100d);
+                }
+                logger.WriteLine();
+
+                logger.WriteLine("Greatest Debtors");
+                foreach (var tup in people.Select(p => new { Debtor = p, Amount = netMoney.Where(d => d.Debtor == p && !(DebtFloaters.Contains(new Tuple<Person, Person>(p, d.Creditor)))).Sum(d => d.Amount) }).OrderByDescending(obj => obj.Amount))
+                {
+                    logger.WriteLine("\t{0}: {1:c}", tup.Debtor, tup.Amount / 100d);
+                }
+                logger.WriteLine();
+
+                netMoney = netMoney.Select(d => (Debt)d.Clone()).ToList();
             }
-            Console.WriteLine();
+            finally
+            {
+                db.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, people);
+            }
 
             return netMoney;
         }

@@ -1,3 +1,5 @@
+using System;
+
 namespace Austin.DkpLib
 {
     partial class DkpDataContext
@@ -8,7 +10,7 @@ namespace Austin.DkpLib
     {
     }
 
-    partial class Person
+    partial class Person : ICloneable
     {
         public override string ToString()
         {
@@ -33,6 +35,15 @@ namespace Austin.DkpLib
         public void PrepareForCycleTesting()
         {
             Visited = false;
+        }
+
+        public object Clone()
+        {
+            var copy = new Person();
+            copy._ID = this._ID;
+            copy._FirstName = this._FirstName;
+            copy._LastName = this._LastName;
+            return copy;
         }
     }
 }

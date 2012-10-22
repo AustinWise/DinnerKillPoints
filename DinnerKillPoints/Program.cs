@@ -72,11 +72,7 @@ namespace DinnerKillPoints
 
             var ran = new Random();
 
-            db.Dispose();
-            db = new DkpDataContext();
             WriteData(true, db.People.OrderBy(p => ran.Next()).Where(p => p != laura).ToArray());
-            db.Dispose();
-            db = new DkpDataContext();
             WriteData(false, db.People.ToArray());
 
             db.Dispose();
@@ -87,10 +83,7 @@ namespace DinnerKillPoints
             const string outDir = @"C:\Users\AustinWise\Dropbox\DKP\";
 
             List<Debt> netMoney = null;
-            using (removeCycles ? new ConsoleSwapper(Path.Combine(outDir, "Info.txt")) : new ConsoleSwapper())
-            {
-                netMoney = DebtGraph.TestAlgo(db, people, DebtFloaters, removeCycles);
-            }
+            netMoney = DebtGraph.TestAlgo(db, people, DebtFloaters, removeCycles, removeCycles ? new StreamWriter(Path.Combine(outDir, "Info.txt")) : Console.Out);
 
             const string gvPath = @"c:\temp\graph\test.gv";
             using (var sw = new StreamWriter(gvPath))
