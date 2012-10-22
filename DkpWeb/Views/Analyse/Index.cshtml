@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/RazorSite.cshtml";
+}
+<h2>
+    Analyse Index</h2>
+@using (@Html.BeginForm("Display", "Analyse"))
+{
+    <select multiple="multiple" style="height: 400px;">
+        @foreach (Austin.DkpLib.Person p in Model)
+        {
+            <option title="@p.FirstName @p.LastName" value="@p.ID">@p.FirstName @p.LastName</option>
+        }
+    </select>
+    <br />
+    <button type="submit">
+        Test</button>
+}
