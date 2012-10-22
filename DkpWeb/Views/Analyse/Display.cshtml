@@ -1,6 +1,14 @@
-﻿@{
+﻿@model DkpWeb.Models.AnalyseModel
+
+@{
     ViewBag.Title = "Display";
     Layout = "~/Views/Shared/RazorSite.cshtml";
 }
 
 <h2>Display</h2>
+
+<img src="data:image/png;base64,@Model.ImageBase64" />
+
+<pre><code>
+@Model.LogOutput
+</code></pre>

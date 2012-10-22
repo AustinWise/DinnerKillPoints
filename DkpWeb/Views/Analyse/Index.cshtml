@@ -6,7 +6,7 @@
     Analyse Index</h2>
 @using (@Html.BeginForm("Display", "Analyse"))
 {
-    <select multiple="multiple" style="height: 400px;">
+    <select name="peopleIds" multiple="multiple" style="height: 400px;">
         @foreach (Austin.DkpLib.Person p in Model)
         {
             <option title="@p.FirstName @p.LastName" value="@p.ID">@p.FirstName @p.LastName</option>

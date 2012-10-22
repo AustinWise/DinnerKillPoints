@@ -203,12 +203,30 @@ namespace Austin.DkpLib
             sw.WriteLine("}");
         }
 
-        public static void RenderGraphAsPng(string gvFile, string targetFile)
+        public static void RenderGraphAsPng(string gvFilePath, string targetFile)
         {
-            ProcessStartInfo psi = new ProcessStartInfo("dot", string.Format("-Tpng -o \"{0}\" \"{1}\"", targetFile, gvFile));
+            ProcessStartInfo psi = new ProcessStartInfo("dot", string.Format("-Tpng -o \"{0}\" \"{1}\"", targetFile, gvFilePath));
             var p = Process.Start(psi);
-            p.Start();
             p.WaitForExit();
+        }
+
+        public static byte[] RenderGraphAsPng(string gvFileContents)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo("dot", "-Tpng");
+            psi.UseShellExecute = false;
+            psi.RedirectStandardInput = true;
+            psi.RedirectStandardOutput = true;
+            var p = Process.Start(psi);
+
+            p.StandardInput.Write(gvFileContents);
+            p.StandardInput.Flush();
+            p.StandardInput.Close();
+
+            var mem = new MemoryStream();
+            p.StandardOutput.BaseStream.CopyTo(mem);
+            p.WaitForExit();
+
+            return mem.ToArray();
         }
 
         private static List<List<Person>> FindCycles(Person[] people, List<Debt> debts)
