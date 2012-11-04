@@ -21,26 +21,24 @@ namespace Austin.DkpLib
         public static List<Debt> TestAlgo(DkpDataContext db, Person[] people, List<Tuple<int, int>> debtFloaters, bool RemoveCycles, TextWriter logger)
         {
             var netMoney = new List<Debt>();
+            people = people.Select(p => p.Clone()).Cast<Person>().ToArray();
+            var peopleMap = people.ToDictionary(p => p.ID);
 
             logger = logger ?? TextWriter.Null;
 
             try
             {
-                var DebtFloaters = debtFloaters.Select(tup => new Tuple<Person, Person>(db.People.Where(p => p.ID == tup.Item1).Single(), db.People.Where(p => p.ID == tup.Item2).Single())).ToList();
-
-                logger.WriteLine("Raw tranactions:");
-                logger.WriteLine("\t{0,19},{1,15},{2,15},{3,8},  {4}", "Date", "Owes", "Owed", "Amount", "Description");
-                foreach (var t in db.Transactions.OrderBy(t => t.Created))
-                {
-                    logger.WriteLine("\t{0,19:s},{1,15},{2,15},{3,8:c},  {4}", t.Created, t.Debtor, t.Creditor, t.Amount / 100d, t.Description);
-                }
-                logger.WriteLine();
+                var DebtFloaters = debtFloaters.Select(tup => new Tuple<Person, Person>(people.Where(p => p.ID == tup.Item1).Single(), people.Where(p => p.ID == tup.Item2).Single())).ToList();
 
                 //sum all debts from one person to another
                 var summedDebts = new Dictionary<Tuple<Person, Person>, int>();
                 foreach (var t in db.Transactions)
                 {
-                    var tup = new Tuple<Person, Person>(t.Debtor, t.Creditor);
+                    if (!peopleMap.ContainsKey(t.CreditorID))
+                        continue;
+                    if (!peopleMap.ContainsKey(t.DebtorID))
+                        continue;
+                    var tup = new Tuple<Person, Person>(peopleMap[t.DebtorID], peopleMap[t.CreditorID]);
                     int net = 0;
                     if (summedDebts.ContainsKey(tup))
                         net = summedDebts[tup];
@@ -83,15 +81,6 @@ namespace Austin.DkpLib
                     }
                 }
 
-
-                logger.WriteLine("Combined debts:");
-                foreach (var n in summedDebts)
-                {
-                    logger.WriteLine("\t{0} -> {1}: {2:c}", n.Key.Item1, n.Key.Item2, n.Value / 100d);
-                }
-                //Console.WriteLine("{0:c}", summedDebts.Sum(d => d.Value) / 100d);
-                logger.WriteLine();
-
                 //net up all the debts
                 //what's this, O(2n) ?
                 for (int i = 0; i < people.Length - 1; i++)
@@ -116,13 +105,6 @@ namespace Austin.DkpLib
                             netMoney.Add(new Debt() { Debtor = p2, Creditor = p1, Amount = -net });
                     }
                 }
-
-                logger.WriteLine("Net:");
-                foreach (var d in netMoney.OrderBy(n => n.Debtor.FirstName))
-                {
-                    logger.WriteLine("\t{0} -> {1}: {2:c}", d.Debtor, d.Creditor, d.Amount / 100d);
-                }
-                logger.WriteLine();
 
                 if (RemoveCycles)
                 {
@@ -169,13 +151,6 @@ namespace Austin.DkpLib
                     logger.WriteLine();
                 }
 
-                logger.WriteLine("New net:");
-                foreach (var d in netMoney.OrderBy(n => n.Debtor.FirstName))
-                {
-                    logger.WriteLine("\t{0} -> {1}: {2:c}", d.Debtor, d.Creditor, d.Amount / 100d);
-                }
-                logger.WriteLine();
-
                 logger.WriteLine("Greatest Debtors");
                 foreach (var tup in people.Select(p => new { Debtor = p, Amount = netMoney.Where(d => d.Debtor == p && !(DebtFloaters.Contains(new Tuple<Person, Person>(p, d.Creditor)))).Sum(d => d.Amount) }).OrderByDescending(obj => obj.Amount))
                 {
@@ -187,10 +162,21 @@ namespace Austin.DkpLib
             }
             finally
             {
-                db.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, people);
+                //db.Refresh(System.Data.Linq.RefreshMode.OverwriteCurrentValues, people);
             }
 
             return netMoney;
+        }
+
+        public static List<Tuple<Person, int>> GreatestDebtor(List<Debt> netMoney)
+        {
+            var ret = new List<Tuple<Person, int>>();
+            var people = netMoney.SelectMany(p => new[] { p.Creditor, p.Debtor }).ToList();
+            foreach (var tup in people.Select(p => new { Debtor = p, Amount = netMoney.Where(d => d.Debtor == p).Sum(d => d.Amount) }).OrderByDescending(obj => obj.Amount))
+            {
+                ret.Add(new Tuple<Person, int>(tup.Debtor, tup.Amount));
+            }
+            return ret;
         }
 
         public static void WriteGraph(List<Debt> netMoney, TextWriter sw)
