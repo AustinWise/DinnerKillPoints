@@ -1,13 +1,41 @@
 ﻿@model DkpWeb.Models.AnalyseModel
 
 @{
-    ViewBag.Title = "Display";
+    ViewBag.Title = "Analyse Results";
 }
 
 <h2>Display</h2>
 
 <img src="data:image/png;base64,@Model.ImageBase64" />
+<div id="chart_div" style="width: 900px; height: 500px;"></div>
+
 
 <pre><code>
 @Model.LogOutput
 </code></pre>
+
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script type="text/javascript">
+    google.load("visualization", "1", { packages: ["corechart"] });
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+        ['Person', 'Debt'],
+        @foreach (var d in Model.Debtors)
+        {
+            Write(new MvcHtmlString(string.Format("['{0}', {1}],", d.Item1.ToString(), d.Item2 / 100d)));
+        }
+    ]);
+
+        var options = {
+            title: 'Greatest Debtor',
+            //vAxis: { title: 'Year', titleTextStyle: { color: 'red'} },
+            hAxis: { title: 'Debt ($)', titleTextStyle: { color: 'red'} },
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>

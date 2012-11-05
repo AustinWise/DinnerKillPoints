@@ -46,7 +46,11 @@ namespace DkpWeb.Controllers
             DebtGraph.WriteGraph(netMoney, swGraph);
             var bytes = DebtGraph.RenderGraphAsPng(swGraph.ToString());
 
-            return View(new AnalyseModel() { LogOutput = swLog.ToString(), ImageBase64 = Convert.ToBase64String(bytes) });
+            var mod = new AnalyseModel();
+            mod.LogOutput = swLog.ToString();
+            mod.ImageBase64 = Convert.ToBase64String(bytes);
+            mod.Debtors = DebtGraph.GreatestDebtor(netMoney);
+            return View(mod);
         }
     }
 }
