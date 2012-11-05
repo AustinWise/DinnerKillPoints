@@ -84,6 +84,7 @@ namespace DinnerKillPoints
 
             List<Debt> netMoney = null;
             netMoney = DebtGraph.TestAlgo(db, people, DebtFloaters, removeCycles, removeCycles ? new StreamWriter(Path.Combine(outDir, "Info.txt")) : Console.Out);
+            Console.WriteLine("{0:c}", netMoney.Sum(m => m.Amount) / 100d);
 
             const string gvPath = @"c:\temp\graph\test.gv";
             using (var sw = new StreamWriter(gvPath))
@@ -100,31 +101,6 @@ namespace DinnerKillPoints
         {
             var austin = db.People.Where(p => p.ID == i).Single();
             return austin;
-        }
-
-        class ConsoleSwapper : IDisposable
-        {
-            private TextWriter oldConsole;
-            private StreamWriter sw;
-
-            public ConsoleSwapper()
-            {
-            }
-
-            public ConsoleSwapper(string path)
-            {
-                sw = new StreamWriter(path);
-                oldConsole = Console.Out;
-                Console.SetOut(sw);
-            }
-
-            public void Dispose()
-            {
-                if (oldConsole != null)
-                    Console.SetOut(oldConsole);
-                if (sw != null)
-                    sw.Dispose();
-            }
         }
     }
 }

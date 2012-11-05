@@ -145,13 +145,7 @@ namespace Austin.DkpLib
                 logger.WriteLine();
             }
 
-            logger.WriteLine("Greatest Debtors");
-            foreach (var tup in people.Select(p => new { Debtor = p, Amount = netMoney.Where(d => d.Debtor == p && !(DebtFloaters.Contains(new Tuple<Person, Person>(p, d.Creditor)))).Sum(d => d.Amount) }).OrderByDescending(obj => obj.Amount))
-            {
-                logger.WriteLine("\t{0}: {1:c}", tup.Debtor, tup.Amount / 100d);
-            }
-            logger.WriteLine();
-
+            logger.Flush();
             return netMoney;
         }
 
