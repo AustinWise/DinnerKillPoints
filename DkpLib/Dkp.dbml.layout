@@ -14,27 +14,27 @@
         <elementListCompartment Id="3a2888b0-70e2-480e-8930-514234d5eef0" absoluteBounds="3.515, 1.335, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="3a73e064-20c1-4ffb-b3df-e0c0e3f26d19" absoluteBounds="0.75, 1.375, 2, 1.3862939453125003">
+    <classShape Id="3a73e064-20c1-4ffb-b3df-e0c0e3f26d19" absoluteBounds="0.75, 1.375, 2, 1.5785953776041666">
       <DataClassMoniker Name="/DkpDataContext/Person" />
       <nestedChildShapes>
-        <elementListCompartment Id="0a2136a6-6572-4532-9a7c-10cd3a580273" absoluteBounds="0.765, 1.835, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="0a2136a6-6572-4532-9a7c-10cd3a580273" absoluteBounds="0.765, 1.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(2.75 : 5.97199625651042); (4.5 : 5.97199625651042); (4.5 : 3.03049967447917)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 5.97199625651042); (4.5 : 5.97199625651042); (4.5 : 3.03049967447917)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DkpDataContext/BillSplit/BillSplit_Transaction" />
       <nodes>
         <classShapeMoniker Id="34a46353-6210-47cf-b77b-130b94ca2154" />
         <classShapeMoniker Id="af47729d-a6ac-4aed-84d3-46b1d4155eb0" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 2.06814697265625); (3.5 : 2.06814697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 2.36883443196615); (3.5 : 2.36883443196615)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DkpDataContext/Person/Person_Transaction" />
       <nodes>
         <classShapeMoniker Id="3a73e064-20c1-4ffb-b3df-e0c0e3f26d19" />
         <classShapeMoniker Id="af47729d-a6ac-4aed-84d3-46b1d4155eb0" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 1.65907348632813); (3.5 : 1.65907348632813)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 1.80941721598307); (3.5 : 1.80941721598307)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DkpDataContext/Person/Person_Transaction1" />
       <nodes>
         <classShapeMoniker Id="3a73e064-20c1-4ffb-b3df-e0c0e3f26d19" />

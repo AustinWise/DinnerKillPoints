@@ -29,7 +29,7 @@ namespace DkpWeb.Controllers
         public ActionResult Index()
         {
             Person[] people;
-            people = dc.People.ToArray();
+            people = dc.People.Where(p => !p.IsDeleted).ToArray();
             return View(people);
         }
 

@@ -551,6 +551,8 @@ namespace Austin.DkpLib
 		
 		private string _LastName;
 		
+		private bool _IsDeleted;
+		
 		private EntitySet<Transaction> _Credits;
 		
 		private EntitySet<Transaction> _Debts;
@@ -565,6 +567,8 @@ namespace Austin.DkpLib
     partial void OnFirstNameChanged();
     partial void OnLastNameChanging(string value);
     partial void OnLastNameChanged();
+    partial void OnIsDeletedChanging(bool value);
+    partial void OnIsDeletedChanged();
     #endregion
 		
 		public Person()
@@ -630,6 +634,26 @@ namespace Austin.DkpLib
 					this._LastName = value;
 					this.SendPropertyChanged("LastName");
 					this.OnLastNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="bit not null")]
+		public bool IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
 				}
 			}
 		}

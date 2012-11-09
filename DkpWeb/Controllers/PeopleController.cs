@@ -17,7 +17,7 @@ namespace DkpWeb.Controllers
             Person[] people;
             using (var dc = new DkpDataContext())
             {
-                people = dc.People.ToArray();
+                people = dc.People.Where(p => !p.IsDeleted).ToArray();
             }
             return View(people);
         }

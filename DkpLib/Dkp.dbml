@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DKP" Class="DkpDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=DKP;Integrated Security=True" SettingsObjectName="Austin.DkpLib.Properties.Settings" SettingsPropertyName="DKPConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=mssqloltp.wise.local;Initial Catalog=DKP;Integrated Security=True" SettingsObjectName="Austin.DkpLib.Properties.Settings" SettingsPropertyName="DKPConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BillSplit" Member="BillSplits">
     <Type Name="BillSplit">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -26,6 +26,7 @@
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="FirstName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="LastName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="bit not null" CanBeNull="false" />
       <Association Name="Person_Transaction" Member="Credits" ThisKey="ID" OtherKey="CreditorID" Type="Transaction" />
       <Association Name="Person_Transaction1" Member="Debts" ThisKey="ID" OtherKey="DebtorID" Type="Transaction" />
     </Type>
