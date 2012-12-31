@@ -154,10 +154,10 @@ namespace Austin.DkpLib
             var ret = new List<Tuple<Person, int>>();
             var people = netMoney.SelectMany(p => new[] { p.Creditor, p.Debtor }).Distinct().ToList();
             foreach (var tup in people
-                .Select(p => new { Debtor = p, Amount = netMoney.Where(d => d.Debtor == p).Sum(d => d.Amount) })
-                .OrderByDescending(obj => obj.Amount))
+                .Select(p => new { Debtor = p, Owes = netMoney.Where(d => d.Debtor == p).Sum(d => d.Amount) - netMoney.Where(d => d.Creditor == p).Sum(d => d.Amount) })
+                .OrderByDescending(obj => obj.Owes))
             {
-                ret.Add(new Tuple<Person, int>(tup.Debtor, tup.Amount));
+                ret.Add(new Tuple<Person, int>(tup.Debtor, tup.Owes));
             }
             return ret;
         }
