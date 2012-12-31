@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <publishData>
-  <publishProfile publishUrl="C:\temp\mydeploy" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+  <publishProfile publishUrl="c:\temp\mydeploy" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="DKP" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="False" userName="Administrator" savePWD="False" userPWD="" SelectedForPublish="True">
     <file relUrl="Scripts/jquery.validate.unobtrusive.js" publishTime="10/21/2012 22:42:49" />
     <file relUrl="Views/Transaction/Index.cshtml" publishTime="10/21/2012 22:48:49" />
     <file relUrl="Views/Account/Register.cshtml" publishTime="10/21/2012 22:42:49" />
@@ -10,7 +10,7 @@
     <file relUrl="Content/themes/base/jquery.ui.accordion.css" publishTime="10/21/2012 22:42:52" />
     <file relUrl="Scripts/MicrosoftMvcValidation.debug.js" publishTime="10/21/2012 22:42:49" />
     <file relUrl="Content/themes/base/jquery.ui.button.css" publishTime="10/21/2012 22:42:52" />
-    <file relUrl="Web.config" publishTime="11/08/2012 23:30:50" />
+    <file relUrl="Web.config" publishTime="12/27/2012 16:05:27" />
     <file relUrl="Content/themes/base/images/ui-icons_cd0a0a_256x240.png" publishTime="10/21/2012 22:42:52" />
     <file relUrl="Scripts/MicrosoftMvcAjax.js" publishTime="10/21/2012 22:42:49" />
     <file relUrl="Scripts/jquery-ui-1.8.11.js" publishTime="10/21/2012 22:42:51" />
@@ -24,7 +24,7 @@
     <file relUrl="Views/Shared/_LogOnPartial.cshtml" publishTime="10/21/2012 22:42:49" />
     <file relUrl="Content/themes/base/jquery.ui.dialog.css" publishTime="10/21/2012 22:42:51" />
     <file relUrl="Content/themes/base/jquery.ui.resizable.css" publishTime="10/21/2012 22:42:51" />
-    <file relUrl="bin/DkpWeb.pdb" publishTime="11/08/2012 23:30:00" />
+    <file relUrl="bin/DkpWeb.pdb" publishTime="12/27/2012 16:02:45" />
     <file relUrl="Scripts/jquery-1.5.1.js" publishTime="10/21/2012 22:42:50" />
     <file relUrl="Content/themes/base/jquery.ui.core.css" publishTime="10/21/2012 22:42:52" />
     <file relUrl="Views/Analyse/Display.cshtml" publishTime="11/04/2012 16:17:43" />
@@ -54,14 +54,14 @@
     <file relUrl="Scripts/MicrosoftMvcValidation.js" publishTime="10/21/2012 22:42:49" />
     <file relUrl="Views/_ViewStart.cshtml" publishTime="10/21/2012 22:42:49" />
     <file relUrl="Content/themes/base/images/ui-icons_888888_256x240.png" publishTime="10/21/2012 22:42:52" />
-    <file relUrl="bin/DkpLib.pdb" publishTime="11/08/2012 23:28:29" />
+    <file relUrl="bin/DkpLib.pdb" publishTime="12/27/2012 16:02:45" />
     <file relUrl="Scripts/modernizr-1.7.js" publishTime="10/21/2012 22:42:53" />
     <file relUrl="Scripts/jquery.unobtrusive-ajax.js" publishTime="10/21/2012 22:42:49" />
     <file relUrl="Content/themes/base/jquery.ui.all.css" publishTime="10/21/2012 22:42:52" />
     <file relUrl="Scripts/MicrosoftAjax.debug.js" publishTime="10/21/2012 22:42:49" />
     <file relUrl="Scripts/jquery-1.5.1-vsdoc.js" publishTime="10/21/2012 22:42:50" />
-    <file relUrl="bin/DkpWeb.dll" publishTime="11/08/2012 23:30:00" />
-    <file relUrl="bin/DkpLib.dll" publishTime="11/08/2012 23:28:29" />
+    <file relUrl="bin/DkpWeb.dll" publishTime="12/27/2012 16:02:45" />
+    <file relUrl="bin/DkpLib.dll" publishTime="12/27/2012 16:02:45" />
     <file relUrl="Scripts/MicrosoftMvcAjax.debug.js" publishTime="10/21/2012 22:42:49" />
     <file relUrl="Content/themes/base/images/ui-bg_glass_95_fef1ec_1x400.png" publishTime="10/21/2012 22:42:52" />
     <file relUrl="Scripts/jquery.validate.js" publishTime="10/21/2012 22:42:51" />
