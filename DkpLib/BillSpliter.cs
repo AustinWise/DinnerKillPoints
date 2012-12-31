@@ -10,16 +10,27 @@ namespace Austin.DkpLib
         private string mName;
         private DateTime mDate;
         private Person mPayer;
+        private List<Tuple<Person, int>> mParty;
 
         public BillSpliter(string name, DateTime date, Person payer)
         {
             this.mName = name;
             this.mDate = date;
             this.mPayer = payer;
-            this.Party = new Dictionary<Person, int>();
+            mParty = new List<Tuple<Person, int>>();
         }
 
-        public Dictionary<Person, int> Party { get; private set; }
+        public int this[Person person]
+        {
+            get
+            {
+                return mParty.Where(kvp => kvp.Item1.Equals(person)).Sum(p => p.Item2);
+            }
+            set
+            {
+                mParty.Add(new Tuple<Person, int>(person, value));
+            }
+        }
         public int Tax { get; set; }
         public int Tip { get; set; }
         public int SharedFood { get; set; }
@@ -27,28 +38,28 @@ namespace Austin.DkpLib
         public void Save(DkpDataContext db)
         {
 
-            var pool = Party.Sum(p => p.Value) + SharedFood;
+            var pool = mParty.Sum(p => p.Item2) + SharedFood;
             var bs = new BillSplit() { Name = mName };
             db.BillSplits.InsertOnSubmit(bs);
 
-            foreach (var p in Party.Keys)
+            foreach (var p in mParty)
             {
                 double personSubtotal = SharedFood;
-                personSubtotal /= Party.Count;
-                personSubtotal += Party[p];
+                personSubtotal /= mParty.Count;
+                personSubtotal += p.Item2;
                 var ratio = (double)personSubtotal / pool;
-                //Console.WriteLine(ratio);
+                Console.WriteLine(ratio);
                 var total = personSubtotal + ratio * (Tax + Tip);
-                //Console.WriteLine(p.FirstName + ": " + total + " (" + Math.Round(total) + ")");
+                Console.WriteLine(p.Item1.FirstName + ": " + total + " (" + Math.Round(total) + ")");
 
-                if (p == mPayer)
+                if (p.Item1 == mPayer)
                     continue;
 
                 var t = new Transaction()
                 {
                     ID = Guid.NewGuid(),
                     Creditor = mPayer,
-                    Debtor = p,
+                    Debtor = p.Item1,
                     Amount = (int)Math.Round(total),
                     BillSplit = bs,
                     Description = mName,

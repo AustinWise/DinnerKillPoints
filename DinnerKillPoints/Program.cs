@@ -44,17 +44,18 @@ namespace DinnerKillPoints
             var laura = GetPerson(13);
             var minh = GetPerson(14);
 
-            AddDebtFloater(wesley, maria);
+            //AddDebtFloater(wesley, maria);
             AddDebtFloater(seanMc, meredith);
 
-            var bs = new BillSpliter("Parking", DateTime.Now, austin);
-            bs.SharedFood = 1050;
-            bs.Party[austin] = 0;
-            bs.Party[arata] = 0;
-            bs.Party[wesley] = 0;
-            bs.Party[maria] = 0;
-            //bs.Tax = 1086;
-            //bs.Tip = 2100;
+            var bs = new BillSpliter("Cascal", new DateTime(2012, 12, 29, 21, 6, 53), caspar);
+            bs.SharedFood = 1200 + 1200 + 850 + 900 + 1200 + 2600;
+            bs[wesley] = 750 + 850;
+            bs[austin] = 900 + 850;
+            bs[david] = 950;
+            bs[caspar] = 900;
+            bs[wesley] = 595;
+            bs.Tax = 1152;
+            bs.Tip = 2253;
             //bs.Save(db);
 
             var t = new Transaction()
@@ -72,8 +73,8 @@ namespace DinnerKillPoints
 
             var ran = new Random();
 
-            WriteData(true, db.People.OrderBy(p => ran.Next()).Where(p => p != laura).ToArray());
-            WriteData(false, db.People.ToArray());
+            WriteData(true, db.People.Where(p => !p.IsDeleted).OrderBy(p => ran.Next()).Where(p => p != laura).ToArray());
+            WriteData(false, db.People.Where(p => !p.IsDeleted).ToArray());
 
             db.Dispose();
         }
