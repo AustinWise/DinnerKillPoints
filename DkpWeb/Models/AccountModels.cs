@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace MvcApplication2.Models
+namespace DkpWeb.Models
 {
 
     public class ChangePasswordModel

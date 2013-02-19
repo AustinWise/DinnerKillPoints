@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
-using MvcApplication2.Models;
+using DkpWeb.Models;
 
-namespace MvcApplication2.Controllers
+namespace DkpWeb.Controllers
 {
     public class AccountController : Controller
     {
