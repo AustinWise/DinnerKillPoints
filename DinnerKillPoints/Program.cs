@@ -43,6 +43,8 @@ namespace DinnerKillPoints
             var ryuho = GetPerson(12);
             var laura = GetPerson(13);
             var minh = GetPerson(14);
+            var george = GetPerson(15);
+            var justine = GetPerson(16);
 
             //AddDebtFloater(wesley, maria);
             AddDebtFloater(seanMc, meredith);

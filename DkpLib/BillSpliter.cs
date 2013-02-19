@@ -37,7 +37,6 @@ namespace Austin.DkpLib
 
         public void Save(DkpDataContext db)
         {
-
             var pool = mParty.Sum(p => p.Item2) + SharedFood;
             var bs = new BillSplit() { Name = mName };
             db.BillSplits.InsertOnSubmit(bs);

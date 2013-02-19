@@ -16,7 +16,7 @@ namespace DkpWeb.Controllers
 
         public ActionResult Index()
         {
-            return View(mData.Transactions.Where(t => !t.Debtor.IsDeleted && !t.Creditor.IsDeleted).OrderBy(t => t.Created));
+            return View(mData.Transactions.OrderByDescending(t => t.Created));
         }
 
         protected override void Dispose(bool disposing)
