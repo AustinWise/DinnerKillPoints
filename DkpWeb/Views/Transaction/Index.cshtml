@@ -3,7 +3,10 @@
 }
 <h2>
     Transactions</h2>
-    @Html.ActionLink("Add","Add")
+@if (Roles.IsUserInRole("DKP"))
+{
+    @Html.ActionLink("Add", "Add")
+}
 <table>
     <tr>
         <th>
@@ -20,6 +23,9 @@
         </th>
         <th>
             Date
+        </th>
+        <th>
+            Bill Split
         </th>
     </tr>
     @foreach (Austin.DkpLib.Transaction t in Model)
@@ -39,6 +45,9 @@
             </td>
             <td>
                 @t.Created
+            </td>
+            <td>
+                @(t.BillID.HasValue ? t.BillID.Value.ToString() : "")
             </td>
         </tr>
     }
