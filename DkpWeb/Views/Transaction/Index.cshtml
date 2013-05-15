@@ -25,7 +25,7 @@
             Date
         </th>
         <th>
-            Bill Split
+            Details
         </th>
     </tr>
     @foreach (Austin.DkpLib.Transaction t in Model)
@@ -47,7 +47,7 @@
                 @t.Created
             </td>
             <td>
-                @(t.BillID.HasValue ? t.BillID.Value.ToString() : "")
+                @Html.ActionLink("Details", "View", new { id = @t.ID })
             </td>
         </tr>
     }

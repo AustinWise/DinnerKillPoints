@@ -20,11 +20,27 @@ namespace DkpWeb.Controllers
             return View(mData.Transactions.OrderByDescending(t => t.Created));
         }
 
+        public ActionResult View(Guid id)
+        {
+            return View(mData.Transactions.Where(t => t.ID == id).Single());
+        }
+
         [Authorize(Roles = "DKP")]
         public ActionResult Add()
         {
             ViewBag.People = mData.People.Where(p => !p.IsDeleted).ToList();
             return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Delete(Guid id)
+        {
+            var trans = mData.Transactions.Where(t => t.ID == id).Single();
+            mData.Transactions.DeleteOnSubmit(trans);
+            mData.SubmitChanges();
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
