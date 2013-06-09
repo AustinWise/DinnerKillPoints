@@ -10,7 +10,7 @@ namespace Austin.DkpLib
     {
     }
 
-    partial class Person : ICloneable
+    partial class Person : ICloneable, IComparable<Person>
     {
         public override string ToString()
         {
@@ -44,6 +44,14 @@ namespace Austin.DkpLib
             copy._FirstName = this._FirstName;
             copy._LastName = this._LastName;
             return copy;
+        }
+
+        public int CompareTo(Person other)
+        {
+            int ret = this.FirstName.CompareTo(other.FirstName);
+            if (ret == 0)
+                ret = this.LastName.CompareTo(other.LastName);
+            return ret;
         }
     }
 }

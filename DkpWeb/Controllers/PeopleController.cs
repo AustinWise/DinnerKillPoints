@@ -17,7 +17,11 @@ namespace DkpWeb.Controllers
             Person[] people;
             using (var dc = new DkpDataContext())
             {
-                people = dc.People.Where(p => !p.IsDeleted).ToArray();
+                people = dc.People
+                           .Where(p => !p.IsDeleted)
+                           .ToList() //execute SQL
+                           .OrderBy(p => p) //because this does not work on IQueryable
+                           .ToArray();
             }
             return View(people);
         }
