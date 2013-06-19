@@ -95,7 +95,7 @@ namespace DinnerKillPoints
             const string outDir = @"C:\Users\AustinWise\Dropbox\DKP\";
 
             List<Debt> netMoney = null;
-            netMoney = DebtGraph.TestAlgo(db, people, DebtFloaters, removeCycles, removeCycles ? new StreamWriter(Path.Combine(outDir, "Info.txt")) : Console.Out);
+            netMoney = DebtGraph.TestAlgo(db, people, removeCycles, removeCycles ? new StreamWriter(Path.Combine(outDir, "Info.txt")) : Console.Out);
             Console.WriteLine("{0:c}", netMoney.Sum(m => m.Amount) / 100d);
 
             const string gvPath = @"c:\temp\graph\test.gv";

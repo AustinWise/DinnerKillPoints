@@ -9,6 +9,19 @@ namespace Austin.DkpLib
 {
     public static class DebtGraph
     {
+        static DebtGraph()
+        {
+            AddDebtFloater(6, 8); //sean, meredith
+            AddDebtFloater(2, 16); //caspar, justine
+        }
+
+        static List<Tuple<int, int>> sDebtFloaters = new List<Tuple<int, int>>();
+        private static void AddDebtFloater(int p1, int p2)
+        {
+            sDebtFloaters.Add(new Tuple<int, int>(p1, p2));
+            sDebtFloaters.Add(new Tuple<int, int>(p2, p1));
+        }
+
         private static void replace(Dictionary<Tuple<Person, Person>, int> summedDebts, Tuple<Person, Person> oldKey, Tuple<Person, Person> newKey)
         {
             var val = summedDebts[oldKey];
@@ -18,7 +31,7 @@ namespace Austin.DkpLib
             summedDebts[newKey] = val;
         }
 
-        public static List<Debt> TestAlgo(DkpDataContext db, Person[] people, List<Tuple<int, int>> debtFloaters, bool RemoveCycles, TextWriter logger)
+        public static List<Debt> TestAlgo(DkpDataContext db, Person[] people, bool RemoveCycles, TextWriter logger)
         {
             var netMoney = new List<Debt>();
             var peopleMap = db.People.Select(p => p.Clone()).Cast<Person>().ToDictionary(p => p.ID);
@@ -26,7 +39,7 @@ namespace Austin.DkpLib
 
             logger = logger ?? TextWriter.Null;
 
-            var DebtFloaters = debtFloaters.Select(tup => new Tuple<Person, Person>(peopleMap[tup.Item1], peopleMap[tup.Item2])).ToList();
+            var DebtFloaters = sDebtFloaters.Select(tup => new Tuple<Person, Person>(peopleMap[tup.Item1], peopleMap[tup.Item2])).ToList();
 
             //sum all debts from one person to another
             var summedDebts = new Dictionary<Tuple<Person, Person>, int>();
@@ -162,7 +175,7 @@ namespace Austin.DkpLib
             return ret;
         }
 
-        public static void WriteGraph(List<Debt> netMoney, TextWriter sw)
+        public static void WriteGraph(IEnumerable<Debt> netMoney, TextWriter sw)
         {
             sw.WriteLine("digraph Test {");
             foreach (var d in netMoney)
