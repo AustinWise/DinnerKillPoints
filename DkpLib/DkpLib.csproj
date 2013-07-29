@@ -60,7 +60,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Dkp.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Dkp.designer.cs</LastGenOutput>
