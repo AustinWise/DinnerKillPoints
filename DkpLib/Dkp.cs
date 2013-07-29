@@ -1,9 +1,21 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Austin.DkpLib
 {
     partial class DkpDataContext
     {
+        public IEnumerable<Person> ActivePeopleOrderedByName
+        {
+            get
+            {
+                return People
+                    .Where(p => !p.IsDeleted)
+                    .OrderBy(p => p.FirstName)
+                    .ThenBy(p => p.LastName);
+            }
+        }
     }
 
     partial class Transaction

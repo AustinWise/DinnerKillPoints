@@ -14,16 +14,10 @@ namespace DkpWeb.Controllers
 
         public ActionResult Index()
         {
-            Person[] people;
             using (var dc = new DkpDataContext())
             {
-                people = dc.People
-                           .Where(p => !p.IsDeleted)
-                           .ToList() //execute SQL
-                           .OrderBy(p => p) //because this does not work on IQueryable
-                           .ToArray();
+                return View(dc.ActivePeopleOrderedByName.ToArray());
             }
-            return View(people);
         }
 
         public ActionResult Detail(int id)

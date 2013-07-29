@@ -28,13 +28,7 @@ namespace DkpWeb.Controllers
 
         public ActionResult Index()
         {
-            Person[] people;
-            people = dc.People
-                       .Where(p => !p.IsDeleted)
-                       .ToList() //execute SQL
-                       .OrderBy(p => p) //because this does not work on IQueryable
-                       .ToArray();
-            return View(people);
+            return View(dc.ActivePeopleOrderedByName);
         }
 
         [HttpPost]
