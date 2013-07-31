@@ -28,7 +28,7 @@ namespace DkpWeb.Controllers
         [Authorize(Roles = "DKP")]
         public ActionResult Add()
         {
-            ViewBag.People = mData.People.Where(p => !p.IsDeleted).ToList();
+            ViewBag.People = mData.ActivePeopleOrderedByName.ToList();
             return View();
         }
 
@@ -84,7 +84,7 @@ namespace DkpWeb.Controllers
                 }
             }
 
-            ViewBag.People = mData.People.Where(p => !p.IsDeleted).ToList();
+            ViewBag.People = mData.ActivePeopleOrderedByName.ToList();
             return View(model);
         }
 
