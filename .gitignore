@@ -5,3 +5,6 @@ obj
 *.cache
 TestResults
 DkpData/sql
+
+packages/*
+!packages/repositories.config

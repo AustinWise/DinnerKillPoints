@@ -1,8 +1,38 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                To learn more about ASP.NET MVC visit
+                <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
+                The page features <mark>videos, tutorials, and samples</mark> to help you get the most from ASP.NET MVC.
+                If you have any questions about ASP.NET MVC visit
+                <a href="http://forums.asp.net/1146.aspx/1?MVC" title="ASP.NET MVC Forum">our forums</a>.
+            </p>
+        </div>
+    </section>
+}
+<h3>We suggest the following:</h3>
+<ol class="round">
+    <li class="one">
+        <h5>Use analyse to choose one person to pay</h5>
+        See the @Html.ActionLink("analyse", "Index", "Analyse") tab.
+    </li>
 
-<h2>@ViewBag.Message</h2>
-<p>
-    To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
-</p>
+    <li class="two">
+        <h5>Record the debt in DKP</h5>
+        Use the @Html.ActionLink("transactions", "Index", "Transaction") tab record the debts.
+    </li>
+
+    <li class="three">
+        <h5>Repeat</h5>
+        By having the person who owes the most pay each time, the debt will not grow
+        too large.
+    </li>
+</ol>
