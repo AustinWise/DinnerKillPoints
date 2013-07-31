@@ -57,6 +57,7 @@ namespace DinnerKillPoints
 
             //AddDebtFloater(wesley, maria);
             AddDebtFloater(seanMc, meredith);
+            AddDebtFloater(caspar, justine);
 
             var bs = new BillSpliter("Cascal", new DateTime(2012, 12, 29, 21, 6, 53), caspar);
             bs.SharedFood = 1200 + 1200 + 850 + 900 + 1200 + 2600;
