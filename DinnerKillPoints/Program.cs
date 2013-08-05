@@ -54,20 +54,28 @@ namespace DinnerKillPoints
             var adrian = GetPerson(23);
             var ed = GetPerson(24);
             var randy = GetPerson(25);
+            var becky = GetPerson(26);
 
             //AddDebtFloater(wesley, maria);
             AddDebtFloater(seanMc, meredith);
             AddDebtFloater(caspar, justine);
 
-            var bs = new BillSpliter("Cascal", new DateTime(2012, 12, 29, 21, 6, 53), caspar);
-            bs.SharedFood = 1200 + 1200 + 850 + 900 + 1200 + 2600;
-            bs[wesley] = 750 + 850;
-            bs[austin] = 900 + 850;
-            bs[david] = 950;
-            bs[caspar] = 900;
-            bs[wesley] = 595;
-            bs.Tax = 1152;
-            bs.Tip = 2253;
+            var bs = new BillSpliter("Limon", new DateTime(2013, 8, 4, 12 + 8, 15, 0), austin, david, wesley);
+            bs.AddFreeLoader(seanChen);
+            var fish = (1195 + 1195 + 1025) / 6d;
+            var meat = (1095 + 1195 + 2095) / 7d;
+            var wesleyElaineProfiteroles = 825 / 2d;
+            bs.SharedFood = 895 + 1350+725;
+            bs[austin] = fish + meat + 1000 + 1000 + 1000;
+            bs[wesley] = fish + meat + wesleyElaineProfiteroles + 695 + 900;
+            bs[elaine] = fish + meat + wesleyElaineProfiteroles + 1000;
+            bs[david] = fish + meat + 1000 + 1000 + 825;
+            bs[justine] = meat + 1195 + 1000;
+            bs[seanChen] = meat + fish + 1000 + 825;
+            bs[caspar] = meat + fish + 1000;
+            bs[becky] = 250;
+            bs.Tax = 2663;
+            bs.Tip = 5057;
             //bs.Save(db);
 
             var t = new Transaction()

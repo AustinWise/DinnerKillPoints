@@ -13,6 +13,8 @@ namespace Austin.DkpLib
         {
             AddDebtFloater(6, 8); //sean, meredith
             AddDebtFloater(2, 16); //caspar, justine
+
+            //AddUnPayment(3, 18); //wesley, elaine
         }
 
         static List<Tuple<int, int>> sDebtFloaters = new List<Tuple<int, int>>();
@@ -20,6 +22,13 @@ namespace Austin.DkpLib
         {
             sDebtFloaters.Add(new Tuple<int, int>(p1, p2));
             sDebtFloaters.Add(new Tuple<int, int>(p2, p1));
+        }
+
+        static List<Tuple<int, int>> sMutuallyAssuredUnpayment = new List<Tuple<int, int>>();
+        private static void AddUnPayment(int p1, int p2)
+        {
+            sMutuallyAssuredUnpayment.Add(new Tuple<int, int>(p1, p2));
+            sMutuallyAssuredUnpayment.Add(new Tuple<int, int>(p2, p1));
         }
 
         private static void replace(Dictionary<Tuple<Person, Person>, int> summedDebts, Tuple<Person, Person> oldKey, Tuple<Person, Person> newKey)
@@ -43,7 +52,7 @@ namespace Austin.DkpLib
 
             //sum all debts from one person to another
             var summedDebts = new Dictionary<Tuple<Person, Person>, int>();
-            foreach (var t in db.Transactions)
+            foreach (var t in db.Transactions.Where(t => t.CreditorID != t.DebtorID))
             {
                 var tup = new Tuple<Person, Person>(peopleMap[t.DebtorID], peopleMap[t.CreditorID]);
                 int net = 0;
@@ -85,6 +94,12 @@ namespace Austin.DkpLib
                     removedPerson.FirstName += "<removed>";
                     DebtFloaters.RemoveAt(0);
                     DebtFloaters.RemoveAt(0);
+                }
+
+                //remove mutually assured unpayment
+                foreach (var mut in sMutuallyAssuredUnpayment)
+                {
+                    summedDebts.Remove(new Tuple<Person, Person>(peopleMap[mut.Item1], peopleMap[mut.Item2]));
                 }
             }
 
