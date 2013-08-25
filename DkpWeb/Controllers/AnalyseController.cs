@@ -31,7 +31,6 @@ namespace DkpWeb.Controllers
             return View(dc.ActivePeopleOrderedByName);
         }
 
-        [HttpPost]
         public ActionResult Display(int[] peopleIds)
         {
             var people = peopleIds

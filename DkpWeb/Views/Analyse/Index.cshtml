@@ -3,7 +3,7 @@
 }
 <h2>
     Analyse Index</h2>
-@using (@Html.BeginForm("Display", "Analyse"))
+@using (@Html.BeginForm("Display", "Analyse", FormMethod.Get))
 {
     <select name="peopleIds" multiple="multiple" style="height: 400px;">
         @foreach (Austin.DkpLib.Person p in Model)
