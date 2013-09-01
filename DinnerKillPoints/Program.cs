@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Austin.DkpLib;
+using System.Data.SqlClient;
+using System.Net;
 
 namespace DinnerKillPoints
 {
@@ -28,6 +30,9 @@ namespace DinnerKillPoints
         static void Main(string[] args)
         {
             db = new DkpDataContext();
+
+            var cs = new SqlConnectionStringBuilder(db.Connection.ConnectionString);
+            var ips = Dns.GetHostAddresses(cs.DataSource);
 
             var austin = GetPerson(1);
             var caspar = GetPerson(2);
@@ -55,6 +60,7 @@ namespace DinnerKillPoints
             var ed = GetPerson(24);
             var randy = GetPerson(25);
             var becky = GetPerson(26);
+            var andrew = GetPerson(29);
 
             //AddDebtFloater(wesley, maria);
             AddDebtFloater(seanMc, meredith);
@@ -91,10 +97,12 @@ namespace DinnerKillPoints
             //db.Transactions.InsertOnSubmit(t);
             //db.SubmitChanges();
 
+            //DebtTransfer(elaine, david, wesley);
+
             var ran = new Random();
 
             WriteData(true, db.People.Where(p => !p.IsDeleted).OrderBy(p => ran.Next()).Where(p => p != laura).ToArray());
-            WriteData(false, db.People.Where(p => !p.IsDeleted).ToArray());
+            WriteData(false, db.People.ToArray());
 
             db.Dispose();
         }
@@ -122,6 +130,59 @@ namespace DinnerKillPoints
         {
             var austin = db.People.Where(p => p.ID == i).Single();
             return austin;
+        }
+
+        private static void DebtTransfer(Person debtor, Person oldCreditor, Person newCreditor)
+        {
+            var netMoney = DebtGraph.TestAlgo(db, new[] { debtor, oldCreditor }, false, null);
+            if (netMoney.Count != 1)
+                throw new Exception("No debt to transfer.");
+
+            var theDebt = netMoney[0];
+
+            if (theDebt.Debtor.ID != debtor.ID || theDebt.Creditor.ID != oldCreditor.ID)
+                throw new Exception("Debt does not go in the expected direction.");
+
+            var now = DateTime.Now;
+            var msg = Transaction.CreateDebtTransferString(debtor, oldCreditor, newCreditor);
+
+            var cancelTrans = new Transaction()
+            {
+                ID = Guid.NewGuid(),
+                DebtorID = oldCreditor.ID, //owes money
+                CreditorID = debtor.ID, //owed money
+                Amount = theDebt.Amount,
+                BillID = null,
+                Description = msg,
+                Created = now
+            };
+            db.Transactions.InsertOnSubmit(cancelTrans);
+
+            var makeCreditorWholeTransaction = new Transaction()
+            {
+                ID = Guid.NewGuid(),
+                DebtorID = newCreditor.ID, //owes money
+                CreditorID = oldCreditor.ID, //owed money
+                Amount = theDebt.Amount,
+                BillID = null,
+                Description = msg,
+                Created = now
+            };
+            db.Transactions.InsertOnSubmit(makeCreditorWholeTransaction);
+
+            var makeDebtorOweNewPartyTrans = new Transaction()
+            {
+                ID = Guid.NewGuid(),
+                DebtorID = debtor.ID, //owes money
+                CreditorID = newCreditor.ID, //owed money
+                Amount = theDebt.Amount,
+                BillID = null,
+                Description = msg,
+                Created = now
+            };
+            db.Transactions.InsertOnSubmit(makeDebtorOweNewPartyTrans);
+
+            db.SubmitChanges();
         }
     }
 }

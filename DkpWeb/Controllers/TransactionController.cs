@@ -17,7 +17,13 @@ namespace DkpWeb.Controllers
 
         public ActionResult Index()
         {
-            return View(mData.Transactions.OrderByDescending(t => t.Created));
+            var trans = mData.Transactions.OrderByDescending(t => t.Created).ToList();
+            var personMap = mData.People.ToDictionary(p => p.ID);
+            foreach (var t in trans)
+            {
+                t.SetPrettyDescription(personMap);
+            }
+            return View(trans);
         }
 
         public ActionResult View(Guid id)

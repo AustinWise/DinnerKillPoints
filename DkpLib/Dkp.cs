@@ -20,6 +20,41 @@ namespace Austin.DkpLib
 
     partial class Transaction
     {
+        const string DebtTransferString = "Debt Transfer: ";
+        public static string CreateDebtTransferString(Person debtor, Person oldCreditor, Person newCreditor)
+        {
+            return string.Format("{0}{1} {2} {3}", DebtTransferString, debtor.ID, oldCreditor.ID, newCreditor.ID);
+        }
+
+        string _PrettyDescription = null;
+        public string PrettyDescription
+        {
+            get
+            {
+                return _PrettyDescription ?? _Description;
+            }
+            set
+            {
+                _PrettyDescription = value;
+            }
+        }
+
+        public void SetPrettyDescription(Dictionary<int, Person> personMap)
+        {
+            if (!this.Description.StartsWith(DebtTransferString))
+                return;
+
+            var splits = Description.Remove(0, DebtTransferString.Length).Split(' ');
+            if (splits.Length != 3)
+                return;
+
+            var debtor = personMap[int.Parse(splits[0])];
+            var oldCreditor = personMap[int.Parse(splits[1])];
+            var newCreditor = personMap[int.Parse(splits[2])];
+
+            _PrettyDescription = string.Format("{0}{2}'s debt of {1:c} to {3} is now owed to {4}",
+                DebtTransferString, Amount / 100d, debtor.FirstName, oldCreditor.FirstName, newCreditor.FirstName);
+        }
     }
 
     partial class Person : ICloneable, IComparable<Person>
