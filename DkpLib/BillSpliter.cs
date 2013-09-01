@@ -51,6 +51,9 @@ namespace Austin.DkpLib
 
         public void Save(DkpDataContext db)
         {
+            if (mParty.Count == 0)
+                throw new Exception("Must have one or more people in that party.");
+
             var pool = mParty.Sum(p => p.Item2) + SharedFood;
             var bs = new BillSplit() { Name = mName };
             db.BillSplits.InsertOnSubmit(bs);
