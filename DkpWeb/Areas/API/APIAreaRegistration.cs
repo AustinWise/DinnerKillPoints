@@ -14,11 +14,11 @@ namespace DkpWeb.Areas.API
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
-            context.MapRoute(
-                "API_default",
-                "api/v1/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
-            );
+            //context.MapRoute(
+            //    "API_default",
+            //    "api/v1/{controller}/{action}/{id}",
+            //    new { action = "Index", id = UrlParameter.Optional }
+            //);
         }
     }
 }

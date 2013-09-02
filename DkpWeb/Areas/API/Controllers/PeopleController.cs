@@ -18,6 +18,8 @@ namespace DkpWeb.Areas.API.Controllers
         public string FirstName { get; set; }
         [DataMember]
         public string LastName { get; set; }
+        [DataMember]
+        public bool IsDeleted { get; set; }
     }
     public class PeopleController : ApiController
     {
@@ -26,7 +28,7 @@ namespace DkpWeb.Areas.API.Controllers
         {
             using (var db = new DkpDataContext())
             {
-                return db.People.Select(p => new ApiPerson() { ID = p.ID, FirstName = p.FirstName, LastName = p.LastName }).ToList();
+                return db.People.Select(p => new ApiPerson() { ID = p.ID, FirstName = p.FirstName, LastName = p.LastName, IsDeleted = p.IsDeleted }).ToList();
             }
         }
 

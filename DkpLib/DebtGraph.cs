@@ -13,8 +13,7 @@ namespace Austin.DkpLib
         {
             AddDebtFloater(6, 8); //sean, meredith
             AddDebtFloater(2, 16); //caspar, justine
-
-            //AddUnPayment(3, 18); //wesley, elaine
+            AddDebtFloater(3, 18); //wesley, elaine
         }
 
         static List<Tuple<int, int>> sDebtFloaters = new List<Tuple<int, int>>();
