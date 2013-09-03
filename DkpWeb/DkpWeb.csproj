@@ -206,6 +206,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AnalyseController.cs" />
+    <Compile Include="Controllers\BillSplitController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PeopleController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
@@ -351,6 +352,8 @@
     <Content Include="Views\Transaction\Add.cshtml" />
     <Content Include="Views\Transaction\Index.cshtml" />
     <Content Include="Views\Transaction\View.cshtml" />
+    <Content Include="Views\BillSplit\Index.cshtml" />
+    <Content Include="Views\BillSplit\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
