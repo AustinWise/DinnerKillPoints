@@ -13,6 +13,10 @@ namespace DkpWeb.Areas.API.Controllers
     [DataContract]
     public class ApiTransaction
     {
+        public ApiTransaction()
+        {
+        }
+
         public ApiTransaction(Transaction t)
         {
             this.ID = t.ID;
