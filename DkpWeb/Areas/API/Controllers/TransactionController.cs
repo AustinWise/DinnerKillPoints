@@ -35,6 +35,19 @@ namespace DkpWeb.Areas.API.Controllers
         public int CreditorId { get; set; }
         [DataMember, StringLength(50)]
         public string Description { get; set; }
+
+        public Transaction ToTransaction(BillSplit bill)
+        {
+            var t = new Transaction();
+            t.ID = Guid.NewGuid();
+            t.Created = DateTime.Now;
+            t.Description = this.Description;
+            t.CreditorID = this.CreditorId;
+            t.DebtorID = this.DebtorId;
+            t.Amount = this.Amount;
+            t.BillSplit = bill;
+            return t;
+        }
     }
     public class TransactionController : ApiController
     {
@@ -58,18 +71,27 @@ namespace DkpWeb.Areas.API.Controllers
         }
 
         // POST api/transaction
-        public void Post([FromBody]string value)
+        public Guid Post([FromBody]ApiTransaction value)
         {
+            using (var db = new DkpDataContext())
+            {
+                var t = value.ToTransaction(null);
+                db.Transactions.InsertOnSubmit(t);
+                db.SubmitChanges();
+                return t.ID;
+            }
         }
 
         // PUT api/transaction/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(Guid id, [FromBody]ApiTransaction value)
         {
+            throw new NotImplementedException();
         }
 
         // DELETE api/transaction/5
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
+            throw new NotImplementedException();
         }
     }
 }
