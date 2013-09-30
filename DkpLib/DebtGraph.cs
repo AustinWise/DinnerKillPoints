@@ -12,7 +12,7 @@ namespace Austin.DkpLib
         static DebtGraph()
         {
             AddDebtFloater(6, 8); //sean, meredith
-            AddDebtFloater(2, 16); //caspar, justine
+            //AddDebtFloater(2, 16); //caspar, justine
             AddDebtFloater(3, 18); //wesley, elaine
         }
 

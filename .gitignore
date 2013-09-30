@@ -1,5 +1,5 @@
 *.suo
-*proj.user
+*.user
 bin
 obj
 *.cache

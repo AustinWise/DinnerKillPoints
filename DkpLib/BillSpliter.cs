@@ -41,6 +41,14 @@ namespace Austin.DkpLib
         public int Tax { get; set; }
         public int Tip { get; set; }
         public int SharedFood { get; set; }
+        public int SubTotal
+        {
+            get
+            {
+                return Convert.ToInt32(mParty.Sum(p => p.Item2)) + SharedFood;
+            }
+        }
+
 
         public void AddFreeLoader(Person p)
         {
