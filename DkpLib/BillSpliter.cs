@@ -38,6 +38,7 @@ namespace Austin.DkpLib
                 mParty.Add(new Tuple<Person, double>(person, value));
             }
         }
+
         public int Tax { get; set; }
         public int Tip { get; set; }
         public int SharedFood { get; set; }
@@ -48,7 +49,6 @@ namespace Austin.DkpLib
                 return Convert.ToInt32(mParty.Sum(p => p.Item2)) + SharedFood;
             }
         }
-
 
         public void AddFreeLoader(Person p)
         {
@@ -79,7 +79,6 @@ namespace Austin.DkpLib
                 Console.WriteLine(p.Item1.FirstName + ": " + total + " (" + Math.Round(total) + ")");
 
                 amountSpent.Add(new Tuple<Person, double>(p.Item1, total));
-
             }
 
             var totalSpentPart1 = pool + Tip + Tax;
@@ -104,29 +103,97 @@ namespace Austin.DkpLib
                 }
 
                 var totalSpentPart3 = amountSpent.Sum(p => p.Item2);
-                if (Math.Abs(totalSpentPart2 - totalSpentPart3) > 0.1)
+                if (Math.Abs(totalSpentPart1 - totalSpentPart3) > 0.1)
                     throw new Exception("Something terrible has happened (part3).");
             }
 
-            foreach (var p in amountSpent)
+            var debtsToPayers = SplitDebtsBetweenPayers(amountSpent);
+            var totalSpentPart4 = debtsToPayers.SelectMany(p => p.Item2).Sum(p => p.Item2);
+            if (Math.Abs(totalSpentPart1 - totalSpentPart4) > 0.1)
+                throw new Exception("Something terrible has happened (part4).");
+
+            var pennySplits = SplitPennies(debtsToPayers);
+            var totalSpentPart5 = pennySplits.Sum(p => p.Item3);
+            if (Math.Abs(totalSpentPart1 - (double)totalSpentPart5) > 0.1)
+                throw new Exception("Something terrible has happened (part5).");
+
+            foreach (var p in pennySplits)
             {
-                foreach (var payer in mPayer)
+                var t = new Transaction()
                 {
-                    var t = new Transaction()
-                    {
-                        ID = Guid.NewGuid(),
-                        Creditor = payer,
-                        Debtor = p.Item1,
-                        Amount = (int)Math.Round(p.Item2 / (double)mPayer.Length),
-                        BillSplit = bs,
-                        Description = mName,
-                        Created = mDate,
-                    };
-                    db.Transactions.InsertOnSubmit(t);
-                }
+                    ID = Guid.NewGuid(),
+                    Creditor = p.Item2,
+                    Debtor = p.Item1,
+                    Amount = p.Item3,
+                    BillSplit = bs,
+                    Description = mName,
+                    Created = mDate,
+                };
+                db.Transactions.InsertOnSubmit(t);
             }
 
             db.SubmitChanges();
+        }
+
+        List<Tuple<Person, List<Tuple<Person, double>>>> SplitDebtsBetweenPayers(List<Tuple<Person, double>> amountSpent)
+        {
+            var ret = new List<Tuple<Person, List<Tuple<Person, double>>>>();
+            foreach (var p in amountSpent)
+            {
+                var creditors = new List<Tuple<Person, double>>();
+                foreach (var payer in mPayer)
+                {
+                    creditors.Add(new Tuple<Person, double>(payer, p.Item2 / (double)mPayer.Length));
+                }
+                ret.Add(new Tuple<Person, List<Tuple<Person, double>>>(p.Item1, creditors));
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Distributes pennies.
+        /// </summary>
+        /// <param name="amountSpent"></param>
+        /// <returns>Item1 owes Item2 Item3 pennies</returns>
+        List<Tuple<Person, Person, int>> SplitPennies(List<Tuple<Person, List<Tuple<Person, double>>>> amountSpent)
+        {
+            var pennies = amountSpent
+                .Select(tup => new
+                {
+                    Debtor = tup.Item1,
+                    Debts = tup.Item2.Select(debt => new Tuple<Person, int>(debt.Item1, (int)Math.Floor(debt.Item2))).ToList(),
+                    PennyFraction = tup.Item2.Select(debt => debt.Item2 - Math.Floor(debt.Item2)).Sum()
+                })
+                .OrderByDescending(p => p.PennyFraction)
+                .ToList();
+            var tempDoublePennyCount = pennies.Sum(p => p.PennyFraction);
+
+            if (Math.Abs(tempDoublePennyCount - Math.Round(tempDoublePennyCount)) > 0.01)
+                throw new Exception("Non-int number of pennies.");
+
+            var totalPennies = (int)Math.Round(tempDoublePennyCount);
+
+            if (totalPennies < 0)
+                throw new Exception("Negitive number of pennies.");
+
+
+            int payerNdx = 0;
+            while (totalPennies != 0)
+            {
+                foreach (var d in pennies)
+                {
+                    if (totalPennies == 0)
+                        break;
+                    if (mFreeLoaders.Contains(d.Debtor))
+                        continue;
+                    var ndx = payerNdx++ % d.Debts.Count;
+                    var tup = d.Debts[ndx];
+                    d.Debts[ndx] = new Tuple<Person, int>(tup.Item1, tup.Item2 + 1);
+                    totalPennies--;
+                }
+            }
+
+            return pennies.SelectMany(p => p.Debts.Select(d => new Tuple<Person, Person, int>(p.Debtor, d.Item1, d.Item2))).ToList();
         }
     }
 }
