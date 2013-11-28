@@ -101,10 +101,11 @@ namespace Austin.DkpLib
             ValidateBill();
 
             var pool = mParty.Sum(p => p.Item2) + SharedFood;
-            var initalSum = pool + Tip + Tax;
+            var totalBillValue = pool + Tip + Tax;
 
             var amountSpent = new List<Tuple<Person, double>>();
 
+            //First add up each person's share of the bill, splitting shared food items equally.
             foreach (var p in mParty)
             {
                 double personSubtotal = SharedFood;
@@ -117,12 +118,13 @@ namespace Austin.DkpLib
 
                 amountSpent.Add(new Tuple<Person, double>(p.Item1, total));
             }
+            checkTotal(totalBillValue, amountSpent.Select(tup => tup.Item2).Sum());
 
-            checkTotal(initalSum, amountSpent.Select(tup => tup.Item2).Sum());
+            //Distrubute any bill-wide discount to each person according to their share of the bill.
 
+            //Take each freeloader and evenly split their meal across all the non-freeloaders
             var freeloadersFound = amountSpent.Where(p => mFreeLoaders.Contains(p.Item1)).ToList();
             var nonFreeLoaderCount = amountSpent.Count - freeloadersFound.Count;
-
             if (freeloadersFound.Count != 0)
             {
                 var freeloaderSum = freeloadersFound.Select(p => p.Item2).Sum();
@@ -135,14 +137,17 @@ namespace Austin.DkpLib
                     amountSpent.Add(new Tuple<Person, double>(p.Item1, 0));
                 }
 
-                checkTotal(initalSum, amountSpent.Sum(p => p.Item2));
+                checkTotal(totalBillValue, amountSpent.Sum(p => p.Item2));
             }
 
+            //Evenly split each person's debt to each payer.
             var debtsToPayers = SplitDebtsBetweenPayers(amountSpent);
-            checkTotal(initalSum, debtsToPayers.SelectMany(p => p.Item2).Sum(p => p.Item2));
+            checkTotal(totalBillValue, debtsToPayers.SelectMany(p => p.Item2).Sum(p => p.Item2));
 
+            //Take all the fractional pennies and distrubte them to each debtor, round robin to each payer.
             var pennySplits = SplitPennies(debtsToPayers);
-            checkTotal(initalSum, pennySplits.Sum(p => p.Item3));
+            checkTotal(totalBillValue, pennySplits.Sum(p => p.Item3));
+
             return pennySplits;
         }
 
