@@ -101,7 +101,10 @@ namespace Austin.DkpLib
             ValidateBill();
 
             var pool = mParty.Sum(p => p.Item2) + SharedFood;
-            var totalBillValue = pool + Tip + Tax;
+            var totalBillValue = pool + Tip + Tax - Discount;
+
+            if (totalBillValue < 0)
+                throw new Exception("Negative total bill value.");
 
             var amountSpent = new List<Tuple<Person, double>>();
 
@@ -112,15 +115,11 @@ namespace Austin.DkpLib
                 personSubtotal /= mParty.Count;
                 personSubtotal += p.Item2;
                 var ratio = (double)personSubtotal / pool;
-                Console.WriteLine(ratio);
-                var total = personSubtotal + ratio * (Tax + Tip);
-                Console.WriteLine(p.Item1.FirstName + ": " + total + " (" + Math.Round(total) + ")");
+                var total = personSubtotal + ratio * (Tax + Tip - Discount);
 
                 amountSpent.Add(new Tuple<Person, double>(p.Item1, total));
             }
             checkTotal(totalBillValue, amountSpent.Select(tup => tup.Item2).Sum());
-
-            //Distrubute any bill-wide discount to each person according to their share of the bill.
 
             //Take each freeloader and evenly split their meal across all the non-freeloaders
             var freeloadersFound = amountSpent.Where(p => mFreeLoaders.Contains(p.Item1)).ToList();
@@ -147,6 +146,12 @@ namespace Austin.DkpLib
             //Take all the fractional pennies and distrubte them to each debtor, round robin to each payer.
             var pennySplits = SplitPennies(debtsToPayers);
             checkTotal(totalBillValue, pennySplits.Sum(p => p.Item3));
+
+            foreach (var p in pennySplits)
+            {
+                if (p.Item3 < 0)
+                    throw new Exception("Negative debt.");
+            }
 
             return pennySplits;
         }
