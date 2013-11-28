@@ -42,6 +42,8 @@ namespace Austin.DkpLib
         public int Tax { get; set; }
         public int Tip { get; set; }
         public int SharedFood { get; set; }
+        public int Discount { get; set; }
+
         public int SubTotal
         {
             get
@@ -59,13 +61,47 @@ namespace Austin.DkpLib
 
         public void Save(DkpDataContext db)
         {
+            var debts = SplitBill();
+
+            var bs = new BillSplit() { Name = mName };
+            db.BillSplits.InsertOnSubmit(bs);
+            foreach (var p in debts)
+            {
+                var t = new Transaction()
+                {
+                    ID = Guid.NewGuid(),
+                    Creditor = p.Item2,
+                    Debtor = p.Item1,
+                    Amount = p.Item3,
+                    BillSplit = bs,
+                    Description = mName,
+                    Created = mDate,
+                };
+                db.Transactions.InsertOnSubmit(t);
+            }
+
+            db.SubmitChanges();
+        }
+
+        private void ValidateBill()
+        {
             if (mParty.Count == 0)
                 throw new Exception("Must have one or more people in that party.");
+            foreach (var kvp in mParty)
+            {
+                if (kvp.Item2 < 0)
+                    throw new NotSupportedException(kvp.Item1.ToString() + " spent a negitive amount of money.");
+            }
+            if (Tax < 0 || Tip < 0 || SharedFood < 0 || Discount < 0)
+                throw new NotSupportedException("Negative bill attribute.");
+        }
+
+        public List<Tuple<Person, Person, int>> SplitBill()
+        {
+            ValidateBill();
 
             var pool = mParty.Sum(p => p.Item2) + SharedFood;
             var initalSum = pool + Tip + Tax;
-            var bs = new BillSplit() { Name = mName };
-            db.BillSplits.InsertOnSubmit(bs);
 
             var amountSpent = new List<Tuple<Person, double>>();
 
@@ -81,7 +117,6 @@ namespace Austin.DkpLib
 
                 amountSpent.Add(new Tuple<Person, double>(p.Item1, total));
             }
-
 
             checkTotal(initalSum, amountSpent.Select(tup => tup.Item2).Sum());
 
@@ -108,23 +143,7 @@ namespace Austin.DkpLib
 
             var pennySplits = SplitPennies(debtsToPayers);
             checkTotal(initalSum, pennySplits.Sum(p => p.Item3));
-
-            foreach (var p in pennySplits)
-            {
-                var t = new Transaction()
-                {
-                    ID = Guid.NewGuid(),
-                    Creditor = p.Item2,
-                    Debtor = p.Item1,
-                    Amount = p.Item3,
-                    BillSplit = bs,
-                    Description = mName,
-                    Created = mDate,
-                };
-                db.Transactions.InsertOnSubmit(t);
-            }
-
-            db.SubmitChanges();
+            return pennySplits;
         }
 
         static void checkTotal(double initalSum, double currentSum)
