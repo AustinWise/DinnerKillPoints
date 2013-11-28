@@ -63,6 +63,7 @@ namespace Austin.DkpLib
                 throw new Exception("Must have one or more people in that party.");
 
             var pool = mParty.Sum(p => p.Item2) + SharedFood;
+            var initalSum = pool + Tip + Tax;
             var bs = new BillSplit() { Name = mName };
             db.BillSplits.InsertOnSubmit(bs);
 
@@ -81,11 +82,8 @@ namespace Austin.DkpLib
                 amountSpent.Add(new Tuple<Person, double>(p.Item1, total));
             }
 
-            var totalSpentPart1 = pool + Tip + Tax;
-            var totalSpentPart2 = amountSpent.Select(tup => tup.Item2).Sum();
 
-            if (Math.Abs(totalSpentPart1 - totalSpentPart2) > 0.1)
-                throw new Exception("Something terrible has happened.");
+            checkTotal(initalSum, amountSpent.Select(tup => tup.Item2).Sum());
 
             var freeloadersFound = amountSpent.Where(p => mFreeLoaders.Contains(p.Item1)).ToList();
             var nonFreeLoaderCount = amountSpent.Count - freeloadersFound.Count;
@@ -102,20 +100,14 @@ namespace Austin.DkpLib
                     amountSpent.Add(new Tuple<Person, double>(p.Item1, 0));
                 }
 
-                var totalSpentPart3 = amountSpent.Sum(p => p.Item2);
-                if (Math.Abs(totalSpentPart1 - totalSpentPart3) > 0.1)
-                    throw new Exception("Something terrible has happened (part3).");
+                checkTotal(initalSum, amountSpent.Sum(p => p.Item2));
             }
 
             var debtsToPayers = SplitDebtsBetweenPayers(amountSpent);
-            var totalSpentPart4 = debtsToPayers.SelectMany(p => p.Item2).Sum(p => p.Item2);
-            if (Math.Abs(totalSpentPart1 - totalSpentPart4) > 0.1)
-                throw new Exception("Something terrible has happened (part4).");
+            checkTotal(initalSum, debtsToPayers.SelectMany(p => p.Item2).Sum(p => p.Item2));
 
             var pennySplits = SplitPennies(debtsToPayers);
-            var totalSpentPart5 = pennySplits.Sum(p => p.Item3);
-            if (Math.Abs(totalSpentPart1 - (double)totalSpentPart5) > 0.1)
-                throw new Exception("Something terrible has happened (part5).");
+            checkTotal(initalSum, pennySplits.Sum(p => p.Item3));
 
             foreach (var p in pennySplits)
             {
@@ -133,6 +125,12 @@ namespace Austin.DkpLib
             }
 
             db.SubmitChanges();
+        }
+
+        static void checkTotal(double initalSum, double currentSum)
+        {
+            if (Math.Abs(initalSum - currentSum) > 0.1)
+                throw new Exception("Something terrible has happened.");
         }
 
         List<Tuple<Person, List<Tuple<Person, double>>>> SplitDebtsBetweenPayers(List<Tuple<Person, double>> amountSpent)
