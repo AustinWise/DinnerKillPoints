@@ -20,7 +20,7 @@ namespace Austin.DkpLib
 
     partial class Transaction
     {
-        const string DebtTransferString = "Debt Transfer: ";
+        internal const string DebtTransferString = "Debt Transfer: ";
         public static string CreateDebtTransferString(Person debtor, Person oldCreditor, Person newCreditor)
         {
             return string.Format("{0}{1} {2} {3}", DebtTransferString, debtor.ID, oldCreditor.ID, newCreditor.ID);
@@ -41,19 +41,24 @@ namespace Austin.DkpLib
 
         public void SetPrettyDescription(Dictionary<int, Person> personMap)
         {
-            if (!this.Description.StartsWith(DebtTransferString))
-                return;
+            _PrettyDescription = CreatePrettyDescription(Description, Amount, personMap);
+        }
 
-            var splits = Description.Remove(0, DebtTransferString.Length).Split(' ');
+        public static string CreatePrettyDescription(string desc, int amount, Dictionary<int, Person> personMap)
+        {
+            if (!desc.StartsWith(DebtTransferString))
+                return null;
+
+            var splits = desc.Remove(0, DebtTransferString.Length).Split(' ');
             if (splits.Length != 3)
-                return;
+                return null;
 
             var debtor = personMap[int.Parse(splits[0])];
             var oldCreditor = personMap[int.Parse(splits[1])];
             var newCreditor = personMap[int.Parse(splits[2])];
 
-            _PrettyDescription = string.Format("{0}{2}'s debt of {1:c} to {3} is now owed to {4}",
-                DebtTransferString, Amount / 100d, debtor.FirstName, oldCreditor.FirstName, newCreditor.FirstName);
+            return string.Format("{0}{2}'s debt of {1:c} to {3} is now owed to {4}",
+                DebtTransferString, amount / 100d, debtor.FirstName, oldCreditor.FirstName, newCreditor.FirstName);
         }
     }
 
@@ -99,6 +104,30 @@ namespace Austin.DkpLib
             if (ret == 0)
                 ret = this.LastName.CompareTo(other.LastName);
             return ret;
+        }
+    }
+
+    partial class BillSplit
+    {
+        string _PrettyName = null;
+        public string PrettyName
+        {
+            get
+            {
+                return _PrettyName ?? _Name;
+            }
+            set
+            {
+                _PrettyName = value;
+            }
+        }
+
+        public void SetPrettyDescription(Dictionary<int, Person> personMap)
+        {
+            if (!Name.StartsWith(Transaction.DebtTransferString))
+                return;
+            var amount = Transactions.Select(t => t.Amount).Distinct().Single();
+            _PrettyName = Transaction.CreatePrettyDescription(Name, amount, personMap);
         }
     }
 }

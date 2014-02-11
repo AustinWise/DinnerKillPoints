@@ -16,7 +16,13 @@ namespace DkpWeb.Controllers
 
         public ActionResult Index()
         {
-            return View(mData.BillSplits.OrderByDescending(bs => bs.ID).ToList());
+            var bs = mData.BillSplits.OrderByDescending(b => b.ID).ToList();
+            var pMap = mData.People.ToDictionary(p => p.ID);
+            foreach (var b in bs)
+            {
+                b.SetPrettyDescription(pMap);
+            }
+            return View(bs);
         }
 
         //
@@ -24,7 +30,10 @@ namespace DkpWeb.Controllers
 
         public ActionResult Details(int id)
         {
-            return View(mData.BillSplits.Where(bs => bs.ID == id).Single());
+            var bs = mData.BillSplits.Where(b => b.ID == id).Single();
+            var pMap = mData.People.ToDictionary(p => p.ID);
+            bs.SetPrettyDescription(pMap);
+            return View(bs);
         }
 
         //
