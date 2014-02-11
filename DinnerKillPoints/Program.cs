@@ -146,13 +146,17 @@ namespace DinnerKillPoints
             var now = DateTime.Now;
             var msg = Transaction.CreateDebtTransferString(debtor, oldCreditor, newCreditor);
 
+            var bs = new BillSplit();
+            bs.Name = msg;
+            db.BillSplits.InsertOnSubmit(bs);
+
             var cancelTrans = new Transaction()
             {
                 ID = Guid.NewGuid(),
                 DebtorID = oldCreditor.ID, //owes money
                 CreditorID = debtor.ID, //owed money
                 Amount = theDebt.Amount,
-                BillID = null,
+                BillSplit = bs,
                 Description = msg,
                 Created = now
             };
@@ -164,7 +168,7 @@ namespace DinnerKillPoints
                 DebtorID = newCreditor.ID, //owes money
                 CreditorID = oldCreditor.ID, //owed money
                 Amount = theDebt.Amount,
-                BillID = null,
+                BillSplit = bs,
                 Description = msg,
                 Created = now
             };
@@ -176,7 +180,7 @@ namespace DinnerKillPoints
                 DebtorID = debtor.ID, //owes money
                 CreditorID = newCreditor.ID, //owed money
                 Amount = theDebt.Amount,
-                BillID = null,
+                BillSplit = bs,
                 Description = msg,
                 Created = now
             };
