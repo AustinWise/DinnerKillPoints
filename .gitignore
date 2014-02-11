@@ -8,3 +8,6 @@ DkpData/sql
 
 packages/*
 !packages/repositories.config
+
+*.dbmdl
+*.scmp
