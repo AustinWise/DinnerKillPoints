@@ -37,7 +37,19 @@ namespace Austin.DkpLib
             summedDebts[newKey] = val;
         }
 
+
+        public static List<Debt> TestAlgo(DkpDataContext db, IEnumerable<Transaction> rawTrans, bool RemoveCycles, TextWriter logger)
+        {
+            var people = rawTrans.SelectMany(t => new[] { t.Creditor, t.Debtor }).Distinct().ToArray();
+            return TestAlgo(db, rawTrans, people, RemoveCycles, logger);
+        }
+
         public static List<Debt> TestAlgo(DkpDataContext db, Person[] people, bool RemoveCycles, TextWriter logger)
+        {
+            return TestAlgo(db, db.Transactions.Where(t => t.CreditorID != t.DebtorID), people, RemoveCycles, logger);
+        }
+
+        public static List<Debt> TestAlgo(DkpDataContext db, IEnumerable<Transaction> trans, Person[] people, bool RemoveCycles, TextWriter logger)
         {
             var netMoney = new List<Debt>();
             var peopleMap = db.People.Select(p => p.Clone()).Cast<Person>().ToDictionary(p => p.ID);
@@ -49,7 +61,7 @@ namespace Austin.DkpLib
 
             //sum all debts from one person to another
             var summedDebts = new Dictionary<Tuple<Person, Person>, int>();
-            foreach (var t in db.Transactions.Where(t => t.CreditorID != t.DebtorID))
+            foreach (var t in trans)
             {
                 var tup = new Tuple<Person, Person>(peopleMap[t.DebtorID], peopleMap[t.CreditorID]);
                 int net = 0;
