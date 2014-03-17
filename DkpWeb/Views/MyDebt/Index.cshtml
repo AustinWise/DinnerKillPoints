@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "My Debt";
+}
+
+<h2>My Debt</h2>
+
+<p>Select you name to see who you owe money:</p>
+
+<ul>
+    @foreach (Austin.DkpLib.Person p in Model)
+    {
+        <li>
+            @Html.ActionLink(p.ToString(), "Details", new { id = p.ID })
+        </li>
+    }
+</ul>

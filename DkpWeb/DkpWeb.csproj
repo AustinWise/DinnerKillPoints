@@ -208,6 +208,7 @@
     <Compile Include="Controllers\AnalyseController.cs" />
     <Compile Include="Controllers\BillSplitController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MyDebtController.cs" />
     <Compile Include="Controllers\PeopleController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
@@ -216,6 +217,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AnalyseModels.cs" />
+    <Compile Include="Models\MyDebtModels.cs" />
     <Compile Include="Models\TransactionModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -354,6 +356,9 @@
     <Content Include="Views\Transaction\View.cshtml" />
     <Content Include="Views\BillSplit\Index.cshtml" />
     <Content Include="Views\BillSplit\Details.cshtml" />
+    <Content Include="Views\MyDebt\Index.cshtml" />
+    <Content Include="Views\MyDebt\Details.cshtml" />
+    <Content Include="Views\MyDebt\DebtHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

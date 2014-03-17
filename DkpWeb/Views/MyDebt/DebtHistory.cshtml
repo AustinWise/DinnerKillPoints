@@ -1,0 +1,49 @@
+﻿@model DkpWeb.Models.DebtLedger
+
+@{
+    ViewBag.Title = "Debt History";
+}
+
+<h2>History of debts owed from @Model.Debtor.ToString() to @Model.Creditor.ToString()</h2>
+<p>
+    A <em>credit</em> is a debt in the opposite direction (from @Model.Creditor.ToString() to @Model.Debtor.ToString()).
+    Parentheses in the <em>running total</em> column mean that the debt is owed in the other direction.
+</p>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Debt</th>
+            <th>Credit</th>
+            <th>Running Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>&mdash;</td>
+            <td>Inital balance</td>
+            <td />
+            <td />
+            <td>@((0).ToString("C"))</td>
+        </tr>
+        @foreach (var entry in Model.Entries)
+        {
+            <tr>
+                <td>@Html.ActionLink(entry.Created.ToString(), "View", "Transaction", new { id = entry.TransactionId }, null)</td>
+                <td>@entry.Description</td>
+                @if (entry.Amount < 0)
+                {
+                    <td />
+                    <td>@((Math.Abs(entry.Amount) / 100d).ToString("C"))</td>
+                }
+                else
+                {
+                    <td>@((entry.Amount / 100d).ToString("C"))</td>
+                    <td />
+                }
+                <td>@((entry.RunningTotal / 100d).ToString("C"))</td>
+            </tr>
+        }
+    </tbody>
+</table>
