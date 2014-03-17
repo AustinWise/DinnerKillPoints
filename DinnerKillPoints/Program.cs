@@ -14,18 +14,13 @@ namespace DinnerKillPoints
     // * A nice way to split a bill easily.
 
 
-
+    //split app idea:
+    //pass phone around, select who you are, then check all the items that are yours
+    //the next person sees that much fewer items
 
     class Program
     {
         static DkpDataContext db;
-
-        static List<Tuple<int, int>> DebtFloaters = new List<Tuple<int, int>>();
-        private static void AddDebtFloater(Person p1, Person p2)
-        {
-            DebtFloaters.Add(new Tuple<int, int>(p1.ID, p2.ID));
-            DebtFloaters.Add(new Tuple<int, int>(p2.ID, p1.ID));
-        }
 
         static void Main(string[] args)
         {
@@ -61,43 +56,29 @@ namespace DinnerKillPoints
             var randy = GetPerson(25);
             var becky = GetPerson(26);
             var andrew = GetPerson(29);
-
-            //AddDebtFloater(wesley, maria);
-            AddDebtFloater(seanMc, meredith);
-            AddDebtFloater(caspar, justine);
-
-            var bs = new BillSpliter("Limon", new DateTime(2013, 8, 4, 12 + 8, 15, 0), austin, david, wesley);
-            bs.AddFreeLoader(seanChen);
-            var fish = (1195 + 1195 + 1025) / 6d;
-            var meat = (1095 + 1195 + 2095) / 7d;
-            var wesleyElaineProfiteroles = 825 / 2d;
-            bs.SharedFood = 895 + 1350+725;
-            bs[austin] = fish + meat + 1000 + 1000 + 1000;
-            bs[wesley] = fish + meat + wesleyElaineProfiteroles + 695 + 900;
-            bs[elaine] = fish + meat + wesleyElaineProfiteroles + 1000;
-            bs[david] = fish + meat + 1000 + 1000 + 825;
-            bs[justine] = meat + 1195 + 1000;
-            bs[seanChen] = meat + fish + 1000 + 825;
-            bs[caspar] = meat + fish + 1000;
-            bs[becky] = 250;
-            bs.Tax = 2663;
-            bs.Tip = 5057;
-            //bs.Save(db);
+            var justinShih = GetPerson(30);
+            var davidFang = GetPerson(31);
+            var derek = GetPerson(32);
+            var elaineJeu = GetPerson(33);
+            var jimmy = GetPerson(34);
+            var alex = GetPerson(35);
 
             var t = new Transaction()
             {
                 ID = Guid.NewGuid(),
-                Debtor = caspar, //owes money
-                Creditor = arata, //owed money
-                Amount = 250,
+                Debtor = katherine, //owes money
+                Creditor = austin, //owed money
+                Amount = 750,
                 BillID = null,
-                Description = "Repayment",
-                Created = DateTime.Now
+                Description = "Parking",
+                Created = new DateTime(2014, 3, 8, 12 + 11, 8, 0)
             };
             //db.Transactions.InsertOnSubmit(t);
             //db.SubmitChanges();
 
-            //DebtTransfer(elaine, david, wesley);
+            //DebtTransfer(seanChen, david, austin);
+            //DebtTransfer(seanChen, wesley, austin);
+            //DebtTransfer(caspar, seanChen, austin);
 
             var ran = new Random();
 
