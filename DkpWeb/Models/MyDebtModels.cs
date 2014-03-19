@@ -13,9 +13,6 @@ namespace DkpWeb.Models
         public Person Person { get; set; }
 
         [Required]
-        public string LogOutput { get; set; }
-
-        [Required]
         public string ImageBase64 { get; set; }
 
         [Required]

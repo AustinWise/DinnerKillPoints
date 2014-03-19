@@ -79,6 +79,8 @@ namespace DinnerKillPoints
             //DebtTransfer(seanChen, david, austin);
             //DebtTransfer(seanChen, wesley, austin);
             //DebtTransfer(caspar, seanChen, austin);
+            //DebtTransfer(elaine, austin, wesley, new DateTime(2014, 3, 7, 0, 0, 0));
+            //DebtTransfer(elaine, roger, wesley, new DateTime(2014, 3, 7, 0, 0, 0));
 
             var ran = new Random();
 

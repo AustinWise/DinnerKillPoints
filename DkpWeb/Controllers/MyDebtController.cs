@@ -37,8 +37,7 @@ namespace DkpWeb.Controllers
                         && (!t.Creditor.IsDeleted && !t.Debtor.IsDeleted))
                     .ToList();
 
-                var swLog = new StringWriter();
-                var netMoney = DebtGraph.TestAlgo(dc, transactions, true, swLog);
+                var netMoney = DebtGraph.TestAlgo(dc, transactions, true, TextWriter.Null);
 
                 var swGraph = new StringWriter();
                 DebtGraph.WriteGraph(netMoney, swGraph);
@@ -56,7 +55,6 @@ namespace DkpWeb.Controllers
 
                 var mod = new MyDebtModel();
                 mod.Person = person;
-                mod.LogOutput = swLog.ToString();
                 mod.ImageBase64 = Convert.ToBase64String(bytes);
                 mod.Creditors = creditors;
                 mod.OverallDebt = (myDebt == null) ? 0 : myDebt.Item2;
