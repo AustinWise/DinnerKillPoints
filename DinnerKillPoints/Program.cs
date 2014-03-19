@@ -115,6 +115,11 @@ namespace DinnerKillPoints
 
         private static void DebtTransfer(Person debtor, Person oldCreditor, Person newCreditor)
         {
+            DebtTransfer(debtor, oldCreditor, newCreditor, DateTime.Now);
+        }
+
+        private static void DebtTransfer(Person debtor, Person oldCreditor, Person newCreditor, DateTime when)
+        {
             var netMoney = DebtGraph.TestAlgo(db, new[] { debtor, oldCreditor }, false, null);
             if (netMoney.Count != 1)
                 throw new Exception("No debt to transfer.");
@@ -124,7 +129,6 @@ namespace DinnerKillPoints
             if (theDebt.Debtor.ID != debtor.ID || theDebt.Creditor.ID != oldCreditor.ID)
                 throw new Exception("Debt does not go in the expected direction.");
 
-            var now = DateTime.Now;
             var msg = Transaction.CreateDebtTransferString(debtor, oldCreditor, newCreditor);
 
             var bs = new BillSplit();
@@ -139,7 +143,7 @@ namespace DinnerKillPoints
                 Amount = theDebt.Amount,
                 BillSplit = bs,
                 Description = msg,
-                Created = now
+                Created = when
             };
             db.Transactions.InsertOnSubmit(cancelTrans);
 
@@ -151,7 +155,7 @@ namespace DinnerKillPoints
                 Amount = theDebt.Amount,
                 BillSplit = bs,
                 Description = msg,
-                Created = now
+                Created = when
             };
             db.Transactions.InsertOnSubmit(makeCreditorWholeTransaction);
 
@@ -163,7 +167,7 @@ namespace DinnerKillPoints
                 Amount = theDebt.Amount,
                 BillSplit = bs,
                 Description = msg,
-                Created = now
+                Created = when
             };
             db.Transactions.InsertOnSubmit(makeDebtorOweNewPartyTrans);
 
