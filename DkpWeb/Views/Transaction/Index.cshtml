@@ -1,34 +1,29 @@
-﻿@{
+﻿@model DkpWeb.Models.TransactionList
+
+@{
     ViewBag.Title = "Index";
 }
-<h2>
-    Transactions</h2>
+<h2>Transactions</h2>
 @if (Roles.IsUserInRole("DKP"))
 {
     @Html.ActionLink("Add", "Add")
 }
 <table>
     <tr>
-        <th>
-            Debtor
+        <th>Debtor
         </th>
-        <th>
-            Creditor
+        <th>Creditor
         </th>
-        <th>
-            Amount
+        <th>Amount
         </th>
-        <th>
-            Description
+        <th>Description
         </th>
-        <th>
-            Date
+        <th>Date
         </th>
-        <th>
-            Details
+        <th>Details
         </th>
     </tr>
-    @foreach (Austin.DkpLib.Transaction t in Model)
+    @foreach (var t in Model.Transactions)
     {
         <tr>
             <td>
@@ -51,4 +46,7 @@
             </td>
         </tr>
     }
+
 </table>
+
+@Html.Pager(DkpWeb.Models.TransactionList.PageSize, Model.CurrentPage, Model.TotalItems)

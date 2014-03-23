@@ -15,15 +15,27 @@ namespace DkpWeb.Controllers
 
         private DkpDataContext mData = new DkpDataContext();
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var trans = mData.Transactions.OrderByDescending(t => t.Created).ToList();
+            var totalSize = mData.Transactions.Count();
+            var currentPage = (page ?? 1) - 1; //convert to 0-based
+            var pageSize = TransactionList.PageSize;
+
+            if (currentPage < 0 || currentPage * TransactionList.PageSize > totalSize)
+                return this.HttpNotFound();
+
+            var q = mData.Transactions.OrderByDescending(t => t.Created).Skip(pageSize * currentPage).Take(pageSize);
+            var trans = q.ToList();
             var personMap = mData.People.ToDictionary(p => p.ID);
             foreach (var t in trans)
             {
                 t.SetPrettyDescription(personMap);
             }
-            return View(trans);
+
+            //convert back to 1-based indexing for view
+            var model = new TransactionList(currentPage + 1, totalSize, trans);
+
+            return View(model);
         }
 
         public ActionResult View(Guid id)

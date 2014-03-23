@@ -3,9 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using Austin.DkpLib;
 
 namespace DkpWeb.Models
 {
+    public class TransactionList
+    {
+        public TransactionList(int currentPage, int totalItemCount, IEnumerable<Transaction> transactions)
+        {
+            this.CurrentPage = currentPage;
+            this.TotalItems = totalItemCount;
+            this.Transactions = transactions;
+        }
+
+        public const int PageSize = 50;
+
+        public readonly int CurrentPage;
+        public readonly int TotalItems;
+        public readonly IEnumerable<Transaction> Transactions;
+    }
+
     public class NewTransactionModel
     {
         [Required]
