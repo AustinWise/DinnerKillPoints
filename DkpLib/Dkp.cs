@@ -20,7 +20,7 @@ namespace Austin.DkpLib
 
     partial class Transaction
     {
-        internal const string DebtTransferString = "Debt Transfer: ";
+        public const string DebtTransferString = "Debt Transfer: ";
         public static string CreateDebtTransferString(Person debtor, Person oldCreditor, Person newCreditor)
         {
             return string.Format("{0}{1} {2} {3}", DebtTransferString, debtor.ID, oldCreditor.ID, newCreditor.ID);

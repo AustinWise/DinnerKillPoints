@@ -43,6 +43,25 @@ namespace DkpWeb.Controllers
             return View(mData.Transactions.Where(t => t.ID == id).Single());
         }
 
+        public ActionResult TopScore()
+        {
+            var peopleMap = mData.People.ToDictionary(p => p.ID);
+
+            var q = mData.Transactions
+                .Where(t => !t.Description.StartsWith(Transaction.DebtTransferString))
+                .GroupBy(t => t.Description)
+                .Select(g => new TopScoreEntry { Name = g.Key, Amount = g.Sum(t => t.Amount) })
+                .OrderByDescending(g => g.Amount)
+                .ToList();
+
+            foreach (var t in q)
+            {
+                t.Name = Transaction.CreatePrettyDescription(t.Name, t.Amount, peopleMap) ?? t.Name;
+            }
+
+            return View(q);
+        }
+
         [Authorize(Roles = "DKP")]
         public ActionResult Add()
         {

@@ -364,6 +364,7 @@
     <Content Include="Views\MyDebt\Index.cshtml" />
     <Content Include="Views\MyDebt\Details.cshtml" />
     <Content Include="Views\MyDebt\DebtHistory.cshtml" />
+    <Content Include="Views\Transaction\TopScore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

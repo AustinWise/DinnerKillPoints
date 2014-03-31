@@ -7,6 +7,12 @@ using Austin.DkpLib;
 
 namespace DkpWeb.Models
 {
+    public class TopScoreEntry
+    {
+        public string Name { get; set; }
+        public int Amount { get; set; }
+    }
+
     public class TransactionList
     {
         public TransactionList(int currentPage, int totalItemCount, IEnumerable<Transaction> transactions)

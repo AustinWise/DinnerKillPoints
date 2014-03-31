@@ -1,0 +1,25 @@
+﻿@model List<DkpWeb.Models.TopScoreEntry>
+
+@{
+    ViewBag.Title = "Top Score";
+}
+
+<h2>Top Score</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Total Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in Model)
+        {
+            <tr>
+                <td>@t.Name</td>
+                <td>@((t.Amount / 100d).ToString("c"))</td>
+            </tr>
+        }
+    </tbody>
+</table>
