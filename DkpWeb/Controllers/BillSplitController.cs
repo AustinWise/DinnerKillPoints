@@ -16,7 +16,7 @@ namespace DkpWeb.Controllers
 
         public ActionResult Index()
         {
-            var bs = mData.BillSplits.OrderByDescending(b => b.ID).ToList();
+            var bs = mData.BillSplits.OrderByDescending(b => b.Transactions.Select(t => t.Created).FirstOrDefault()).ToList();
             var pMap = mData.People.ToDictionary(p => p.ID);
             foreach (var b in bs)
             {
