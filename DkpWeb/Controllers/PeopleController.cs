@@ -20,6 +20,17 @@ namespace DkpWeb.Controllers
             }
         }
 
+        public ActionResult All()
+        {
+            using (var dc = new DkpDataContext())
+            {
+                return View("Index", dc.People
+                    .OrderBy(p => p.FirstName)
+                    .ThenBy(p => p.LastName)
+                    .ToArray());
+            }
+        }
+
         public ActionResult Detail(int id)
         {
             Person person;
