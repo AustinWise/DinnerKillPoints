@@ -27,6 +27,7 @@
       <Column Name="FirstName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="LastName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="bit not null" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Association Name="Person_Transaction" Member="Credits" ThisKey="ID" OtherKey="CreditorID" Type="Transaction" />
       <Association Name="Person_Transaction1" Member="Debts" ThisKey="ID" OtherKey="DebtorID" Type="Transaction" />
     </Type>

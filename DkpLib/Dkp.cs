@@ -96,6 +96,7 @@ namespace Austin.DkpLib
             copy._FirstName = this._FirstName;
             copy._LastName = this._LastName;
             copy._IsDeleted = this._IsDeleted;
+            copy._Email = this._Email;
             return copy;
         }
 
