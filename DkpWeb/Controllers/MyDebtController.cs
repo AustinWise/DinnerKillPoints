@@ -11,15 +11,21 @@ namespace DkpWeb.Controllers
 {
     public class MyDebtController : Controller
     {
+        private DkpDataContext mData = new DkpDataContext();
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+                mData.Dispose();
+        }
+
         //
         // GET: /MyDebt/
 
         public ActionResult Index()
         {
-            using (var dc = new DkpDataContext())
-            {
-                return View(dc.ActivePeopleOrderedByName.ToArray());
-            }
+            return View(mData.ActivePeopleOrderedByName.ToArray());
         }
 
         //
@@ -27,40 +33,37 @@ namespace DkpWeb.Controllers
 
         public ActionResult Details(int id)
         {
-            using (var dc = new DkpDataContext())
-            {
-                var person = dc.People.Where(p => p.ID == id).Single();
+            var person = mData.People.Where(p => p.ID == id).Single();
 
-                var transactions = dc.Transactions
-                    .Where(t => t.CreditorID != t.DebtorID
-                        && (t.CreditorID == person.ID || t.DebtorID == person.ID)
-                        && (!t.Creditor.IsDeleted && !t.Debtor.IsDeleted))
-                    .ToList();
+            var transactions = mData.Transactions
+                .Where(t => t.CreditorID != t.DebtorID
+                    && (t.CreditorID == person.ID || t.DebtorID == person.ID)
+                    && (!t.Creditor.IsDeleted && !t.Debtor.IsDeleted))
+                .ToList();
 
-                var netMoney = DebtGraph.TestAlgo(dc, transactions, true, TextWriter.Null);
+            var netMoney = DebtGraph.TestAlgo(mData, transactions, true, TextWriter.Null);
 
-                var swGraph = new StringWriter();
-                DebtGraph.WriteGraph(netMoney, swGraph);
-                var bytes = DebtGraph.RenderGraphAsPng(swGraph.ToString());
+            var swGraph = new StringWriter();
+            DebtGraph.WriteGraph(netMoney, swGraph);
+            var bytes = DebtGraph.RenderGraphAsPng(swGraph.ToString());
 
-                var creditors = DebtGraph.GreatestDebtor(netMoney);
-                var myDebt = creditors.Where(d => d.Item1.ID == person.ID).SingleOrDefault();
-                if (myDebt != null)
-                    creditors.Remove(myDebt);
+            var creditors = DebtGraph.GreatestDebtor(netMoney);
+            var myDebt = creditors.Where(d => d.Item1.ID == person.ID).SingleOrDefault();
+            if (myDebt != null)
+                creditors.Remove(myDebt);
 
-                //change the list of debtors in to creditors
-                creditors = creditors.Select(c => new Tuple<Person, int>(c.Item1, -c.Item2))
-                    .Reverse()
-                    .ToList();
+            //change the list of debtors in to creditors
+            creditors = creditors.Select(c => new Tuple<Person, int>(c.Item1, -c.Item2))
+                .Reverse()
+                .ToList();
 
-                var mod = new MyDebtModel();
-                mod.Person = person;
-                mod.ImageBase64 = Convert.ToBase64String(bytes);
-                mod.Creditors = creditors;
-                mod.OverallDebt = (myDebt == null) ? 0 : myDebt.Item2;
+            var mod = new MyDebtModel();
+            mod.Person = person;
+            mod.ImageBase64 = Convert.ToBase64String(bytes);
+            mod.Creditors = creditors;
+            mod.OverallDebt = (myDebt == null) ? 0 : myDebt.Item2;
 
-                return View(mod);
-            }
+            return View(mod);
         }
 
         //
@@ -68,42 +71,40 @@ namespace DkpWeb.Controllers
 
         public ActionResult DebtHistory(int debtorId, int creditorId)
         {
-            using (var dc = new DkpDataContext())
+            var debtor = mData.People.Where(p => p.ID == debtorId).Single();
+            var creditor = mData.People.Where(p => p.ID == creditorId).Single();
+
+            var trans = mData.Transactions.Where(t =>
+                   (t.CreditorID == debtor.ID && t.DebtorID == creditor.ID)
+                || (t.CreditorID == creditor.ID && t.DebtorID == debtor.ID))
+                .OrderBy(t => t.Created);
+
+            var personMap = mData.People.ToDictionary(p => p.ID);
+            int runningTotal = 0;
+            var entries = new List<DebtLedgerEntry>();
+
+            foreach (var t in trans)
             {
-                var debtor = dc.People.Where(p => p.ID == debtorId).Single();
-                var creditor = dc.People.Where(p => p.ID == creditorId).Single();
+                t.SetPrettyDescription(personMap);
 
-                var trans = dc.Transactions.Where(t =>
-                       (t.CreditorID == debtor.ID && t.DebtorID == creditor.ID)
-                    || (t.CreditorID == creditor.ID && t.DebtorID == debtor.ID))
-                    .OrderBy(t => t.Created);
+                int amount;
+                if (t.DebtorID == debtor.ID)
+                    amount = t.Amount;
+                else
+                    amount = -t.Amount;
+                runningTotal += amount;
 
-                var personMap = dc.People.ToDictionary(p => p.ID);
-                int runningTotal = 0;
-                var entries = new List<DebtLedgerEntry>();
-
-                foreach (var t in trans)
-                {
-                    t.SetPrettyDescription(personMap);
-
-                    int amount;
-                    if (t.DebtorID == debtor.ID)
-                        amount = t.Amount;
-                    else
-                        amount = -t.Amount;
-                    runningTotal += amount;
-
-                    var entry = new DebtLedgerEntry(t, amount, runningTotal);
-                    entries.Add(entry);
-                }
-
-                var ret = new DebtLedger();
-                ret.Debtor = debtor;
-                ret.Creditor = creditor;
-                ret.Entries = entries;
-
-                return View(ret);
+                var entry = new DebtLedgerEntry(t, amount, runningTotal);
+                entries.Add(entry);
             }
+
+            var ret = new DebtLedger();
+            ret.Debtor = debtor;
+            ret.Creditor = creditor;
+            ret.Entries = entries;
+            ret.AmountCents = runningTotal;
+
+            return View(ret);
         }
     }
 }

@@ -30,6 +30,26 @@
       <Column Name="Email" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Association Name="Person_Transaction" Member="Credits" ThisKey="ID" OtherKey="CreditorID" Type="Transaction" />
       <Association Name="Person_Transaction1" Member="Debts" ThisKey="ID" OtherKey="DebtorID" Type="Transaction" />
+      <Association Name="Person_PaymentIdentity" Member="PaymentIdentities" ThisKey="ID" OtherKey="PersonID" Type="PaymentIdentity" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PaymentIdentity" Member="PaymentIdentities">
+    <Type Name="PaymentIdentity">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PersonID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentMethID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Person_PaymentIdentity" Member="Person" ThisKey="PersonID" OtherKey="ID" Type="Person" IsForeignKey="true" />
+      <Association Name="PaymentMethod_PaymentIdentity" Member="PaymentMethod" ThisKey="PaymentMethID" OtherKey="Id" Type="PaymentMethod" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PaymentMethod" Member="PaymentMethods">
+    <Type Name="PaymentMethod">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PayLinkFormat" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="RequestMoneyLinkFormat" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="PaymentMethod_PaymentIdentity" Member="PaymentIdentities" ThisKey="Id" OtherKey="PaymentMethID" Type="PaymentIdentity" />
     </Type>
   </Table>
 </Database>

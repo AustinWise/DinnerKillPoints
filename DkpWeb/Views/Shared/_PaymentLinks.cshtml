@@ -1,0 +1,24 @@
+﻿@using DkpWeb.Models
+@model PaymentLinksModel
+
+<ul>
+    @foreach (var ident in Model.Target.PaymentIdentities)
+    {
+        if (Model.Type == PaymentLinkType.Payment && ident.PaymentMethod.HasPayLink)
+        {
+            <li>
+                <a href="@ident.CreatePayLink(Model.AmountCents)">
+                    Send payment to @Model.Target with @ident.PaymentMethod.Name
+                </a>
+            </li>
+        }
+        if (Model.Type == PaymentLinkType.Request && ident.PaymentMethod.HasRequestMoneyLink)
+        {
+            <li>
+                <a href="@ident.CreateRequestMoneyLink(Model.AmountCents)">
+                    Request repayment from @Model.Target with @ident.PaymentMethod.Name
+                </a>
+            </li>
+        }
+    }
+</ul>
