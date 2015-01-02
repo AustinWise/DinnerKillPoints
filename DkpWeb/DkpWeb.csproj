@@ -224,6 +224,7 @@
     <Compile Include="Models\AnalyseModels.cs" />
     <Compile Include="Models\MyDebtModels.cs" />
     <Compile Include="Models\PaymentLinksModel.cs" />
+    <Compile Include="Models\PeopleModels.cs" />
     <Compile Include="Models\TransactionModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -369,6 +370,7 @@
     <Content Include="Views\MyDebt\DebtHistory.cshtml" />
     <Content Include="Views\Transaction\TopScore.cshtml" />
     <Content Include="Views\Shared\_PaymentLinks.cshtml" />
+    <Content Include="Views\People\AddPaymentIdentity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

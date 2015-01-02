@@ -35,7 +35,7 @@
   </Table>
   <Table Name="dbo.PaymentIdentity" Member="PaymentIdentities">
     <Type Name="PaymentIdentity">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Id" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="PersonID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PaymentMethID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UserName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
@@ -45,7 +45,7 @@
   </Table>
   <Table Name="dbo.PaymentMethod" Member="PaymentMethods">
     <Type Name="PaymentMethod">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Id" AutoSync="Never" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Name" Type="System.String" DbType="NChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="PayLinkFormat" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="RequestMoneyLinkFormat" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />

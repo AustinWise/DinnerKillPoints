@@ -1,7 +1,42 @@
-﻿@{
+﻿@model Austin.DkpLib.Person
+
+@{
     ViewBag.Title = "Detail";
 }
 <h2>
-    Detail</h2>
-<h3>@Model.FirstName @Model.LastName</h3>
-Person detail
+    Person: @Model.FirstName @Model.LastName
+</h2>
+
+<h3>Payment identies</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>User name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var meth in @Model.PaymentIdentities)
+        {
+            <tr>
+                <td>@meth.PaymentMethod.Name</td>
+                <td>@meth.UserName</td>
+                <td>
+                    @if (Roles.IsUserInRole("Admin"))
+                    {
+                        using (Html.BeginForm("DeletePaymentIdentity", "People", new { id = meth.Id }, FormMethod.Post))
+                        {
+                            <input id="submit" type="submit" value="Delete" />
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (Roles.IsUserInRole("Admin"))
+{
+    @Html.ActionLink("Add payment identity", "AddPaymentIdentity", new { id = Model.ID })
+}
