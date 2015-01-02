@@ -59,5 +59,8 @@ namespace DkpWeb.Models
 
         [Required]
         public Person Creditor { get; set; }
+
+        [Required]
+        public int AmountCents { get; set; }
     }
 }

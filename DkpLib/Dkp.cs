@@ -132,4 +132,46 @@ namespace Austin.DkpLib
             _PrettyName = Transaction.CreatePrettyDescription(Name, amount, personMap);
         }
     }
+
+    partial class PaymentMethod
+    {
+        public bool HasPayLink
+        {
+            get { return !string.IsNullOrEmpty(PayLinkFormat); }
+        }
+
+        public bool HasRequestMoneyLink
+        {
+            get { return !string.IsNullOrEmpty(RequestMoneyLinkFormat); }
+        }
+    }
+
+    partial class PaymentIdentity
+    {
+        public string CreatePayLink(int amountCents)
+        {
+            return createLink(this.PaymentMethod.PayLinkFormat, amountCents);
+        }
+
+        public string CreateRequestMoneyLink(int amountCents)
+        {
+            return createLink(this.PaymentMethod.RequestMoneyLinkFormat, amountCents);
+        }
+
+        private string createLink(string format, int amountCents)
+        {
+            if (amountCents <= 0)
+                throw new ArgumentOutOfRangeException("amountCents", "must be positive");
+            if (string.IsNullOrEmpty(format))
+                throw new NotSupportedException("");
+
+            var param = new Formattable[]
+            {
+                new Formattable(UserName),
+                new Formattable((amountCents / 100d).ToString()),
+            };
+
+            return string.Format(format, param);
+        }
+    }
 }

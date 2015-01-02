@@ -1,4 +1,5 @@
-﻿@model DkpWeb.Models.DebtLedger
+﻿@using DkpWeb.Models
+@model DebtLedger
 
 @{
     ViewBag.Title = "Debt History";
@@ -8,7 +9,14 @@
 <p>
     A <em>credit</em> is a debt in the opposite direction (from @Model.Creditor.ToString() to @Model.Debtor.ToString()).
     Parentheses in the <em>running total</em> column mean that the debt is owed in the other direction.
-</p>
+</p>@if (Model.AmountCents > 0)
+{
+    @Html.Partial("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Payment, Model.AmountCents));
+}
+@if (Model.AmountCents < 0)
+{
+    @Html.Partial("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Request, -Model.AmountCents));
+}
 <table>
     <thead>
         <tr>
