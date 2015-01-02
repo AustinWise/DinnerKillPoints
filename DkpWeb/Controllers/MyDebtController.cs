@@ -103,6 +103,7 @@ namespace DkpWeb.Controllers
             ret.Creditor = creditor;
             ret.Entries = entries;
             ret.AmountCents = runningTotal;
+            ret.AmountDollars = runningTotal / 100d;
 
             return View(ret);
         }
