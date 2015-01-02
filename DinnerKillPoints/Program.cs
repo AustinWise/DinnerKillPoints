@@ -62,25 +62,30 @@ namespace DinnerKillPoints
             var elaineJeu = GetPerson(33);
             var jimmy = GetPerson(34);
             var alex = GetPerson(35);
+            var victor = GetPerson(36);
+            var tiffany = GetPerson(37);
+            var moriaki = GetPerson(38);
+            var adam = GetPerson(39);
+            var benKwong = GetPerson(40);
+            var jasonBanich = GetPerson(41);
+            var changLiu = GetPerson(42);
+            var mike = GetPerson(43);
 
-            var t = new Transaction()
-            {
-                ID = Guid.NewGuid(),
-                Debtor = katherine, //owes money
-                Creditor = austin, //owed money
-                Amount = 750,
-                BillID = null,
-                Description = "Parking",
-                Created = new DateTime(2014, 3, 8, 12 + 11, 8, 0)
-            };
+
+            //var t = new Transaction()
+            //{
+            //    ID = Guid.NewGuid(),
+            //    Debtor = austin, //owes money
+            //    Creditor = caspar, //owed money
+            //    Amount = 11420,
+            //    BillID = null,
+            //    Description = "Repayment",
+            //    Created = new DateTime(2014, 11, 4, 12 + 8, 5, 0),
+            //};
             //db.Transactions.InsertOnSubmit(t);
             //db.SubmitChanges();
 
-            //DebtTransfer(seanChen, david, austin);
-            //DebtTransfer(seanChen, wesley, austin);
-            //DebtTransfer(caspar, seanChen, austin);
-            //DebtTransfer(elaine, austin, wesley, new DateTime(2014, 3, 7, 0, 0, 0));
-            //DebtTransfer(elaine, roger, wesley, new DateTime(2014, 3, 7, 0, 0, 0));
+            //CheckForDupes();
 
             var ran = new Random();
 
@@ -88,6 +93,26 @@ namespace DinnerKillPoints
             WriteData(false, db.People.ToArray());
 
             db.Dispose();
+        }
+
+        private static void CheckForDupes()
+        {
+            foreach (var trans in db.Transactions
+                .Where(t => t.BillID == null && !t.Description.StartsWith(Transaction.DebtTransferString))
+                .Where(t => t.Description != "Repayment")
+                .GroupBy(t => t.Amount)
+                .Where(ts => ts.Count() > 1))
+            {
+                Console.WriteLine(trans.Key);
+                foreach (var newGroup in trans.GroupBy(t => t.Description).Where(ts => ts.Count() > 1))
+                {
+                    Console.WriteLine(newGroup.Key);
+                    foreach (var t in newGroup)
+                    {
+                        Console.WriteLine("\t{0,20}{1,20}", t.Debtor, t.Creditor);
+                    }
+                }
+            }
         }
 
         private static void WriteData(bool removeCycles, Person[] people)
