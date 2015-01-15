@@ -112,10 +112,10 @@ namespace MailMerge
             sb.AppendFormat("Hi {0},", debtor.FirstName);
             sb.AppendLine("<br/>");
 
-            sb.Append("It is the end of the year so I am trying to balance my books.  ");
+            sb.Append("This is friendly, automated reminder that you currently owe a balence to me in DKP.");
             sb.Append("Including ");
             sb.Append(souceTrans[0].Description);
-            sb.Append(" you owe me ");
+            sb.Append(", our most recent time together, you owe me ");
             sb.AppendFormat("{0:c}.", amountInDollars);
             sb.AppendLine("<br/>");
 
@@ -124,11 +124,14 @@ namespace MailMerge
             sb.Append("\">this table</a>. Let me know if you have any questions or concerns.");
             sb.AppendLine("<br/>");
 
-            sb.Append("I accept Square Cash");
-            sb.AppendFormat("(<a href=\"mailto:{0}?cc=cash@square.com&subject={1:c}\">click here to send</a>)",
-                creditor.Email,
-                amountInDollars);
-            sb.Append(", Paypal, Venmo, cash, and check.");
+            sb.AppendLine("Here are some handy links to send payment:<ul>");
+            foreach (var payId in creditor.PaymentIdentities)
+            {
+                if (!payId.PaymentMethod.HasPayLink)
+                    continue;
+                sb.AppendFormat("<li><a href=\"{0}\">{1}</a></li>", payId.CreatePayLink(amount), payId.PaymentMethod.Name.Trim());
+            }
+            sb.Append("</ul>");
             sb.AppendLine("<br/>");
 
             sb.Append("Thanks,");
