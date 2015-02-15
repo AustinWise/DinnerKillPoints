@@ -150,12 +150,12 @@ namespace Austin.DkpLib
     {
         public string CreatePayLink(int amountCents)
         {
-            return createLink(this.PaymentMethod.PayLinkFormat, amountCents);
+            return createLink(this.PaymentMethod.PayLinkFormat.Trim(), amountCents);
         }
 
         public string CreateRequestMoneyLink(int amountCents)
         {
-            return createLink(this.PaymentMethod.RequestMoneyLinkFormat, amountCents);
+            return createLink(this.PaymentMethod.RequestMoneyLinkFormat.Trim(), amountCents);
         }
 
         private string createLink(string format, int amountCents)
