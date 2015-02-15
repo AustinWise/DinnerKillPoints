@@ -70,7 +70,11 @@ namespace DinnerKillPoints
             var jasonBanich = GetPerson(41);
             var changLiu = GetPerson(42);
             var mike = GetPerson(43);
-
+            var spencer = GetPerson(44);
+            var jessie = GetPerson(45);
+            var pat = GetPerson(46);
+            var cam = GetPerson(47);
+            var zack = GetPerson(48);
 
             //var t = new Transaction()
             //{
