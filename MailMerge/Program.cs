@@ -59,7 +59,7 @@ namespace MailMerge
             var from = new MailAddress(person.Email, person.ToString());
             var client = new SmtpClient("smtp.gmail.com", 587);
             client.EnableSsl = true;
-            foreach (var tup in debtors)
+            foreach (var tup in debtors.Where(d => !string.IsNullOrEmpty(d.Item1.Email)))
             {
                 var fields = ProcessOnePerson(person, tup.Item1, tup.Item2);
 
