@@ -1,10 +1,11 @@
 ﻿using Austin.DkpLib;
-using CsvHelper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 
 namespace MailMerge
@@ -18,6 +19,8 @@ namespace MailMerge
             3, //wesley
             11, //jeff
             12, //ryuho
+            31, //david fang
+            42, //chaing
         };
 
         static DkpDataContext sDc;
@@ -53,18 +56,19 @@ namespace MailMerge
 
             debtors = debtors.Where(tup => tup.Item2 > 1000).ToList();
 
-            using (var sw = new StreamWriter("test.csv"))
+            var from = new MailAddress(person.Email, person.ToString());
+            var client = new SmtpClient("smtp.gmail.com", 587);
+            client.EnableSsl = true;
+            foreach (var tup in debtors)
             {
-                using (var csv = new CsvWriter(sw))
-                {
-                    csv.WriteHeader<MyRecord>();
-                    foreach (var tup in debtors)
-                    {
-                        var fields = ProcessOnePerson(person, tup.Item1, tup.Item2);
-                        csv.WriteRecord(fields);
-                    }
-                }
+                var fields = ProcessOnePerson(person, tup.Item1, tup.Item2);
 
+                var msg = new MailMessage(from, new MailAddress(tup.Item1.Email, tup.Item1.ToString()));
+                msg.Subject = "DKP Invoice";
+                msg.Body = fields.BODY;
+                msg.IsBodyHtml = true;
+
+                client.Send(msg);
             }
         }
 
