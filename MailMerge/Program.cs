@@ -65,6 +65,8 @@ namespace MailMerge
             var from = new MailAddress(person.Email, person.ToString());
             var client = new SmtpClient("smtp.gmail.com", 587);
             client.EnableSsl = true;
+            int sentSoFar = 0;
+            int totalToSend = debtors.Where(d => !string.IsNullOrEmpty(d.Item1.Email)).Count();
             foreach (var tup in debtors.Where(d => !string.IsNullOrEmpty(d.Item1.Email)))
             {
                 var fields = ProcessOnePerson(person, tup.Item1, tup.Item2);
@@ -75,6 +77,7 @@ namespace MailMerge
                 msg.IsBodyHtml = true;
 
                 client.Send(msg);
+                Console.WriteLine("Sent {0}/{1}", ++sentSoFar, totalToSend);
             }
         }
 
