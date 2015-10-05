@@ -64,6 +64,6 @@ namespace DkpWeb.Models
         public int AmountCents { get; set; }
 
         [Required]
-        public double AmountDollars { get; set; }
+        public string AmountDollars { get; set; }
     }
 }

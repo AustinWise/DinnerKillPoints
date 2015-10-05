@@ -168,7 +168,7 @@ namespace Austin.DkpLib
             var param = new Formattable[]
             {
                 new Formattable(UserName),
-                new Formattable((amountCents / 100d).ToString()),
+                new Formattable((amountCents / 100d).ToString("0.00")),
             };
 
             return string.Format(format, param);
