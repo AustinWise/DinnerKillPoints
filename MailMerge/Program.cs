@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,7 +30,11 @@ namespace MailMerge
 
         static void Main(string[] args)
         {
-            sDc = new DkpDataContext();
+            var cs = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Austin.DkpLib.Properties.Settings.DKPConnectionString"].ConnectionString);
+            var ips = Dns.GetHostAddresses(cs.DataSource);
+            Console.Write("Please enter the password: ");
+            cs.Password = Console.ReadLine();
+            sDc = new DkpDataContext(cs.ToString());
             sPersonMap = sDc.People.ToDictionary(p => p.ID, p => p);
 
             var person = sDc.People.Where(p => p.ID == PERSON_TO_MAIL_MERGE).Single();

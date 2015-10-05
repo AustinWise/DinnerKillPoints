@@ -6,6 +6,7 @@ using System.IO;
 using Austin.DkpLib;
 using System.Data.SqlClient;
 using System.Net;
+using System.Configuration;
 
 namespace DinnerKillPoints
 {
@@ -24,10 +25,12 @@ namespace DinnerKillPoints
 
         static void Main(string[] args)
         {
-            db = new DkpDataContext();
-
-            var cs = new SqlConnectionStringBuilder(db.Connection.ConnectionString);
+            var cs = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Austin.DkpLib.Properties.Settings.DKPConnectionString"].ConnectionString);
             var ips = Dns.GetHostAddresses(cs.DataSource);
+            Console.Write("Please enter the password: ");
+            cs.Password = Console.ReadLine();
+            db = new DkpDataContext(cs.ToString());
+
 
             var austin = GetPerson(1);
             var caspar = GetPerson(2);
@@ -93,7 +96,7 @@ namespace DinnerKillPoints
 
             var ran = new Random();
 
-            WriteData(true, db.People.Where(p => !p.IsDeleted).OrderBy(p => ran.Next()).Where(p => p != laura).ToArray());
+            WriteData(true, db.People.Where(p => !p.IsDeleted).OrderBy(p => ran.Next()).ToArray());
             WriteData(false, db.People.ToArray());
 
             db.Dispose();
@@ -121,7 +124,7 @@ namespace DinnerKillPoints
 
         private static void WriteData(bool removeCycles, Person[] people)
         {
-            const string outDir = @"C:\Users\AustinWise\Dropbox\DKP\";
+            const string outDir = @"D:\AustinWise\Dropbox\DKP";
 
             List<Debt> netMoney = null;
             netMoney = DebtGraph.TestAlgo(db, people, removeCycles, removeCycles ? new StreamWriter(Path.Combine(outDir, "Info.txt")) : Console.Out);
