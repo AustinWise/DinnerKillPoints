@@ -17,7 +17,7 @@
 @if (Model.AmountCents < 0)
 {
     <p>
-        You are owed @(-Model.AmountDollars) by @Model.Creditor.
+        You are owed @Model.AmountDollars by @Model.Creditor.
         @Html.Partial("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Request, -Model.AmountCents))
     </p>
 }
