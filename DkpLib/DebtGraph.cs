@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Xml.Linq;
+using System.Web;
 
 namespace Austin.DkpLib
 {
@@ -218,7 +220,20 @@ namespace Austin.DkpLib
 
         public static byte[] RenderGraphAsPng(string gvFileContents)
         {
-            ProcessStartInfo psi = new ProcessStartInfo("dot", "-Tpng");
+            return RengerGraphAs(gvFileContents, "png").ToArray();
+        }
+
+        public static IHtmlString RenderGraphAsSvg(string gvFileContents)
+        {
+            var mem = RengerGraphAs(gvFileContents, "svg");
+            mem.Seek(0, SeekOrigin.Begin);
+            var doc = XDocument.Load(mem);
+            return new HtmlString(doc.Root.ToString(SaveOptions.DisableFormatting));
+        }
+
+        private static MemoryStream RengerGraphAs(string gvFileContents, string imgType)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo("dot", "-T" + imgType);
             psi.UseShellExecute = false;
             psi.RedirectStandardInput = true;
             psi.RedirectStandardOutput = true;
@@ -232,7 +247,7 @@ namespace Austin.DkpLib
             p.StandardOutput.BaseStream.CopyTo(mem);
             p.WaitForExit();
 
-            return mem.ToArray();
+            return mem;
         }
 
         private static List<List<Person>> FindCycles(Person[] people, List<Debt> debts)

@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Austin.DkpLib;
+using DkpWeb.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Austin.DkpLib;
-using DkpWeb.Models;
 
 namespace DkpWeb.Controllers
 {
@@ -45,7 +44,7 @@ namespace DkpWeb.Controllers
 
             var swGraph = new StringWriter();
             DebtGraph.WriteGraph(netMoney, swGraph);
-            var bytes = DebtGraph.RenderGraphAsPng(swGraph.ToString());
+            var svg = DebtGraph.RenderGraphAsSvg(swGraph.ToString());
 
             var creditors = DebtGraph.GreatestDebtor(netMoney);
             var myDebt = creditors.Where(d => d.Item1.ID == person.ID).SingleOrDefault();
@@ -59,7 +58,7 @@ namespace DkpWeb.Controllers
 
             var mod = new MyDebtModel();
             mod.Person = person;
-            mod.ImageBase64 = Convert.ToBase64String(bytes);
+            mod.ImageSvg = svg;
             mod.Creditors = creditors;
             mod.OverallDebt = (myDebt == null) ? 0 : myDebt.Item2;
 

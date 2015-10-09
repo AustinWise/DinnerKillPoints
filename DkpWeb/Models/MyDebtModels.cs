@@ -13,7 +13,7 @@ namespace DkpWeb.Models
         public Person Person { get; set; }
 
         [Required]
-        public string ImageBase64 { get; set; }
+        public IHtmlString ImageSvg { get; set; }
 
         [Required]
         public List<Tuple<Person, int>> Creditors { get; set; }

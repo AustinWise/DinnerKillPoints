@@ -13,7 +13,7 @@ namespace DkpWeb.Models
         public string LogOutput { get; set; }
 
         [Required]
-        public string ImageBase64 { get; set; }
+        public IHtmlString ImageSvg { get; set; }
 
         [Required]
         public List<Tuple<Person, int>> Debtors { get; set; }

@@ -41,11 +41,11 @@ namespace DkpWeb.Controllers
             
             var swGraph = new StringWriter();
             DebtGraph.WriteGraph(netMoney, swGraph);
-            var bytes = DebtGraph.RenderGraphAsPng(swGraph.ToString());
+            var svg = DebtGraph.RenderGraphAsSvg(swGraph.ToString());
 
             var mod = new AnalyseModel();
             mod.LogOutput = swLog.ToString();
-            mod.ImageBase64 = Convert.ToBase64String(bytes);
+            mod.ImageSvg = svg;
             mod.Debtors = DebtGraph.GreatestDebtor(netMoney);
             return View(mod);
         }
