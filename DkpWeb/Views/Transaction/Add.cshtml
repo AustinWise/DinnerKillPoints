@@ -38,9 +38,10 @@
             </div>
             <div class="editor-field">
                 <select name="Debtor" id="Debtor">
+                    <option value="0">-select someone-</option>
                     @foreach (Austin.DkpLib.Person p in ViewBag.People)
                     {
-                        <option id="@p.ID" value="@p.ID">@p.FirstName @p.LastName</option>
+                        <option value="@p.ID">@p.FirstName @p.LastName</option>
                     }
                 </select>
                 @Html.ValidationMessageFor(m => m.Debtor)
@@ -51,9 +52,10 @@
             </div>
             <div class="editor-field">
                 <select name="Creditor" id="Creditor">
+                    <option value="0">-select someone-</option>
                     @foreach (Austin.DkpLib.Person p in ViewBag.People)
                     {
-                        <option id="@p.ID" value="@p.ID">@p.FirstName @p.LastName</option>
+                        <option value="@p.ID">@p.FirstName @p.LastName</option>
                     }
                 </select>
                 @Html.ValidationMessageFor(m => m.Creditor)
