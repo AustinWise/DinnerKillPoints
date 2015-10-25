@@ -41,7 +41,7 @@
                     <option value="0">-select someone-</option>
                     @foreach (Austin.DkpLib.Person p in ViewBag.People)
                     {
-                        <option value="@p.ID">@p.FirstName @p.LastName</option>
+                        <option value="@p.ID" @(Model.Debtor == p.ID ? "selected" : "")>@p.FirstName @p.LastName</option>
                     }
                 </select>
                 @Html.ValidationMessageFor(m => m.Debtor)
@@ -55,7 +55,7 @@
                     <option value="0">-select someone-</option>
                     @foreach (Austin.DkpLib.Person p in ViewBag.People)
                     {
-                        <option value="@p.ID">@p.FirstName @p.LastName</option>
+                        <option value="@p.ID" @(Model.Creditor == p.ID ? "selected" : "")>@p.FirstName @p.LastName</option>
                     }
                 </select>
                 @Html.ValidationMessageFor(m => m.Creditor)

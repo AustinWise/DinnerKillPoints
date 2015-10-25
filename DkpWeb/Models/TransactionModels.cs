@@ -40,7 +40,7 @@ namespace DkpWeb.Models
         [Required]
         [DataType(DataType.Currency)]
         [Display(Name = "Amount (dollars)")]
-        [Range(0.01, 100)]
+        [Range(0.01, 10000)]
         public double Amount { get; set; }
 
         [Required]

@@ -66,7 +66,7 @@ namespace DkpWeb.Controllers
         public ActionResult Add()
         {
             ViewBag.People = mData.ActivePeopleOrderedByName.ToList();
-            return View();
+            return View(new NewTransactionModel());
         }
 
         [HttpPost]
