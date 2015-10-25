@@ -35,16 +35,16 @@ namespace DinnerKillPoints
             var austin = GetPerson(1);
             var caspar = GetPerson(2);
             var wesley = GetPerson(3);
-            var maria = GetPerson(4);
+            //var maria = GetPerson(4);
             var david = GetPerson(5);
-            var seanMc = GetPerson(6);
-            var andrea = GetPerson(7);
-            var meredith = GetPerson(8);
+            //var seanMc = GetPerson(6);
+            //var andrea = GetPerson(7);
+            //var meredith = GetPerson(8);
             var seanChen = GetPerson(9);
             var arata = GetPerson(10);
             var jeff = GetPerson(11);
             var ryuho = GetPerson(12);
-            var laura = GetPerson(13);
+            //var laura = GetPerson(13);
             var minh = GetPerson(14);
             var george = GetPerson(15);
             var justine = GetPerson(16);
@@ -53,16 +53,16 @@ namespace DinnerKillPoints
             var roger = GetPerson(19);
             var eric = GetPerson(20);
             var katherine = GetPerson(21);
-            var ryanSund = GetPerson(22);
+            //var ryanSund = GetPerson(22);
             var adrian = GetPerson(23);
             var ed = GetPerson(24);
             var randy = GetPerson(25);
             var becky = GetPerson(26);
             var andrew = GetPerson(29);
             var justinShih = GetPerson(30);
-            var davidFang = GetPerson(31);
+            //var davidFang = GetPerson(31);
             var derek = GetPerson(32);
-            var elaineJeu = GetPerson(33);
+            //var elaineJeu = GetPerson(33);
             var jimmy = GetPerson(34);
             var alex = GetPerson(35);
             var victor = GetPerson(36);
@@ -70,29 +70,36 @@ namespace DinnerKillPoints
             var moriaki = GetPerson(38);
             var adam = GetPerson(39);
             var benKwong = GetPerson(40);
-            var jasonBanich = GetPerson(41);
+            //var jasonBanich = GetPerson(41);
             var changLiu = GetPerson(42);
             var mike = GetPerson(43);
-            var spencer = GetPerson(44);
-            var jessie = GetPerson(45);
+            //var spencer = GetPerson(44);
+            //var jessie = GetPerson(45);
             var pat = GetPerson(46);
             var cam = GetPerson(47);
             var zack = GetPerson(48);
+            var mary = GetPerson(49);
+            var monica = GetPerson(50);
+            var ryanWeinstein = GetPerson(51);
+            var michelle = GetPerson(52);
 
-            //var t = new Transaction()
+
+            //Transaction t;
+            //t = new Transaction()
             //{
             //    ID = Guid.NewGuid(),
-            //    Debtor = austin, //owes money
-            //    Creditor = caspar, //owed money
-            //    Amount = 11420,
+            //    Debtor = roger, //owes money
+            //    Creditor = austin, //owed money
+            //    Amount = 11525,
             //    BillID = null,
             //    Description = "Repayment",
-            //    Created = new DateTime(2014, 11, 4, 12 + 8, 5, 0),
+            //    Created = new DateTime(2015, 10, 22, 0, 20, 0),
             //};
             //db.Transactions.InsertOnSubmit(t);
             //db.SubmitChanges();
 
             //CheckForDupes();
+
 
             var ran = new Random();
 
