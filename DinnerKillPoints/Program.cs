@@ -1,12 +1,8 @@
-﻿using System;
+﻿using Austin.DkpLib;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using Austin.DkpLib;
-using System.Data.SqlClient;
-using System.Net;
-using System.Configuration;
+using System.Linq;
 
 namespace DinnerKillPoints
 {
@@ -25,12 +21,7 @@ namespace DinnerKillPoints
 
         static void Main(string[] args)
         {
-            var cs = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Austin.DkpLib.Properties.Settings.DKPConnectionString"].ConnectionString);
-            var ips = Dns.GetHostAddresses(cs.DataSource);
-            Console.Write("Please enter the password: ");
-            cs.Password = Console.ReadLine();
-            db = new DkpDataContext(cs.ToString());
-
+            db = new DkpDataContext();
 
             var austin = GetPerson(1);
             var caspar = GetPerson(2);
@@ -82,6 +73,7 @@ namespace DinnerKillPoints
             var monica = GetPerson(50);
             var ryanWeinstein = GetPerson(51);
             var michelle = GetPerson(52);
+            var allison = GetPerson(53);
 
 
             //Transaction t;

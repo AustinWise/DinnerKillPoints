@@ -1,13 +1,11 @@
 ﻿using Austin.DkpLib;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace MailMerge
@@ -21,20 +19,35 @@ namespace MailMerge
             3, //wesley
             11, //jeff
             12, //ryuho
-            31, //david fang
-            42, //chaing
         };
 
         static DkpDataContext sDc;
         static Dictionary<int, Person> sPersonMap;
 
+        readonly static Encoding sPasswordEnc = Encoding.UTF8;
+        readonly static DataProtectionScope sPasswordScope = DataProtectionScope.CurrentUser;
+
         static void Main(string[] args)
         {
-            var cs = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Austin.DkpLib.Properties.Settings.DKPConnectionString"].ConnectionString);
-            var ips = Dns.GetHostAddresses(cs.DataSource);
-            Console.Write("Please enter the password: ");
-            cs.Password = Console.ReadLine();
-            sDc = new DkpDataContext(cs.ToString());
+            Properties.Settings settings = Properties.Settings.Default;
+            string emailPassword;
+            if (args.Length == 1 && args[0].ToLowerInvariant() == "--set-mail-password")
+            {
+                Console.Write("Enter email password: ");
+                emailPassword = Console.ReadLine();
+                byte[] encryptedPasword = ProtectedData.Protect(sPasswordEnc.GetBytes(emailPassword), null, sPasswordScope);
+                string base64Password = Convert.ToBase64String(encryptedPasword);
+                settings.EmailPassword = base64Password;
+                settings.Save();
+            }
+            else
+            {
+                byte[] base64Password = Convert.FromBase64String(settings.EmailPassword);
+                byte[] decryptedPassword = ProtectedData.Unprotect(base64Password, null, sPasswordScope);
+                emailPassword = sPasswordEnc.GetString(decryptedPassword);
+            }
+
+            sDc = new DkpDataContext();
             sPersonMap = sDc.People.ToDictionary(p => p.ID, p => p);
 
             var person = sDc.People.Where(p => p.ID == PERSON_TO_MAIL_MERGE).Single();
@@ -64,6 +77,7 @@ namespace MailMerge
 
             var from = new MailAddress(person.Email, person.ToString());
             var client = new SmtpClient("smtp.gmail.com", 587);
+            client.Credentials = new NetworkCredential(settings.EmailUser, emailPassword);
             client.EnableSsl = true;
             int sentSoFar = 0;
             int totalToSend = debtors.Where(d => !string.IsNullOrEmpty(d.Item1.Email)).Count();
@@ -77,7 +91,7 @@ namespace MailMerge
                 msg.IsBodyHtml = true;
 
                 client.Send(msg);
-                Console.WriteLine("Sent {0}/{1}", ++sentSoFar, totalToSend);
+                Console.WriteLine("Sent {0,2}/{1,2} ({2})", ++sentSoFar, totalToSend, tup.Item1.FirstName);
             }
         }
 
