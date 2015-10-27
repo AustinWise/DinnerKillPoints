@@ -10,14 +10,12 @@ namespace DkpWeb.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Welcome to Dinner Kill Points";
-
             return View();
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your app description page.";
+            ViewBag.Message = "Your application description page.";
 
             return View();
         }

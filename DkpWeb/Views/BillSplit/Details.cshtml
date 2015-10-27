@@ -45,7 +45,8 @@
     </tr>
 </table>
 
-@if (Roles.IsUserInRole("Admin"))
+
+@if (Startup.IsUserInRole("Admin"))
 {
     using (Html.BeginForm("Delete", "BillSplit", new { id = @Model.ID }, FormMethod.Post))
     {

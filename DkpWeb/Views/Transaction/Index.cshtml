@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 <h2>Transactions</h2>
-@if (Roles.IsUserInRole("DKP"))
+@if (Startup.IsUserInRole("DKP"))
 {
     @Html.ActionLink("Add", "Add")
 }

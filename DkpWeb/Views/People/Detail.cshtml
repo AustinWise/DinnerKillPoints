@@ -24,7 +24,7 @@
                 <td>@meth.PaymentMethod.Name</td>
                 <td>@meth.UserName</td>
                 <td>
-                    @if (Roles.IsUserInRole("Admin"))
+                    @if (Startup.IsUserInRole("Admin"))
                     {
                         using (Html.BeginForm("DeletePaymentIdentity", "People", new { id = meth.Id }, FormMethod.Post))
                         {
@@ -36,7 +36,7 @@
         }
     </tbody>
 </table>
-@if (Roles.IsUserInRole("Admin"))
+@if (Startup.IsUserInRole("Admin"))
 {
     @Html.ActionLink("Add payment identity", "AddPaymentIdentity", new { id = Model.ID })
 }
