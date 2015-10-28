@@ -47,6 +47,11 @@ namespace MailMerge
                 emailPassword = sPasswordEnc.GetString(decryptedPassword);
             }
 
+            bool actuallySend = false;
+            Console.Write("Type 'true' to actually send emails: ");
+            actuallySend &= bool.TryParse(Console.ReadLine(), out actuallySend);
+
+
             sDc = new DkpDataContext();
             sPersonMap = sDc.People.ToDictionary(p => p.ID, p => p);
 
@@ -90,9 +95,14 @@ namespace MailMerge
                 msg.Body = fields.BODY;
                 msg.IsBodyHtml = true;
 
-                client.Send(msg);
-                Console.WriteLine("Sent {0,2}/{1,2} ({2})", ++sentSoFar, totalToSend, tup.Item1.FirstName);
+                if (actuallySend)
+                    client.Send(msg);
+                Console.WriteLine(actuallySend ? "Sent {0,2}/{1,2} ({2})" : "Would send: {2}", ++sentSoFar, totalToSend, tup.Item1.FirstName);
             }
+
+            Console.WriteLine();
+            Console.WriteLine("Done! Press enter to exit.");
+            Console.ReadLine();
         }
 
         class MyRecord
