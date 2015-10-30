@@ -49,8 +49,7 @@ namespace MailMerge
 
             bool actuallySend = false;
             Console.Write("Type 'true' to actually send emails: ");
-            actuallySend &= bool.TryParse(Console.ReadLine(), out actuallySend);
-
+            bool.TryParse(Console.ReadLine(), out actuallySend);
 
             sDc = new DkpDataContext();
             sPersonMap = sDc.People.ToDictionary(p => p.ID, p => p);
