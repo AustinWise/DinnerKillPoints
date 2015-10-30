@@ -30,7 +30,7 @@
     </tr>
     <tr>
         <th>Created</th>
-        <td>@Model.Created</td>
+        <td>@Html.AdjustDate(Model.Created)</td>
     </tr>
 </table>
 @if (Startup.IsUserInRole("Admin"))

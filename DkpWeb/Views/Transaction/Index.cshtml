@@ -39,7 +39,7 @@
                 @t.PrettyDescription
             </td>
             <td>
-                @t.Created
+                @Html.AdjustDate(t.Created)
             </td>
             <td>
                 @Html.ActionLink("Details", "View", new { id = @t.ID })

@@ -21,7 +21,7 @@ namespace Austin.DkpLib
                 throw new ArgumentOutOfRangeException("payer", "Need at least one payer.");
 
             this.mName = name;
-            this.mDate = date;
+            this.mDate = date.ToUniversalTime();
             this.mPayer = payer;
             mParty = new List<Tuple<Person, double>>();
             mFreeLoaders = new List<Person>();

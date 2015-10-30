@@ -6,7 +6,6 @@
     <title>@ViewBag.Title - Dinner Kill Points</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -23,7 +22,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     @*<li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                     <li>@Html.ActionLink("Bill Splits", "Index", "BillSplit")</li>
                     <li>@Html.ActionLink("Transactions", "Index", "Transaction")</li>
                     <li>@Html.ActionLink("My Debt", "Index", "MyDebt")</li>
@@ -37,12 +36,13 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Austin Wise</p>
+            <p>&copy; @DateTime.UtcNow.Year - Austin Wise</p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/AdjustDates")
     @RenderSection("scripts", required: false)
 </body>
 </html>
