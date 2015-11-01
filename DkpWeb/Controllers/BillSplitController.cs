@@ -41,20 +41,14 @@ namespace DkpWeb.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            try
-            {
-                var bs = mData.BillSplits.Where(b => b.ID == id).Single();
-                mData.BillSplits.DeleteOnSubmit(bs);
-                mData.SubmitChanges();
+            var bs = mData.BillSplits.Where(b => b.ID == id).Single();
+            mData.BillSplits.DeleteOnSubmit(bs);
+            mData.SubmitChanges();
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

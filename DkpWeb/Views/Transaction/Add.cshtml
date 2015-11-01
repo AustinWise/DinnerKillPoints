@@ -12,6 +12,7 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "Transaction creation was unsuccessful. Please correct the errors and try again.")
     <div>
         <fieldset>

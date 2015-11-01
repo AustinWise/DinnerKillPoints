@@ -71,6 +71,7 @@ namespace DkpWeb.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(Guid id)
         {
             var trans = mData.Transactions.Where(t => t.ID == id).Single();
@@ -82,6 +83,7 @@ namespace DkpWeb.Controllers
 
         [HttpPost]
         [Authorize(Roles = "DKP")]
+        [ValidateAntiForgeryToken]
         public ActionResult Add(NewTransactionModel model)
         {
             if (ModelState.IsValid)

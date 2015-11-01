@@ -50,6 +50,7 @@
 {
     using (Html.BeginForm("Delete", "BillSplit", new { id = @Model.ID }, FormMethod.Post))
     {
-    <input id="submit" type="submit" value="Delete" />
+        @Html.AntiForgeryToken()
+        <input id="submit" type="submit" value="Delete" />
     }
 }

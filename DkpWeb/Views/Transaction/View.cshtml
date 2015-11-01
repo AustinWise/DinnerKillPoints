@@ -37,6 +37,7 @@
 {
     using (Html.BeginForm("Delete", "Transaction", new { id = @Model.ID }, FormMethod.Post))
     {
-    <input id="submit" type="submit" value="Delete" />
+        @Html.AntiForgeryToken()
+        <input id="submit" type="submit" value="Delete" />
     }
 }
