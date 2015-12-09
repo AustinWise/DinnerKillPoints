@@ -77,15 +77,14 @@ namespace MailMerge
             if (myDebt != null)
                 debtors.Remove(myDebt);
 
-            debtors = debtors.Where(tup => tup.Item2 > 1000).ToList();
+            debtors = debtors.Where(tup => tup.Item2 > 1000 && !string.IsNullOrEmpty(tup.Item1.Email)).ToList();
 
             var from = new MailAddress(person.Email, person.ToString());
             var client = new SmtpClient("smtp.gmail.com", 587);
             client.Credentials = new NetworkCredential(settings.EmailUser, emailPassword);
             client.EnableSsl = true;
             int sentSoFar = 0;
-            int totalToSend = debtors.Where(d => !string.IsNullOrEmpty(d.Item1.Email)).Count();
-            foreach (var tup in debtors.Where(d => !string.IsNullOrEmpty(d.Item1.Email)))
+            foreach (var tup in debtors)
             {
                 var fields = ProcessOnePerson(person, tup.Item1, tup.Item2);
 
@@ -96,7 +95,7 @@ namespace MailMerge
 
                 if (actuallySend)
                     client.Send(msg);
-                Console.WriteLine(actuallySend ? "Sent {0,2}/{1,2} ({2})" : "Would send: {2}", ++sentSoFar, totalToSend, tup.Item1.FirstName);
+                Console.WriteLine(actuallySend ? "Sent {0,2}/{1,2} ({2})" : "Would send: {2}", ++sentSoFar, debtors.Count, tup.Item1.FirstName);
             }
 
             Console.WriteLine();
