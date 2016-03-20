@@ -48,20 +48,20 @@ namespace DinnerKillPoints
             var adrian = GetPerson(23);
             var ed = GetPerson(24);
             var randy = GetPerson(25);
-            var becky = GetPerson(26);
+            //var becky = GetPerson(26);
             var andrew = GetPerson(29);
             var justinShih = GetPerson(30);
             //var davidFang = GetPerson(31);
             var derek = GetPerson(32);
             //var elaineJeu = GetPerson(33);
             var jimmy = GetPerson(34);
-            var alex = GetPerson(35);
+            var alexFong = GetPerson(35);
             var victor = GetPerson(36);
             var tiffany = GetPerson(37);
             var moriaki = GetPerson(38);
             var adam = GetPerson(39);
             var benKwong = GetPerson(40);
-            //var jasonBanich = GetPerson(41);
+            var jasonBanich = GetPerson(41);
             var changLiu = GetPerson(42);
             var mike = GetPerson(43);
             //var spencer = GetPerson(44);
@@ -74,6 +74,7 @@ namespace DinnerKillPoints
             var ryanWeinstein = GetPerson(51);
             var michelle = GetPerson(52);
             var allison = GetPerson(53);
+            var alexBruk = GetPerson(54);
 
 
             //Transaction t;

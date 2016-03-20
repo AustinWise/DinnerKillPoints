@@ -17,8 +17,13 @@ namespace MailMerge
         static readonly int[] PEOPLE_TO_EXCLUDE =
         {
             3, //wesley
+            5, //dCastle
             11, //jeff
             12, //ryuho
+            16, //justine
+            34, //jimmy
+            39, //adam
+            42, //chang
         };
 
         static DkpDataContext sDc;
@@ -95,7 +100,7 @@ namespace MailMerge
 
                 if (actuallySend)
                     client.Send(msg);
-                Console.WriteLine(actuallySend ? "Sent {0,2}/{1,2} ({2})" : "Would send: {2}", ++sentSoFar, debtors.Count, tup.Item1.FirstName);
+                Console.WriteLine(actuallySend ? "Sent {0,2}/{1,2} ({2} {3})" : "Would send: {2} {3}", ++sentSoFar, debtors.Count, tup.Item1.FirstName, tup.Item1.LastName);
             }
 
             Console.WriteLine();
