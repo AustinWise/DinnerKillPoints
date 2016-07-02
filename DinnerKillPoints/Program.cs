@@ -75,6 +75,8 @@ namespace DinnerKillPoints
             var michelle = GetPerson(52);
             var allison = GetPerson(53);
             var alexBruk = GetPerson(54);
+            var dennis = GetPerson(55);
+            var salsa = GetPerson(57);
 
 
             //Transaction t;
