@@ -5,6 +5,7 @@ obj
 *.cache
 TestResults
 DkpData/sql
+*.lock.json
 
 packages/*
 !packages/repositories.config
