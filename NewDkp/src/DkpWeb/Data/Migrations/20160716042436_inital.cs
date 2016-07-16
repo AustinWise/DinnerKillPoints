@@ -45,7 +45,7 @@ namespace DkpWeb.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Email = table.Column<string>(maxLength: 50, nullable: true),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValueSql: "0"),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValueSql: "false"),
                     LastName = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>

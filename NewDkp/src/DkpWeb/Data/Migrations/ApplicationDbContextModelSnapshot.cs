@@ -137,7 +137,7 @@ namespace DkpWeb.Data.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("0");
+                        .HasDefaultValueSql("false");
 
                     b.Property<string>("LastName")
                         .IsRequired()
