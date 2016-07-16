@@ -74,6 +74,8 @@ namespace DkpWeb.Data
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Ignore(e => e.FullName);
             });
 
             modelBuilder.Entity<Transaction>(entity =>
@@ -109,6 +111,8 @@ namespace DkpWeb.Data
                     .HasForeignKey(d => d.DebtorId)
                     .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("FK_Transaction_Person_Debtor");
+
+                entity.Ignore(e => e.PrettyDescription);
             });
         }
 
@@ -117,5 +121,16 @@ namespace DkpWeb.Data
         public virtual DbSet<PaymentMethod> PaymentMethod { get; set; }
         public virtual DbSet<Person> Person { get; set; }
         public virtual DbSet<Transaction> Transaction { get; set; }
+
+        public IEnumerable<Person> ActivePeopleOrderedByName
+        {
+            get
+            {
+                return Person
+                    .Where(p => !p.IsDeleted)
+                    .OrderBy(p => p.FirstName)
+                    .ThenBy(p => p.LastName);
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Services;
+using Sakura.AspNetCore.Mvc;
 
 namespace DkpWeb
 {
@@ -52,6 +53,12 @@ namespace DkpWeb
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.AddBootstrapPagerGenerator(options =>
+            {
+                // Use default pager options.
+                options.ConfigureDefault();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

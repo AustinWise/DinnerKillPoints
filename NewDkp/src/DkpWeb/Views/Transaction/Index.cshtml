@@ -1,0 +1,53 @@
+﻿@model DkpWeb.Models.TransactionList
+@using DkpWeb.Services
+
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Transactions</h2>
+@if (Context.User.IsInRole("DKP"))
+{
+    @Html.ActionLink("Add", "Add")
+}
+<table>
+    <tr>
+        <th>Debtor
+        </th>
+        <th>Creditor
+        </th>
+        <th>Amount
+        </th>
+        <th>Description
+        </th>
+        <th>Date
+        </th>
+        <th>Details
+        </th>
+    </tr>
+    @foreach (var t in Model.Transactions)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(t.Debtor.FirstName + " " + t.Debtor.LastName, "Detail", "People", new { id = t.DebtorId }, null)
+            </td>
+            <td>
+                @Html.ActionLink(t.Creditor.FirstName + " " + t.Creditor.LastName, "Detail", "People", new { id = t.CreditorId }, null)
+            </td>
+            <td>
+                @(((double)t.Amount / 100d).ToString("c"))
+            </td>
+            <td>
+                @t.PrettyDescription
+            </td>
+            <td>
+                @Html.AdjustDate(t.Created)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "View", new { id = @t.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<pager source="Model.Transactions" />
