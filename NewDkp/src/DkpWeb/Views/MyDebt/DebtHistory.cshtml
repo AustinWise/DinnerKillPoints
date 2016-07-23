@@ -1,0 +1,77 @@
+﻿@using DkpWeb.Models.MyDebtViewModels
+@model DebtLedger
+
+@{
+    ViewBag.Title = "Debt History";
+}
+
+<h2>Debt owed from @Model.Debtor to @Model.Creditor</h2>
+
+@if (Model.AmountCents > 0)
+{
+    <p>
+        You owe @Model.AmountDollars to @Model.Creditor.
+        @Html.Partial("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Payment, Model.AmountCents))
+    </p>
+}
+@if (Model.AmountCents < 0)
+{
+    <p>
+        You are owed @Model.AmountDollars by @Model.Creditor.
+        @Html.Partial("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Request, -Model.AmountCents))
+    </p>
+}
+@if (Model.AmountCents == 0)
+{
+    <p>
+        There is no debt between you and @Model.Creditor.
+    </p>
+}
+
+<h3>History</h3>
+<p>
+    A <em>credit</em> is a debt in the opposite direction (from @Model.Creditor.ToString() to @Model.Debtor.ToString()).
+    Parentheses in the <em>running total</em> column mean that the debt is owed in the other direction.
+</p>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Debt</th>
+            <th>Credit</th>
+            <th>Running Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>&mdash;</td>
+            <td>Inital balance</td>
+            <td />
+            <td />
+            <td>@((0).ToString("C"))</td>
+        </tr>
+        @foreach (var entry in Model.Entries)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("View", "Transaction", new { id = entry.TransactionId })">
+                        @Html.AdjustDate(entry.Created)
+                    </a>
+                </td>
+                <td>@entry.Description</td>
+                @if (entry.Amount < 0)
+                {
+                    <td />
+                    <td>@((Math.Abs(entry.Amount) / 100d).ToString("C"))</td>
+                }
+                else
+                {
+                    <td>@((entry.Amount / 100d).ToString("C"))</td>
+                    <td />
+                }
+                <td>@((entry.RunningTotal / 100d).ToString("C"))</td>
+            </tr>
+        }
+    </tbody>
+</table>
