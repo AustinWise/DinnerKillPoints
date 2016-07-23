@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<h2>
+    Analyse Index</h2>
+@using (@Html.BeginForm("Display", "Analyse", FormMethod.Get))
+{
+    <select name="peopleIds" multiple="multiple" style="height: 400px;">
+        @foreach (Person p in Model)
+        {
+            <option title="@p.FirstName @p.LastName" value="@p.Id">@p.FirstName @p.LastName</option>
+        }
+    </select>
+    <br />
+    <button type="submit">
+        Test</button>
+}
