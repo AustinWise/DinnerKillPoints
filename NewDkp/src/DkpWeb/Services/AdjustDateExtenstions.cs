@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace DkpWeb.Services
+namespace Microsoft.AspNetCore.Mvc.Rendering
 {
+    //TODO: move this file to a better place
     public static class AdjustDateExtenstions
     {
         static DateTime sEpoc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
