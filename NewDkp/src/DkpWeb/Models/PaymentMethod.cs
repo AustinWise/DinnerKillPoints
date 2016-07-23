@@ -16,5 +16,15 @@ namespace DkpWeb.Models
         public string RequestMoneyLinkFormat { get; set; }
 
         public virtual ICollection<PaymentIdentity> PaymentIdentity { get; set; }
+
+        public bool HasPayLink
+        {
+            get { return !string.IsNullOrEmpty(PayLinkFormat); }
+        }
+
+        public bool HasRequestMoneyLink
+        {
+            get { return !string.IsNullOrEmpty(RequestMoneyLinkFormat); }
+        }
     }
 }

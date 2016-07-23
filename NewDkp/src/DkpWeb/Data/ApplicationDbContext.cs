@@ -27,6 +27,8 @@ namespace DkpWeb.Data
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Ignore(e => e.PrettyName);
             });
 
             modelBuilder.Entity<PaymentIdentity>(entity =>
@@ -57,6 +59,9 @@ namespace DkpWeb.Data
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnType("nchar(50)");
+
+                entity.Ignore(e => e.HasPayLink);
+                entity.Ignore(e => e.HasRequestMoneyLink);
             });
 
             modelBuilder.Entity<Person>(entity =>
