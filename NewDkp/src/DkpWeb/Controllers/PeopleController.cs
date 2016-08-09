@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Austin.DkpLib;
+﻿using DkpWeb.Data;
 using DkpWeb.Models;
-using Microsoft.AspNetCore.Mvc;
-using DkpWeb.Data;
-using Microsoft.AspNetCore.Authorization;
 using DkpWeb.Models.PeopleViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DkpWeb.Controllers
 {
@@ -44,7 +42,7 @@ namespace DkpWeb.Controllers
 
         public ActionResult Detail(int id)
         {
-            return View(mData.Person.Where(p => p.Id == id).Single());
+            return View(mData.Person.Where(p => p.Id == id).Include(p => p.PaymentIdentity).ThenInclude(p => p.PaymentMeth).Single());
         }
 
         [HttpPost]
