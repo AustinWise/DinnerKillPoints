@@ -13,3 +13,4 @@ packages/*
 *.dbmdl
 *.scmp
 .vs
+*.min.js
