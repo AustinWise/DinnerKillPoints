@@ -20,9 +20,13 @@ namespace DkpWeb.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.HasSequence("billsplit_id_seq");
             modelBuilder.Entity<BillSplit>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.Id)
+                      .HasColumnName("ID")
+                      .HasDefaultValueSql("nextval('billsplit_id_seq')")
+                      .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -31,8 +35,13 @@ namespace DkpWeb.Data
                 entity.Ignore(e => e.PrettyName);
             });
 
+            modelBuilder.HasSequence("paymentidentity_id_seq");
             modelBuilder.Entity<PaymentIdentity>(entity =>
             {
+                entity.Property(e => e.Id)
+                      .HasDefaultValueSql("nextval('paymentidentity_id_seq')")
+                      .ValueGeneratedOnAdd();
+
                 entity.Property(e => e.PaymentMethId).HasColumnName("PaymentMethID");
 
                 entity.Property(e => e.PersonId).HasColumnName("PersonID");
@@ -54,8 +63,13 @@ namespace DkpWeb.Data
                     .HasConstraintName("FK_PaymentIdentity_Person");
             });
 
+            modelBuilder.HasSequence("paymentmethod_id_seq");
             modelBuilder.Entity<PaymentMethod>(entity =>
             {
+                entity.Property(e => e.Id)
+                      .HasDefaultValueSql("nextval('paymentmethod_id_seq')")
+                      .ValueGeneratedOnAdd();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnType("nchar(50)");
@@ -64,9 +78,13 @@ namespace DkpWeb.Data
                 entity.Ignore(e => e.HasRequestMoneyLink);
             });
 
+            modelBuilder.HasSequence("person_id_seq");
             modelBuilder.Entity<Person>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.Id)
+                      .HasColumnName("ID")
+                      .HasDefaultValueSql("nextval('person_id_seq')")
+                      .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
@@ -74,7 +92,7 @@ namespace DkpWeb.Data
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.IsDeleted).HasDefaultValueSql("0");
+                entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
