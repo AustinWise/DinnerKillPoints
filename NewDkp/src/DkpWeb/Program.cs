@@ -94,10 +94,36 @@ namespace DkpWeb
                 //bs[justinShih] = 300;
                 //bs.Save(db);
 
+
+                WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
+                WriteData(db, false, db.Person.ToArray());
+
                 return;
             }
 
             host.Run();
+        }
+
+        private static void WriteData(ApplicationDbContext db, bool removeCycles, Person[] people)
+        {
+            const string outDir = @"D:\AustinWise\Dropbox\DKP";
+
+            List<Debt> netMoney = null;
+            TextWriter infoOutput = removeCycles ? new StreamWriter(File.OpenWrite(Path.Combine(outDir, "Info.txt"))) : null;
+            netMoney = DebtGraph.TestAlgo(db, people, removeCycles, infoOutput ?? Console.Out);
+            if (infoOutput != null)
+                infoOutput.Dispose();
+            Console.WriteLine("{0:c}", netMoney.Sum(m => m.Amount) / 100d);
+
+            const string gvPath = @"c:\temp\graph\test.gv";
+            using (var sw = new StreamWriter(File.OpenWrite(gvPath)))
+            {
+                DebtGraph.WriteGraph(netMoney, sw);
+            }
+
+            DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, removeCycles ? "current.png" : "nocycles.png"));
+            if (removeCycles)
+                DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, DateTime.Now.ToString("yyyy-MM-dd") + ".png"));
         }
 
         static async Task EnsureRole(RoleManager<IdentityRole> roles, string name)
