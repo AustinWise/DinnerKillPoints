@@ -126,6 +126,67 @@ namespace DkpWeb
                 DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, DateTime.Now.ToString("yyyy-MM-dd") + ".png"));
         }
 
+        private static void DebtTransfer(ApplicationDbContext db, Person debtor, Person oldCreditor, Person newCreditor)
+        {
+            DebtTransfer(db, debtor, oldCreditor, newCreditor, DateTime.Now);
+        }
+
+        private static void DebtTransfer(ApplicationDbContext db, Person debtor, Person oldCreditor, Person newCreditor, DateTime when)
+        {
+            var netMoney = DebtGraph.TestAlgo(db, new[] { debtor, oldCreditor }, false, null);
+            if (netMoney.Count != 1)
+                throw new Exception("No debt to transfer.");
+
+            var theDebt = netMoney[0];
+
+            if (theDebt.Debtor.Id != debtor.Id || theDebt.Creditor.Id != oldCreditor.Id)
+                throw new Exception("Debt does not go in the expected direction.");
+
+            var msg = Transaction.CreateDebtTransferString(debtor, oldCreditor, newCreditor);
+
+            var bs = new BillSplit();
+            bs.Name = msg;
+            db.BillSplit.Add(bs);
+
+            var cancelTrans = new Transaction()
+            {
+                Id = Guid.NewGuid(),
+                DebtorId = oldCreditor.Id, //owes money
+                CreditorId = debtor.Id, //owed money
+                Amount = theDebt.Amount,
+                Bill = bs,
+                Description = msg,
+                Created = when
+            };
+            db.Transaction.Add(cancelTrans);
+
+            var makeCreditorWholeTransaction = new Transaction()
+            {
+                Id = Guid.NewGuid(),
+                DebtorId = newCreditor.Id, //owes money
+                CreditorId = oldCreditor.Id, //owed money
+                Amount = theDebt.Amount,
+                Bill = bs,
+                Description = msg,
+                Created = when
+            };
+            db.Transaction.Add(makeCreditorWholeTransaction);
+
+            var makeDebtorOweNewPartyTrans = new Transaction()
+            {
+                Id = Guid.NewGuid(),
+                DebtorId = debtor.Id, //owes money
+                CreditorId = newCreditor.Id, //owed money
+                Amount = theDebt.Amount,
+                Bill = bs,
+                Description = msg,
+                Created = when
+            };
+            db.Transaction.Add(makeDebtorOweNewPartyTrans);
+
+            db.SaveChanges();
+        }
+
         static async Task EnsureRole(RoleManager<IdentityRole> roles, string name)
         {
             var role = await roles.FindByNameAsync(name);
