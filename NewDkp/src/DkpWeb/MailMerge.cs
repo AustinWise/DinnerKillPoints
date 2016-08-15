@@ -26,29 +26,29 @@ namespace DkpWeb
             42, //chang
         };
 
-        readonly ApplicationDbContext sDc;
+        readonly ApplicationDbContext mDb;
         readonly IEmailSender mEmail;
-        readonly Dictionary<int, Person> sPersonMap;
+        readonly Dictionary<int, Person> mPersonMap;
 
         public MailMerge(ApplicationDbContext context, IEmailSender email)
         {
-            sDc = context;
+            mDb = context;
             mEmail = email;
-            sPersonMap = context.Person.ToDictionary(p => p.Id);
+            mPersonMap = context.Person.ToDictionary(p => p.Id);
         }
 
-        public async Task Send(int PERSON_TO_MAIL_MERGE)
+        public async Task Send(int creditorId)
         {
             bool actuallySend = false;
             Console.Write("Type 'true' to actually send emails: ");
             bool.TryParse(Console.ReadLine(), out actuallySend);
 
-            var person = sDc.Person
-                            .Where(p => p.Id == PERSON_TO_MAIL_MERGE)
+            var person = mDb.Person
+                            .Where(p => p.Id == creditorId)
                             .Include(p => p.PaymentIdentity).ThenInclude(p => p.PaymentMeth)
                             .Single();
 
-            var transactions = sDc.Transaction
+            var transactions = mDb.Transaction
                 .Where(t => t.CreditorId != t.DebtorId
                     && (t.CreditorId == person.Id || t.DebtorId == person.Id)
                     && (!t.Creditor.IsDeleted && !t.Debtor.IsDeleted));
@@ -58,7 +58,7 @@ namespace DkpWeb
                 transactions = transactions.Where(t => t.DebtorId != p && t.CreditorId != p);
             }
 
-            var netMoney = DebtGraph.TestAlgo(sDc, transactions, true, TextWriter.Null);
+            var netMoney = DebtGraph.TestAlgo(mDb, transactions, true, TextWriter.Null);
 
             var swGraph = new StringWriter();
             DebtGraph.WriteGraph(netMoney, swGraph);
@@ -95,7 +95,7 @@ namespace DkpWeb
         MyRecord ProcessOnePerson(Person creditor, Person debtor, int amount)
         {
 
-            var q = from t in sDc.Transaction
+            var q = from t in mDb.Transaction
                     where (t.CreditorId == debtor.Id && t.DebtorId == creditor.Id)
                        || (t.CreditorId == creditor.Id && t.DebtorId == debtor.Id)
                     orderby t.Created
@@ -103,14 +103,14 @@ namespace DkpWeb
             var allTrans = q.ToList();
             foreach (var t in allTrans)
             {
-                t.SetPrettyDescription(sPersonMap);
+                t.SetPrettyDescription(mPersonMap);
             }
 
             var souceTrans = new List<Transaction>();
             Debt debt = null;
             while (allTrans.Count != 0)
             {
-                debt = DebtGraph.TestAlgo(sDc, allTrans, false, TextWriter.Null).SingleOrDefault();
+                debt = DebtGraph.TestAlgo(mDb, allTrans, false, TextWriter.Null).SingleOrDefault();
                 if (debt == null)
                     break; //this indicates that there is no debt between the two people
                 if (debt.Debtor.Id == creditor.Id)
