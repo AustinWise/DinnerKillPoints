@@ -4,21 +4,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DkpWeb.Data.Migrations
 {
-    public partial class sequence : Migration
+    public partial class secquence : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateSequence(
-                name: "billsplit_id_seq");
+                name: "billsplit_id_seq",
+                startValue: 1000L);
 
             migrationBuilder.CreateSequence(
-                name: "paymentidentity_id_seq");
+                name: "paymentidentity_id_seq",
+                startValue: 100L);
 
             migrationBuilder.CreateSequence(
-                name: "paymentmethod_id_seq");
+                name: "paymentmethod_id_seq",
+                startValue: 10L);
 
             migrationBuilder.CreateSequence(
-                name: "person_id_seq");
+                name: "person_id_seq",
+                startValue: 100L);
 
             migrationBuilder.AlterColumn<bool>(
                 name: "IsDeleted",

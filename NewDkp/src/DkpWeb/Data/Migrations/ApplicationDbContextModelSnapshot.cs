@@ -14,10 +14,10 @@ namespace DkpWeb.Data.Migrations
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
-                .HasAnnotation("Relational:Sequence:.billsplit_id_seq", "'billsplit_id_seq', '', '1', '1', '', '', 'Int64', 'False'")
-                .HasAnnotation("Relational:Sequence:.paymentidentity_id_seq", "'paymentidentity_id_seq', '', '1', '1', '', '', 'Int64', 'False'")
-                .HasAnnotation("Relational:Sequence:.paymentmethod_id_seq", "'paymentmethod_id_seq', '', '1', '1', '', '', 'Int64', 'False'")
-                .HasAnnotation("Relational:Sequence:.person_id_seq", "'person_id_seq', '', '1', '1', '', '', 'Int64', 'False'");
+                .HasAnnotation("Relational:Sequence:.billsplit_id_seq", "'billsplit_id_seq', '', '1000', '1', '', '', 'Int64', 'False'")
+                .HasAnnotation("Relational:Sequence:.paymentidentity_id_seq", "'paymentidentity_id_seq', '', '100', '1', '', '', 'Int64', 'False'")
+                .HasAnnotation("Relational:Sequence:.paymentmethod_id_seq", "'paymentmethod_id_seq', '', '10', '1', '', '', 'Int64', 'False'")
+                .HasAnnotation("Relational:Sequence:.person_id_seq", "'person_id_seq', '', '100', '1', '', '', 'Int64', 'False'");
 
             modelBuilder.Entity("DkpWeb.Models.ApplicationUser", b =>
                 {

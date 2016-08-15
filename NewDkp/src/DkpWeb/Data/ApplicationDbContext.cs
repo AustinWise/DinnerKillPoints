@@ -20,7 +20,7 @@ namespace DkpWeb.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.HasSequence("billsplit_id_seq");
+            modelBuilder.HasSequence("billsplit_id_seq").StartsAt(1000);
             modelBuilder.Entity<BillSplit>(entity =>
             {
                 entity.Property(e => e.Id)
@@ -35,7 +35,7 @@ namespace DkpWeb.Data
                 entity.Ignore(e => e.PrettyName);
             });
 
-            modelBuilder.HasSequence("paymentidentity_id_seq");
+            modelBuilder.HasSequence("paymentidentity_id_seq").StartsAt(100);
             modelBuilder.Entity<PaymentIdentity>(entity =>
             {
                 entity.Property(e => e.Id)
@@ -63,7 +63,7 @@ namespace DkpWeb.Data
                     .HasConstraintName("FK_PaymentIdentity_Person");
             });
 
-            modelBuilder.HasSequence("paymentmethod_id_seq");
+            modelBuilder.HasSequence("paymentmethod_id_seq").StartsAt(10);
             modelBuilder.Entity<PaymentMethod>(entity =>
             {
                 entity.Property(e => e.Id)
@@ -78,7 +78,7 @@ namespace DkpWeb.Data
                 entity.Ignore(e => e.HasRequestMoneyLink);
             });
 
-            modelBuilder.HasSequence("person_id_seq");
+            modelBuilder.HasSequence("person_id_seq").StartsAt(100);
             modelBuilder.Entity<Person>(entity =>
             {
                 entity.Property(e => e.Id)
