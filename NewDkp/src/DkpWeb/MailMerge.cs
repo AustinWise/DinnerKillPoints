@@ -77,7 +77,7 @@ namespace DkpWeb
                 var fields = ProcessOnePerson(person, tup.Item1, tup.Item2);
 
                 if (actuallySend)
-                    await mEmail.SendEmailAsync(tup.Item1.Email, "DKP Invoice", fields.BODY);
+                    await mEmail.SendHtmlEmailAsync(tup.Item1.FullName, tup.Item1.Email, "DKP Invoice", fields.BODY);
                 Console.WriteLine(actuallySend ? "Sent {0,2}/{1,2} ({2} {3})" : "Would send: {2} {3}", ++sentSoFar, debtors.Count, tup.Item1.FirstName, tup.Item1.LastName);
             }
 
