@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DkpWeb.Config;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +12,10 @@ namespace DkpWeb.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
+        public AuthMessageSender(IOptions<EmailOptions> options)
+        {
+        }
+
         public Task SendEmailAsync(string email, string subject, string message)
         {
             // Plug in your email service here to send an email.

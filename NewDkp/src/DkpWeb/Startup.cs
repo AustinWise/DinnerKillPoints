@@ -13,6 +13,7 @@ using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Services;
 using Sakura.AspNetCore.Mvc;
+using DkpWeb.Config;
 
 namespace DkpWeb
 {
@@ -40,6 +41,9 @@ namespace DkpWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<EmailOptions>(Configuration.GetSection("Gmail"));
+
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration["psql"]));
@@ -59,6 +63,8 @@ namespace DkpWeb
                 // Use default pager options.
                 options.ConfigureDefault();
             });
+
+            services.AddTransient<MailMerge>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

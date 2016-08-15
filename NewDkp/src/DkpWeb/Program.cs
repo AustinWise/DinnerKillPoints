@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Austin.DkpLib;
+using DkpWeb.Data;
+using DkpWeb.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Identity;
-using DkpWeb.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using DkpWeb.Data;
-using Austin.DkpLib;
 
 namespace DkpWeb
 {
@@ -100,6 +100,13 @@ namespace DkpWeb
                 WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
                 WriteData(db, false, db.Person.ToArray());
 
+                return;
+            }
+
+            if (args.Any(a => a == "--mail"))
+            {
+                var mail = host.Services.GetService<MailMerge>();
+                mail.Send(1).Wait();
                 return;
             }
 
