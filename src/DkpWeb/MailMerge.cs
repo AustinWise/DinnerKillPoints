@@ -69,7 +69,7 @@ namespace DkpWeb
             if (myDebt != null)
                 debtors.Remove(myDebt);
 
-            debtors = debtors.Where(tup => tup.Item2 > 900 && !string.IsNullOrEmpty(tup.Item1.Email)).ToList();
+            debtors = debtors.Where(tup => tup.Item2 > 1000 && !string.IsNullOrEmpty(tup.Item1.Email)).ToList();
 
             int sentSoFar = 0;
             foreach (var tup in debtors)

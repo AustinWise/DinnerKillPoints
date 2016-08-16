@@ -46,7 +46,7 @@ namespace DkpWeb.Services
 
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.SslOnConnect).ConfigureAwait(false);
+                await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls).ConfigureAwait(false);
                 await client.AuthenticateAsync(mGmailUsername, mGmailPassword);
                 await client.SendAsync(emailMessage);
                 await client.DisconnectAsync(true);
