@@ -14,3 +14,4 @@ packages/*
 *.scmp
 .vs
 *.min.js
+*.tar
