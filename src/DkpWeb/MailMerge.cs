@@ -20,10 +20,6 @@ namespace DkpWeb
             5, //dCastle
             11, //jeff
             12, //ryuho
-            16, //justine
-            34, //jimmy
-            39, //adam
-            42, //chang
         };
 
         readonly ApplicationDbContext mDb;
@@ -130,10 +126,10 @@ namespace DkpWeb
             sb.AppendFormat("Hi {0},", debtor.FirstName);
             sb.AppendLine("<br/>");
 
-            sb.Append("This is friendly, automated reminder that you currently owe a balence to me in DKP. ");
+            sb.Append("This is a friendly, automated reminder that you currently owe a balence to me in DKP. ");
             sb.Append("Including ");
             sb.Append(souceTrans[0].Description);
-            sb.Append(", our most recent time together, you owe me ");
+            sb.Append(", our most recent time together, you owe ");
             sb.AppendFormat("{0:c}.", amountInDollars);
             sb.AppendLine("<br/>");
 
