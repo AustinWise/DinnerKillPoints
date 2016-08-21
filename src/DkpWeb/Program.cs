@@ -88,6 +88,9 @@ namespace DkpWeb
                 var salsa = GetPerson(57);
                 var stephen = GetPerson(100);
                 var elisha = GetPerson(101);
+                var maya = GetPerson(102);
+                var charles = GetPerson(103);
+                var menglu = GetPerson(104);
 
                 //var bs = new BillSpliter("Drinks", new DateTime(2016, 7, 22, 12 + 10, 0, 0), austin);
                 //bs.SharedFood = 2640;

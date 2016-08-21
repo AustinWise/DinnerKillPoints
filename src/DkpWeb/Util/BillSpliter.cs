@@ -9,6 +9,17 @@ namespace Austin.DkpLib
 {
     public class BillSpliter
     {
+        /// <summary>
+        /// The maximum deviation from a rounded penny amount a sum is allowed to be.
+        /// </summary>
+        /// <remarks>
+        /// The database stores all debts as an integer number of pennies. However during splitting a bill
+        /// fractional penny debts can occure, such as when splitting an item worth an odd number of pennies between
+        /// two people. Durring bill splits the algorithm uses this value as the maximum deviation a summ of all
+        /// debts can be from an integer value, as a check some fractions of a penny have not been lost during rounding.
+        /// </remarks>
+        const double PENNY_THRESHOLD = 0.01;
+
         private string mName;
         private DateTime mDate;
         private Person[] mPayer;
@@ -105,8 +116,10 @@ namespace Austin.DkpLib
             var pool = mParty.Sum(p => p.Item2) + SharedFood;
             var totalBillValue = pool + Tip + Tax - Discount;
 
-            if (totalBillValue < 0)
-                throw new Exception("Negative total bill value.");
+            if (totalBillValue <= 0)
+                throw new Exception("Zero or negative total bill value.");
+            if (Math.Abs(totalBillValue - Math.Round(totalBillValue)) > PENNY_THRESHOLD)
+                throw new Exception("Non-int number of pennies.");
 
             var amountSpent = new List<Tuple<Person, double>>();
 
@@ -160,6 +173,8 @@ namespace Austin.DkpLib
 
         static void checkTotal(double initalSum, double currentSum)
         {
+            if (Math.Abs(currentSum - Math.Round(currentSum)) > PENNY_THRESHOLD)
+                throw new Exception("Non-int number of pennies.");
             if (Math.Abs(initalSum - currentSum) > 0.1)
                 throw new Exception("Something terrible has happened.");
         }
@@ -180,10 +195,15 @@ namespace Austin.DkpLib
         }
 
         /// <summary>
-        /// Distributes pennies.
+        /// Round splits to the nearest penny.
         /// </summary>
         /// <param name="amountSpent"></param>
         /// <returns>Item1 owes Item2 Item3 pennies</returns>
+        /// <remarks>
+        /// Over the course of splitting a bill people can end up owing a fractional number of pennies.
+        /// Thie method rounds peoples debts to the nearest penny, while preserving the invarient that
+        /// the total amount owed in this group of debts does not change.
+        /// </remarks>
         List<Tuple<Person, Person, int>> SplitPennies(List<Tuple<Person, List<Tuple<Person, double>>>> amountSpent)
         {
             var pennies = amountSpent
@@ -197,7 +217,7 @@ namespace Austin.DkpLib
                 .ToList();
             var tempDoublePennyCount = pennies.Sum(p => p.PennyFraction);
 
-            if (Math.Abs(tempDoublePennyCount - Math.Round(tempDoublePennyCount)) > 0.01)
+            if (Math.Abs(tempDoublePennyCount - Math.Round(tempDoublePennyCount)) > PENNY_THRESHOLD)
                 throw new Exception("Non-int number of pennies.");
 
             var totalPennies = (int)Math.Round(tempDoublePennyCount);
