@@ -126,7 +126,7 @@ namespace DkpWeb
             sb.AppendFormat("Hi {0},", debtor.FirstName);
             sb.AppendLine("<br/>");
 
-            sb.Append("This is a friendly, automated reminder that you currently owe a balence to me in DKP. ");
+            sb.Append("This is a personalized friendly, automated reminder that you currently owe a balence to me in DKP. ");
             sb.Append("Including ");
             sb.Append(souceTrans[0].Description);
             sb.Append(", our most recent time together, you owe ");
