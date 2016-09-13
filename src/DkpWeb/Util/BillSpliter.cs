@@ -2,6 +2,7 @@
 using DkpWeb.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -74,7 +75,12 @@ namespace Austin.DkpLib
 
         public void Save(ApplicationDbContext db)
         {
-            var debts = SplitBill();
+            Save(db, TextWriter.Null);
+        }
+
+        public void Save(ApplicationDbContext db, TextWriter log)
+        {
+            var debts = SplitBill(log);
 
             var bs = new BillSplit() { Name = mName };
             db.BillSplit.Add(bs);
@@ -109,7 +115,7 @@ namespace Austin.DkpLib
                 throw new NotSupportedException("Negative bill attribute.");
         }
 
-        public List<Tuple<Person, Person, int>> SplitBill()
+        public List<Tuple<Person, Person, int>> SplitBill(TextWriter log)
         {
             ValidateBill();
 
@@ -121,20 +127,33 @@ namespace Austin.DkpLib
             if (Math.Abs(totalBillValue - Math.Round(totalBillValue)) > PENNY_THRESHOLD)
                 throw new Exception("Non-int number of pennies.");
 
+            log.WriteLine($"pool: {pool / 100d:c}");
+            log.WriteLine($"totalBillValue: {totalBillValue / 100d:c}");
+            log.WriteLine();
+
             var amountSpent = new List<Tuple<Person, double>>();
 
-            //First add up each person's share of the bill, splitting shared food items equally.
+            log.WriteLine("First add up each person's share of the bill, splitting shared food items equally:");
             foreach (var p in mParty)
             {
+                log.WriteLine($"\t{p.Item1.FullName}:");
+
                 double personSubtotal = SharedFood;
                 personSubtotal /= mParty.Count;
+                log.WriteLine($"\t\tpersonal food: {p.Item2 / 100d:c}");
+                log.WriteLine($"\t\tshared food share: {personSubtotal / 100d:c}");
                 personSubtotal += p.Item2;
                 var ratio = (double)personSubtotal / pool;
-                var total = personSubtotal + ratio * (Tax + Tip - Discount);
+                log.WriteLine($"\t\ttax, tip, and discounts share: %{ratio * 100d}");
+                var taxTipShare = ratio * (Tax + Tip - Discount);
+                log.WriteLine($"\t\ttax, tip, and discounts share: {taxTipShare / 100d:c}");
+                var total = personSubtotal + taxTipShare;
 
                 amountSpent.Add(new Tuple<Person, double>(p.Item1, total));
+                log.WriteLine($"\t\ttotal raw share {total / 100d:c}");
             }
             checkTotal(totalBillValue, amountSpent.Select(tup => tup.Item2).Sum());
+            log.WriteLine();
 
             //Take each freeloader and evenly split their meal across all the non-freeloaders
             var freeloadersFound = amountSpent.Where(p => mFreeLoaders.Contains(p.Item1)).ToList();
@@ -142,6 +161,13 @@ namespace Austin.DkpLib
             if (freeloadersFound.Count != 0)
             {
                 var freeloaderSum = freeloadersFound.Select(p => p.Item2).Sum();
+                log.WriteLine($"{freeloadersFound.Count} freeloaders found, oweing a total of {freeloaderSum / 100d:c}:");
+                foreach (var freeloader in freeloadersFound)
+                {
+                    log.WriteLine($"\t{freeloader.Item1.FullName}: {freeloader.Item2 / 100d:c}");
+                }
+                var extraPerPerson = freeloaderSum / nonFreeLoaderCount;
+                log.WriteLine($"adding {extraPerPerson / 100d:c} to each non-freeloader's debts");
                 amountSpent = amountSpent
                     .Where(p => !mFreeLoaders.Contains(p.Item1))
                     .Select(p => new Tuple<Person, double>(p.Item1, p.Item2 + freeloaderSum / nonFreeLoaderCount))
@@ -152,6 +178,7 @@ namespace Austin.DkpLib
                 }
 
                 checkTotal(totalBillValue, amountSpent.Sum(p => p.Item2));
+                log.WriteLine();
             }
 
             //Evenly split each person's debt to each payer.
@@ -168,6 +195,7 @@ namespace Austin.DkpLib
                     throw new Exception("Negative debt.");
             }
 
+            Console.ReadLine();
             return pennySplits;
         }
 
