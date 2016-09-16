@@ -2,19 +2,15 @@
   "userSecretsId": "aspnet-DkpWeb-2b015ff0-fd48-420f-9465-4b03498245a8",
 
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "version": "1.0.0"
-    },
+    "Microsoft.NETCore.App": "1.0.1",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.0.0",
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.0",
-    "Microsoft.AspNetCore.Mvc": "1.0.0",
     "Microsoft.AspNetCore.Razor.Tools": {
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
     "Microsoft.AspNetCore.StaticFiles": "1.0.0",
     "Microsoft.EntityFrameworkCore.Tools": {
       "version": "1.0.0-preview2-final",
@@ -41,10 +37,12 @@
         "version": "1.0.1",
         "type": "build"
     },
-    "Sakura.AspNetCore.Mvc.PagedList": "2.0.6",
-    "Sakura.AspNetCore.PagedList": "2.0.0",
-    "Microsoft.EntityFrameworkCore": "1.0.0",
-    "MailKit": "1.4.2"
+    "Microsoft.AspNetCore.Mvc": "1.0.1",
+    "Sakura.AspNetCore.Mvc.PagedList": "2.0.9",
+    "Sakura.AspNetCore.PagedList": "2.0.1",
+    "MailKit": "1.6.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
+    "Microsoft.EntityFrameworkCore": "1.0.1"
   },
 
   "tools": {
