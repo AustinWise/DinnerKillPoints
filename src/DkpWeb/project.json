@@ -74,7 +74,7 @@
   },
   "scripts": {
     "prepublish": [ "bower install", "dotnet bundle" ],
-    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+    "postpublish": [ ]
   },
   "tools": {
     "BundlerMinifier.Core": "2.2.281",
