@@ -161,7 +161,7 @@ namespace Austin.DkpLib
             if (freeloadersFound.Count != 0)
             {
                 var freeloaderSum = freeloadersFound.Select(p => p.Item2).Sum();
-                log.WriteLine($"{freeloadersFound.Count} freeloaders found, oweing a total of {freeloaderSum / 100d:c}:");
+                log.WriteLine($"{freeloadersFound.Count} freeloaders found, owing a total of {freeloaderSum / 100d:c}:");
                 foreach (var freeloader in freeloadersFound)
                 {
                     log.WriteLine($"\t{freeloader.Item1.FullName}: {freeloader.Item2 / 100d:c}");
