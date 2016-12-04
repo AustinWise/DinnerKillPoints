@@ -15,8 +15,21 @@ namespace DkpWeb
 {
     public class Program
     {
+        private static string sGitCommitHash;
+        public static string GitCommitHash => sGitCommitHash;
+
         public static void Main(string[] args)
         {
+            var gitCommitHashPath = Path.Combine(AppContext.BaseDirectory, "GITHASH.txt");
+            if (File.Exists(gitCommitHashPath))
+            {
+                sGitCommitHash = File.ReadAllText(gitCommitHashPath);
+            }
+            else
+            {
+                sGitCommitHash = "UNKONWN";
+            }
+
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
