@@ -195,7 +195,6 @@ namespace Austin.DkpLib
                     throw new Exception("Negative debt.");
             }
 
-            Console.ReadLine();
             return pennySplits;
         }
 
