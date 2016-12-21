@@ -44,8 +44,7 @@ namespace DkpWeb.Controllers
 
             var transactions = mData.Transaction.Include(t => t.Creditor).Include(t => t.Debtor)
                 .Where(t => t.CreditorId != t.DebtorId
-                    && (t.CreditorId == person.Id || t.DebtorId == person.Id)
-                    && (!t.Creditor.IsDeleted && !t.Debtor.IsDeleted))
+                    && (t.CreditorId == person.Id || t.DebtorId == person.Id))
                 .ToList();
 
             var netMoney = DebtGraph.TestAlgo(mData, transactions, true, TextWriter.Null);
