@@ -17,7 +17,7 @@ using DkpWeb.Config;
 
 namespace DkpWeb
 {
-    public class Startup
+    public class Startup : IStartup
     {
         public Startup(IHostingEnvironment env)
         {
@@ -38,8 +38,7 @@ namespace DkpWeb
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
             services.Configure<EmailOptions>(Configuration.GetSection("Gmail"));
@@ -65,11 +64,15 @@ namespace DkpWeb
             });
 
             services.AddTransient<MailMerge>();
+
+            return services.BuildServiceProvider();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
+            var env = app.ApplicationServices.GetRequiredService<IHostingEnvironment>();
+            var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
