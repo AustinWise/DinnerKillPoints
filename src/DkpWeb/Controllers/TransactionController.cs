@@ -47,6 +47,7 @@ namespace DkpWeb.Controllers
         public ActionResult View(Guid id)
         {
             var trans = mData.Transaction.Include(t => t.Creditor).Include(t => t.Debtor).Where(t => t.Id == id).Single();
+            trans.SetPrettyDescription(mData.Person.ToDictionary(p => p.Id));
             return View(trans);
         }
 
