@@ -50,7 +50,7 @@ namespace DkpWeb.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id)
         {
             var bs = mData.BillSplit.Where(b => b.Id == id).Single();
             mData.BillSplit.Remove(bs);
