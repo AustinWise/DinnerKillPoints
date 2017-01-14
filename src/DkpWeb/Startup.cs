@@ -14,6 +14,7 @@ using DkpWeb.Models;
 using DkpWeb.Services;
 using Sakura.AspNetCore.Mvc;
 using DkpWeb.Config;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace DkpWeb
 {
@@ -29,7 +30,7 @@ namespace DkpWeb
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                builder.AddUserSecrets("aspnet-DkpWeb-2b015ff0-fd48-420f-9465-4b03498245a8");
             }
 
             builder.AddEnvironmentVariables();
