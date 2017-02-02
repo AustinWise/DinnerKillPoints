@@ -104,6 +104,8 @@ namespace DkpWeb
                 var maya = GetPerson(102);
                 var charles = GetPerson(103);
                 var menglu = GetPerson(104);
+                var nate = GetPerson(105);
+                var ryanKwan = GetPerson(106);
 
                 //var bs = new BillSpliter("Drinks", new DateTime(2016, 7, 22, 12 + 10, 0, 0), austin);
                 //bs.SharedFood = 2640;
