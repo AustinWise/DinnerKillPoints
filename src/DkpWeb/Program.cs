@@ -107,13 +107,6 @@ namespace DkpWeb
                 var nate = GetPerson(105);
                 var ryanKwan = GetPerson(106);
 
-                //var bs = new BillSpliter("Drinks", new DateTime(2016, 7, 22, 12 + 10, 0, 0), austin);
-                //bs.SharedFood = 2640;
-                //bs[austin] = 0;
-                //bs[justinShih] = 300;
-                //bs.Save(db);
-
-
                 WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
                 WriteData(db, false, db.Person.ToArray());
 
