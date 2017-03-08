@@ -122,7 +122,7 @@ namespace DkpWeb
 
             if (args.Any(a => a == "--mail"))
             {
-                var mail = host.Services.GetService<MailMerge>();
+                var mail = host.Services.GetRequiredService<MailMerge>();
                 mail.Send(1).Wait();
                 return;
             }
