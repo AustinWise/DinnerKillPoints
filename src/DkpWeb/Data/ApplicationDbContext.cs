@@ -17,13 +17,11 @@ namespace DkpWeb.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.HasSequence("billsplit_id_seq").StartsAt(1000);
             modelBuilder.Entity<BillSplit>(entity =>
             {
                 entity.Property(e => e.Id)
                       .HasColumnName("ID")
-                      .HasDefaultValueSql("nextval('billsplit_id_seq')")
-                      .ValueGeneratedOnAdd();
+                      .UseIdentityColumn();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -32,12 +30,10 @@ namespace DkpWeb.Data
                 entity.Ignore(e => e.PrettyName);
             });
 
-            modelBuilder.HasSequence("paymentidentity_id_seq").StartsAt(100);
             modelBuilder.Entity<PaymentIdentity>(entity =>
             {
                 entity.Property(e => e.Id)
-                      .HasDefaultValueSql("nextval('paymentidentity_id_seq')")
-                      .ValueGeneratedOnAdd();
+                      .UseIdentityColumn();
 
                 entity.Property(e => e.PaymentMethId).HasColumnName("PaymentMethID");
 
@@ -60,28 +56,24 @@ namespace DkpWeb.Data
                     .HasConstraintName("FK_PaymentIdentity_Person");
             });
 
-            modelBuilder.HasSequence("paymentmethod_id_seq").StartsAt(10);
             modelBuilder.Entity<PaymentMethod>(entity =>
             {
                 entity.Property(e => e.Id)
-                      .HasDefaultValueSql("nextval('paymentmethod_id_seq')")
-                      .ValueGeneratedOnAdd();
+                      .UseIdentityColumn();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasColumnType("nchar(50)");
+                    .HasMaxLength(50);
 
                 entity.Ignore(e => e.HasPayLink);
                 entity.Ignore(e => e.HasRequestMoneyLink);
             });
 
-            modelBuilder.HasSequence("person_id_seq").StartsAt(100);
             modelBuilder.Entity<Person>(entity =>
             {
                 entity.Property(e => e.Id)
                       .HasColumnName("ID")
-                      .HasDefaultValueSql("nextval('person_id_seq')")
-                      .ValueGeneratedOnAdd();
+                      .UseIdentityColumn();
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 

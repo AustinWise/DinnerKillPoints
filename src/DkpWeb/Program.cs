@@ -3,6 +3,7 @@ using DkpWeb.Data;
 using DkpWeb.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,29 +20,28 @@ namespace DkpWeb
     {
         public static string GitCommitHash { get; private set; }
 
-        public static IHostBuilder BuildWebHost(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureHostConfiguration(cfg =>
-                {
-                    cfg.AddEnvironmentVariables();
-                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             GitCommitHash = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
-            var host = BuildWebHost(args).Build();
+            var host = CreateHostBuilder(args).Build();
             var cfg = host.Services.GetService<IConfiguration>();
 
             using (var scope = host.Services.CreateScope())
             {
+                var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                await db.Database.MigrateAsync();
+
                 var roles = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                EnsureRole(roles, "Admin").Wait();
-                EnsureRole(roles, "DKP").Wait();
+                await EnsureRole(roles, "Admin");
+                await EnsureRole(roles, "DKP");
             }
 
             if (cfg["split"] != null)
@@ -128,11 +128,11 @@ namespace DkpWeb
             {
                 using var scope = host.Services.CreateScope();
                 var mail = scope.ServiceProvider.GetRequiredService<MailMerge>();
-                mail.Send(1).Wait();
+                await mail.Send(1);
                 return;
             }
 
-            host.Run();
+            await host.RunAsync();
         }
 
         private static void WriteData(ApplicationDbContext db, bool removeCycles, Person[] people)

@@ -31,7 +31,7 @@ namespace DkpWeb
 
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(Configuration["psql"]));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddDefaultUI()
@@ -53,10 +53,12 @@ namespace DkpWeb
             {
                 builder.AddConsole();
                 builder.AddDebug();
+                builder.AddAzureWebAppDiagnostics();
             });
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
