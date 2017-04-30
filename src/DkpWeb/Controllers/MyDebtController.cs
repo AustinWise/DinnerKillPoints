@@ -44,6 +44,8 @@ namespace DkpWeb.Controllers
 
             var transactions = mData.Transaction.Include(t => t.Creditor).Include(t => t.Debtor)
                 .Where(t => t.CreditorId != t.DebtorId
+                    && !t.Creditor.IsDeleted
+                    && !t.Debtor.IsDeleted
                     && (t.CreditorId == person.Id || t.DebtorId == person.Id))
                 .ToList();
 
