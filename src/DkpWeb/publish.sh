@@ -5,7 +5,7 @@ set -x
 REMOTE_SERVER=10.5.2.106
 REMOTE_USER=root
 REMOTE_PATH=/root/
-PUBLISH_FOLDER=bin/Release/netcoreapp1.1/ubuntu.16.04-x64
+PUBLISH_FOLDER=bin/Release/netcoreapp2.0/ubuntu.16.04-x64
 
 dotnet restore
 dotnet publish -r ubuntu.16.04-x64 -c Release

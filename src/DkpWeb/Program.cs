@@ -1,6 +1,7 @@
 ﻿using Austin.DkpLib;
 using DkpWeb.Data;
 using DkpWeb.Models;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -18,6 +19,11 @@ namespace DkpWeb
         private static string sGitCommitHash;
         public static string GitCommitHash => sGitCommitHash;
 
+        public static IWebHost BuildWebHost(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .Build();
+
         public static void Main(string[] args)
         {
             var gitCommitHashPath = Path.Combine(AppContext.BaseDirectory, "GITHASH.txt");
@@ -30,12 +36,7 @@ namespace DkpWeb
                 sGitCommitHash = "UNKONWN";
             }
 
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseIISIntegration()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseStartup<Startup>()
-                .Build();
+            var host = BuildWebHost(args);
 
             var roles = host.Services.GetService<RoleManager<IdentityRole>>();
             EnsureRole(roles, "Admin").Wait();

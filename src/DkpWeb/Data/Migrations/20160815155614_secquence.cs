@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DkpWeb.Data.Migrations
 {
@@ -29,35 +30,35 @@ namespace DkpWeb.Data.Migrations
                 table: "Person",
                 nullable: false,
                 defaultValue: false)
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
             migrationBuilder.AlterColumn<int>(
                 name: "ID",
                 table: "Person",
                 nullable: false,
                 defaultValueSql: "nextval('person_id_seq')")
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
             migrationBuilder.AlterColumn<int>(
                 name: "Id",
                 table: "PaymentMethod",
                 nullable: false,
                 defaultValueSql: "nextval('paymentmethod_id_seq')")
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
             migrationBuilder.AlterColumn<int>(
                 name: "Id",
                 table: "PaymentIdentity",
                 nullable: false,
                 defaultValueSql: "nextval('paymentidentity_id_seq')")
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
             migrationBuilder.AlterColumn<int>(
                 name: "ID",
                 table: "BillSplit",
                 nullable: false,
                 defaultValueSql: "nextval('billsplit_id_seq')")
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -79,31 +80,31 @@ namespace DkpWeb.Data.Migrations
                 table: "Person",
                 nullable: false,
                 defaultValueSql: "false")
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
             migrationBuilder.AlterColumn<int>(
                 name: "ID",
                 table: "Person",
                 nullable: false)
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
             migrationBuilder.AlterColumn<int>(
                 name: "Id",
                 table: "PaymentMethod",
                 nullable: false)
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
             migrationBuilder.AlterColumn<int>(
                 name: "Id",
                 table: "PaymentIdentity",
                 nullable: false)
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
             migrationBuilder.AlterColumn<int>(
                 name: "ID",
                 table: "BillSplit",
                 nullable: false)
-                .Annotation("Npgsql:ValueGeneratedOnAdd", true);
+                .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
         }
     }
 }

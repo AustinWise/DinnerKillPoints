@@ -15,6 +15,7 @@ using DkpWeb.Services;
 using Sakura.AspNetCore.Mvc;
 using DkpWeb.Config;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.AspNetCore.Identity;
 
 namespace DkpWeb
 {
@@ -51,6 +52,8 @@ namespace DkpWeb
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication();
 
             services.AddMvc();
 
@@ -90,7 +93,7 @@ namespace DkpWeb
 
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
