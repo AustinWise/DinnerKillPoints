@@ -37,6 +37,9 @@ namespace DkpWeb.Services
 
         async Task SendEmailAsync(MailboxAddress email, string subject, TextPart body)
         {
+            if (string.IsNullOrEmpty(mGmailUsername) || string.IsNullOrEmpty(mGmailPassword))
+                return; //just skip sending the mail
+
             var emailMessage = new MimeMessage();
 
             emailMessage.From.Add(new MailboxAddress("Austin Wise", mGmailUsername));
