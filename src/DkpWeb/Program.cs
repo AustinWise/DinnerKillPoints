@@ -45,7 +45,8 @@ namespace DkpWeb
             if (args.Any(a => a == "--split"))
             {
                 var db = host.Services.GetService<ApplicationDbContext>();
-                Func<int, Person> GetPerson = id => db.Person.Where(p => p.Id == id).Single();
+                var peopleMap = db.Person.ToDictionary(p => p.Id);
+                Func<int, Person> GetPerson = id => peopleMap[id];
 
                 var austin = GetPerson(1);
                 var caspar = GetPerson(2);
