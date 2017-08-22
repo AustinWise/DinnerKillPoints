@@ -109,6 +109,7 @@ namespace DkpWeb
                 var menglu = GetPerson(104);
                 var nate = GetPerson(105);
                 var ryanKwan = GetPerson(106);
+                var will = GetPerson(107);
 
                 WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
                 WriteData(db, false, db.Person.ToArray());
