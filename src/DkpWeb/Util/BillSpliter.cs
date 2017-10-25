@@ -45,7 +45,10 @@ namespace Austin.DkpLib
         {
             get
             {
-                return mParty.Where(kvp => kvp.Item1.Equals(person)).Sum(p => p.Item2);
+                var trans = mParty.Where(kvp => kvp.Item1.Equals(person)).ToList();
+                if (trans.Count == 0)
+                    throw new ArgumentException($"'{person}' is has no transactions in this billsplit.");
+                return trans.Sum(p => p.Item2);
             }
             set
             {
