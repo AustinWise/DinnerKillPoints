@@ -4,7 +4,7 @@ using DkpWeb.Models;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -37,12 +37,13 @@ namespace DkpWeb
             }
 
             var host = BuildWebHost(args);
+            var cfg = host.Services.GetService<IConfiguration>();
 
             var roles = host.Services.GetService<RoleManager<IdentityRole>>();
             EnsureRole(roles, "Admin").Wait();
             EnsureRole(roles, "DKP").Wait();
 
-            if (args.Any(a => a == "--split"))
+            if (cfg["split"] != null)
             {
                 var db = host.Services.GetService<ApplicationDbContext>();
                 var peopleMap = db.Person.ToDictionary(p => p.Id);
@@ -117,7 +118,7 @@ namespace DkpWeb
                 return;
             }
 
-            if (args.Any(a => a == "--mail"))
+            if (cfg["mail"] != null)
             {
                 var mail = host.Services.GetRequiredService<MailMerge>();
                 mail.Send(1).Wait();
