@@ -5,10 +5,12 @@ set -x
 REMOTE_SERVER=10.5.2.106
 REMOTE_USER=root
 REMOTE_PATH=/root/
-PUBLISH_FOLDER=bin/Release/netcoreapp2.0/ubuntu.16.04-x64
+PUBLISH_OS=linux-x64
+PUBLISH_FOLDER=bin/Release/netcoreapp2.0/${PUBLISH_OS}
+
 
 dotnet restore
-dotnet publish -r ubuntu.16.04-x64 -c Release
+dotnet publish -r ${PUBLISH_OS} -c Release
 git rev-parse HEAD > $PUBLISH_FOLDER/publish/GITHASH.txt
 tar cf publish.tar -C $PUBLISH_FOLDER publish
 scp publish.tar $REMOTE_USER@$REMOTE_SERVER:$REMOTE_PATH
