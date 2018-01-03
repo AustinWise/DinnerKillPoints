@@ -65,13 +65,13 @@ namespace DkpWeb
                 var minh = GetPerson(14);
                 var george = GetPerson(15);
                 var justine = GetPerson(16);
-                var matt = GetPerson(17);
+                //var matt = GetPerson(17);
                 var elaine = GetPerson(18);
                 var roger = GetPerson(19);
                 var eric = GetPerson(20);
                 var katherine = GetPerson(21);
                 //var ryanSund = GetPerson(22);
-                var adrian = GetPerson(23);
+                //var adrian = GetPerson(23);
                 var ed = GetPerson(24);
                 var randy = GetPerson(25);
                 //var becky = GetPerson(26);
@@ -83,7 +83,7 @@ namespace DkpWeb
                 var jimmy = GetPerson(34);
                 var alexFong = GetPerson(35);
                 var victor = GetPerson(36);
-                var tiffany = GetPerson(37);
+                //var tiffany = GetPerson(37);
                 var moriaki = GetPerson(38);
                 var adam = GetPerson(39);
                 var benKwong = GetPerson(40);
@@ -111,6 +111,10 @@ namespace DkpWeb
                 var nate = GetPerson(105);
                 var ryanKwan = GetPerson(106);
                 var will = GetPerson(107);
+                var anthony = GetPerson(108);
+                var helen = GetPerson(109);
+                var john = GetPerson(110);
+
 
                 WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
                 WriteData(db, false, db.Person.ToArray());
