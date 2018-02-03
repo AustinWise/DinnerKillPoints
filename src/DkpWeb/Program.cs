@@ -118,7 +118,7 @@ namespace DkpWeb
                 return;
             }
 
-            if (cfg["mail"] != null)
+            if (cfg["sendmail"] != null)
             {
                 var mail = host.Services.GetRequiredService<MailMerge>();
                 mail.Send(1).Wait();
