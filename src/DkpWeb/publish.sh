@@ -3,8 +3,8 @@ set -e
 set -x
 
 REMOTE_SERVER=10.5.2.106
-REMOTE_USER=root
-REMOTE_PATH=/root/
+REMOTE_USER=dkp
+REMOTE_PATH=/home/dkp/
 PUBLISH_OS=linux-x64
 PUBLISH_FOLDER=bin/Release/netcoreapp2.0/${PUBLISH_OS}
 

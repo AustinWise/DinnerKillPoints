@@ -6,7 +6,7 @@ OLDDIR=oldpublish
 CURDIR=publish
 TARNAME=publish.tar
 
-systemctl stop dkp
+sudo systemctl stop dkp
 
 if [ -d $OLDDIR ]
 then
@@ -21,4 +21,4 @@ fi
 tar xf $TARNAME
 chmod +x $CURDIR/DkpWeb
 
-systemctl start dkp
+sudo systemctl start dkp
