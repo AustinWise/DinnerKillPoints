@@ -8,21 +8,6 @@
     }
   },
   "profiles": {
-    "Split": {
-      "commandName": "Project",
-      "commandLineArgs": "--split 1",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:420"
-    },
-    "mail": {
-      "commandName": "Project",
-      "commandLineArgs": "--mail 1",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
     "web": {
       "commandName": "Project",
       "environmentVariables": {
