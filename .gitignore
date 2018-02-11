@@ -15,3 +15,5 @@ packages/*
 .vs
 *.min.js
 *.tar
+node_modules
+
