@@ -48,7 +48,7 @@ namespace DkpWeb.Controllers
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            return View(new LoginViewModel());
         }
 
         [HttpPost]
@@ -139,7 +139,7 @@ namespace DkpWeb.Controllers
             {
                 _logger.LogWarning("Invalid authenticator code entered for user with ID {UserId}.", user.Id);
                 ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
-                return View();
+                return View(new LoginWith2faViewModel());
             }
         }
 
@@ -156,7 +156,7 @@ namespace DkpWeb.Controllers
 
             ViewData["ReturnUrl"] = returnUrl;
 
-            return View();
+            return View(new LoginWithRecoveryCodeViewModel());
         }
 
         [HttpPost]
@@ -193,7 +193,7 @@ namespace DkpWeb.Controllers
             {
                 _logger.LogWarning("Invalid recovery code entered for user with ID {UserId}", user.Id);
                 ModelState.AddModelError(string.Empty, "Invalid recovery code entered.");
-                return View();
+                return View(new LoginWithRecoveryCodeViewModel());
             }
         }
 
@@ -209,7 +209,7 @@ namespace DkpWeb.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            return View(new RegisterViewModel());
         }
 
         [HttpPost]
@@ -350,7 +350,7 @@ namespace DkpWeb.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
-            return View();
+            return View(new ForgotPasswordViewModel());
         }
 
         [HttpPost]
