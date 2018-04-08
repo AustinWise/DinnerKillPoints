@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DkpWeb.Models
 {
-    public partial class Person : IComparable<Person>
+    public partial class Person : IComparable<Person>, IEquatable<Person>
     {
         public Person()
         {
@@ -32,7 +32,7 @@ namespace DkpWeb.Models
 
         public override int GetHashCode()
         {
-            return this.Id;
+            return Id;
         }
 
         public override bool Equals(object obj)
@@ -40,7 +40,12 @@ namespace DkpWeb.Models
             var other = obj as Person;
             if (other == null)
                 return false;
-            return other.Id == this.Id;
+            return Equals(other);
+        }
+
+        public bool Equals(Person other)
+        {
+            return other.Id == Id;
         }
 
         //for cycle removal

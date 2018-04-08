@@ -27,6 +27,7 @@ namespace Austin.DkpLib
         readonly Person[] mPayer;
         readonly List<Tuple<Person, double>> mParty;
         readonly SortedSet<Person> mFreeLoaders;
+        readonly SortedSet<Person> mFremontBirthday;
 
         public BillSpliter(string name, DateTime date, params Person[] payer)
         {
@@ -40,6 +41,7 @@ namespace Austin.DkpLib
             mPayer = (Person[])payer.Clone();
             mParty = new List<Tuple<Person, double>>();
             mFreeLoaders = new SortedSet<Person>();
+            mFremontBirthday = new SortedSet<Person>();
         }
 
         public double this[Person person]
@@ -73,6 +75,12 @@ namespace Austin.DkpLib
         public void AddFreeLoader(Person p)
         {
             bool added = mFreeLoaders.Add(p);
+            Debug.Assert(added);
+        }
+
+        public void AddFremontBirthday(Person p)
+        {
+            bool added = mFremontBirthday.Add(p);
             Debug.Assert(added);
         }
 
@@ -157,6 +165,30 @@ namespace Austin.DkpLib
             }
             checkTotal(totalBillValue, amountSpent.Select(tup => tup.Item2).Sum());
             log.WriteLine();
+
+            //Apply Fremont-style birthday redistrobution
+            var birthdayPeople = amountSpent.Where(p => mFremontBirthday.Contains(p.Item1)).ToList();
+            if (birthdayPeople.Count != 0)
+            {
+                log.WriteLine("Applying Fremont-style birthday logic.");
+
+                //first zero the birthpeople's debts
+                amountSpent = amountSpent
+                    .Select(tup => Tuple.Create(tup.Item1, mFremontBirthday.Contains(tup.Item1) ? 0 : tup.Item2))
+                    .ToList();
+
+                //Then redistribute
+                foreach (var birthdayPerson in birthdayPeople)
+                {
+                    var amount = birthdayPerson.Item2 / (amountSpent.Count - 1);
+                    log.WriteLine($"\t{birthdayPerson.Item1}'s birthday happiness cost each other person {amount / 100:c}.");
+                    amountSpent = amountSpent
+                        .Select(tup => Tuple.Create(tup.Item1, tup.Item2 + (tup.Item1 == birthdayPerson.Item1 ? 0 : amount)))
+                        .ToList();
+                }
+
+                checkTotal(totalBillValue, amountSpent.Sum(p => p.Item2));
+            }
 
             //Take each freeloader and evenly split their meal across all the non-freeloaders
             var freeloadersFound = amountSpent.Where(p => mFreeLoaders.Contains(p.Item1)).ToList();
