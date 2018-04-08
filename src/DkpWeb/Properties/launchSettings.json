@@ -18,7 +18,7 @@
     },
     "mail": {
       "commandName": "Project",
-      "commandLineArgs": "--mail 1",
+      "commandLineArgs": "--sendmail 1",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
