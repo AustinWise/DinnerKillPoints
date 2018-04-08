@@ -2,6 +2,7 @@
 using DkpWeb.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,11 +22,11 @@ namespace Austin.DkpLib
         /// </remarks>
         const double PENNY_THRESHOLD = 0.01;
 
-        private string mName;
-        private DateTime mDate;
-        private Person[] mPayer;
-        private List<Tuple<Person, double>> mParty;
-        private List<Person> mFreeLoaders;
+        readonly string mName;
+        readonly DateTime mDate;
+        readonly Person[] mPayer;
+        readonly List<Tuple<Person, double>> mParty;
+        readonly SortedSet<Person> mFreeLoaders;
 
         public BillSpliter(string name, DateTime date, params Person[] payer)
         {
@@ -34,11 +35,11 @@ namespace Austin.DkpLib
             if (payer.Length < 1)
                 throw new ArgumentOutOfRangeException("payer", "Need at least one payer.");
 
-            this.mName = name;
-            this.mDate = date.ToUniversalTime();
-            this.mPayer = payer;
+            mName = name;
+            mDate = date.ToUniversalTime();
+            mPayer = (Person[])payer.Clone();
             mParty = new List<Tuple<Person, double>>();
-            mFreeLoaders = new List<Person>();
+            mFreeLoaders = new SortedSet<Person>();
         }
 
         public double this[Person person]
@@ -52,7 +53,7 @@ namespace Austin.DkpLib
             }
             set
             {
-                mParty.Add(new Tuple<Person, double>(person, value));
+                mParty.Add(Tuple.Create(person, value));
             }
         }
 
@@ -71,9 +72,8 @@ namespace Austin.DkpLib
 
         public void AddFreeLoader(Person p)
         {
-            if (mFreeLoaders.Contains(p))
-                throw new ArgumentException("Person is already a free loader.");
-            mFreeLoaders.Add(p);
+            bool added = mFreeLoaders.Add(p);
+            Debug.Assert(added);
         }
 
         public void Save(ApplicationDbContext db)
@@ -130,8 +130,8 @@ namespace Austin.DkpLib
             if (Math.Abs(totalBillValue - Math.Round(totalBillValue)) > PENNY_THRESHOLD)
                 throw new Exception("Non-int number of pennies.");
 
-            log.WriteLine($"pool: {pool / 100d:c}");
-            log.WriteLine($"totalBillValue: {totalBillValue / 100d:c}");
+            log.WriteLine($"pool: {pool / 100:c}");
+            log.WriteLine($"totalBillValue: {totalBillValue / 100:c}");
             log.WriteLine();
 
             var amountSpent = new List<Tuple<Person, double>>();
@@ -143,17 +143,17 @@ namespace Austin.DkpLib
 
                 double personSubtotal = SharedFood;
                 personSubtotal /= mParty.Count;
-                log.WriteLine($"\t\tpersonal food: {p.Item2 / 100d:c}");
-                log.WriteLine($"\t\tshared food share: {personSubtotal / 100d:c}");
+                log.WriteLine($"\t\tpersonal food: {p.Item2 / 100:c}");
+                log.WriteLine($"\t\tshared food share: {personSubtotal / 100:c}");
                 personSubtotal += p.Item2;
-                var ratio = (double)personSubtotal / pool;
-                log.WriteLine($"\t\ttax, tip, and discounts share: %{ratio * 100d}");
+                var ratio = personSubtotal / pool;
+                log.WriteLine($"\t\ttax, tip, and discounts share: %{ratio * 100}");
                 var taxTipShare = ratio * (Tax + Tip - Discount);
-                log.WriteLine($"\t\ttax, tip, and discounts share: {taxTipShare / 100d:c}");
+                log.WriteLine($"\t\ttax, tip, and discounts share: {taxTipShare / 100:c}");
                 var total = personSubtotal + taxTipShare;
 
-                amountSpent.Add(new Tuple<Person, double>(p.Item1, total));
-                log.WriteLine($"\t\ttotal raw share {total / 100d:c}");
+                amountSpent.Add(Tuple.Create(p.Item1, total));
+                log.WriteLine($"\t\ttotal raw share {total / 100:c}");
             }
             checkTotal(totalBillValue, amountSpent.Select(tup => tup.Item2).Sum());
             log.WriteLine();
@@ -164,20 +164,20 @@ namespace Austin.DkpLib
             if (freeloadersFound.Count != 0)
             {
                 var freeloaderSum = freeloadersFound.Select(p => p.Item2).Sum();
-                log.WriteLine($"{freeloadersFound.Count} freeloaders found, owing a total of {freeloaderSum / 100d:c}:");
+                log.WriteLine($"{freeloadersFound.Count} freeloaders found, owing a total of {freeloaderSum / 100:c}:");
                 foreach (var freeloader in freeloadersFound)
                 {
-                    log.WriteLine($"\t{freeloader.Item1.FullName}: {freeloader.Item2 / 100d:c}");
+                    log.WriteLine($"\t{freeloader.Item1.FullName}: {freeloader.Item2 / 100:c}");
                 }
                 var extraPerPerson = freeloaderSum / nonFreeLoaderCount;
-                log.WriteLine($"adding {extraPerPerson / 100d:c} to each non-freeloader's debts");
+                log.WriteLine($"adding {extraPerPerson / 100:c} to each non-freeloader's debts");
                 amountSpent = amountSpent
                     .Where(p => !mFreeLoaders.Contains(p.Item1))
-                    .Select(p => new Tuple<Person, double>(p.Item1, p.Item2 + freeloaderSum / nonFreeLoaderCount))
+                    .Select(p => Tuple.Create(p.Item1, p.Item2 + freeloaderSum / nonFreeLoaderCount))
                     .ToList();
                 foreach (var p in freeloadersFound)
                 {
-                    amountSpent.Add(new Tuple<Person, double>(p.Item1, 0));
+                    amountSpent.Add(Tuple.Create(p.Item1, 0d));
                 }
 
                 checkTotal(totalBillValue, amountSpent.Sum(p => p.Item2));
@@ -217,9 +217,9 @@ namespace Austin.DkpLib
                 var creditors = new List<Tuple<Person, double>>();
                 foreach (var payer in mPayer)
                 {
-                    creditors.Add(new Tuple<Person, double>(payer, p.Item2 / (double)mPayer.Length));
+                    creditors.Add(Tuple.Create(payer, p.Item2 / mPayer.Length));
                 }
-                ret.Add(new Tuple<Person, List<Tuple<Person, double>>>(p.Item1, creditors));
+                ret.Add(Tuple.Create(p.Item1, creditors));
             }
             return ret;
         }
