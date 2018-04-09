@@ -5,12 +5,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
+
+using MultiCreditorDebtList = System.Collections.Generic.List<(DkpWeb.Models.Person debtor, System.Collections.Generic.List<(DkpWeb.Models.Person creditor, double amount)> debts)>;
 
 namespace Austin.DkpLib
 {
     public class BillSpliter
     {
+        class Debt
+        {
+            public Person Debtor { get; }
+            public double Amount { get; }
+
+            public Debt(Person debtor, double amount)
+            {
+                Debtor = debtor;
+                Amount = amount;
+            }
+        }
+
         /// <summary>
         /// The maximum deviation from a rounded penny amount a sum is allowed to be.
         /// </summary>
@@ -25,7 +38,7 @@ namespace Austin.DkpLib
         readonly string mName;
         readonly DateTime mDate;
         readonly Person[] mPayer;
-        readonly List<Tuple<Person, double>> mParty;
+        readonly List<Debt> mParty;
         readonly SortedSet<Person> mFreeLoaders;
         readonly SortedSet<Person> mFremontBirthday;
 
@@ -39,7 +52,7 @@ namespace Austin.DkpLib
             mName = name;
             mDate = date.ToUniversalTime();
             mPayer = (Person[])payer.Clone();
-            mParty = new List<Tuple<Person, double>>();
+            mParty = new List<Debt>();
             mFreeLoaders = new SortedSet<Person>();
             mFremontBirthday = new SortedSet<Person>();
         }
@@ -48,14 +61,14 @@ namespace Austin.DkpLib
         {
             get
             {
-                var trans = mParty.Where(kvp => kvp.Item1.Equals(person)).ToList();
+                var trans = mParty.Where(kvp => kvp.Debtor.Equals(person)).ToList();
                 if (trans.Count == 0)
                     throw new ArgumentException($"'{person}' is has no transactions in this billsplit.");
-                return trans.Sum(p => p.Item2);
+                return trans.Sum(p => p.Amount);
             }
             set
             {
-                mParty.Add(Tuple.Create(person, value));
+                mParty.Add(new Debt(person, value));
             }
         }
 
@@ -68,7 +81,7 @@ namespace Austin.DkpLib
         {
             get
             {
-                return Convert.ToInt32(mParty.Sum(p => p.Item2)) + SharedFood;
+                return Convert.ToInt32(mParty.Sum(p => p.Amount)) + SharedFood;
             }
         }
 
@@ -95,14 +108,14 @@ namespace Austin.DkpLib
 
             var bs = new BillSplit() { Name = mName };
             db.BillSplit.Add(bs);
-            foreach (var p in debts)
+            foreach (var (debtor, creditor, pennies) in debts)
             {
                 var t = new Transaction()
                 {
                     Id = Guid.NewGuid(),
-                    Creditor = p.Item2,
-                    Debtor = p.Item1,
-                    Amount = p.Item3,
+                    Creditor = creditor,
+                    Debtor = debtor,
+                    Amount = pennies,
                     Bill = bs,
                     Description = mName,
                     Created = mDate,
@@ -119,18 +132,18 @@ namespace Austin.DkpLib
                 throw new Exception("Must have one or more people in that party.");
             foreach (var kvp in mParty)
             {
-                if (kvp.Item2 < 0)
-                    throw new NotSupportedException(kvp.Item1.ToString() + " spent a negitive amount of money.");
+                if (kvp.Amount < 0)
+                    throw new NotSupportedException(kvp.Debtor.ToString() + " spent a negitive amount of money.");
             }
             if (Tax < 0 || Tip < 0 || SharedFood < 0 || Discount < 0)
                 throw new NotSupportedException("Negative bill attribute.");
         }
 
-        public List<Tuple<Person, Person, int>> SplitBill(TextWriter log)
+        public List<(Person debtor, Person creditor, int pennies)> SplitBill(TextWriter log)
         {
             ValidateBill();
 
-            var pool = mParty.Sum(p => p.Item2) + SharedFood;
+            var pool = mParty.Sum(p => p.Amount) + SharedFood;
             var totalBillValue = pool + Tip + Tax - Discount;
 
             if (totalBillValue <= 0)
@@ -142,91 +155,91 @@ namespace Austin.DkpLib
             log.WriteLine($"totalBillValue: {totalBillValue / 100:c}");
             log.WriteLine();
 
-            var amountSpent = new List<Tuple<Person, double>>();
+            var amountSpent = new List<Debt>();
 
             log.WriteLine("First add up each person's share of the bill, splitting shared food items equally:");
             foreach (var p in mParty)
             {
-                log.WriteLine($"\t{p.Item1.FullName}:");
+                log.WriteLine($"\t{p.Debtor.FullName}:");
 
                 double personSubtotal = SharedFood;
                 personSubtotal /= mParty.Count;
-                log.WriteLine($"\t\tpersonal food: {p.Item2 / 100:c}");
+                log.WriteLine($"\t\tpersonal food: {p.Amount / 100:c}");
                 log.WriteLine($"\t\tshared food share: {personSubtotal / 100:c}");
-                personSubtotal += p.Item2;
+                personSubtotal += p.Amount;
                 var ratio = personSubtotal / pool;
                 log.WriteLine($"\t\ttax, tip, and discounts share: %{ratio * 100}");
                 var taxTipShare = ratio * (Tax + Tip - Discount);
                 log.WriteLine($"\t\ttax, tip, and discounts share: {taxTipShare / 100:c}");
                 var total = personSubtotal + taxTipShare;
 
-                amountSpent.Add(Tuple.Create(p.Item1, total));
+                amountSpent.Add(new Debt(p.Debtor, total));
                 log.WriteLine($"\t\ttotal raw share {total / 100:c}");
             }
-            checkTotal(totalBillValue, amountSpent.Select(tup => tup.Item2).Sum());
+            checkTotal(totalBillValue, amountSpent.Select(tup => tup.Amount).Sum());
             log.WriteLine();
 
             //Apply Fremont-style birthday redistrobution
-            var birthdayPeople = amountSpent.Where(p => mFremontBirthday.Contains(p.Item1)).ToList();
+            var birthdayPeople = amountSpent.Where(p => mFremontBirthday.Contains(p.Debtor)).ToList();
             if (birthdayPeople.Count != 0)
             {
                 log.WriteLine("Applying Fremont-style birthday logic.");
 
                 //first zero the birthpeople's debts
                 amountSpent = amountSpent
-                    .Select(tup => Tuple.Create(tup.Item1, mFremontBirthday.Contains(tup.Item1) ? 0 : tup.Item2))
+                    .Select(tup => new Debt(tup.Debtor, mFremontBirthday.Contains(tup.Debtor) ? 0 : tup.Amount))
                     .ToList();
 
                 //Then redistribute
                 foreach (var birthdayPerson in birthdayPeople)
                 {
-                    var amount = birthdayPerson.Item2 / (amountSpent.Count - 1);
-                    log.WriteLine($"\t{birthdayPerson.Item1}'s birthday happiness cost each other person {amount / 100:c}.");
+                    var amount = birthdayPerson.Amount / (amountSpent.Count - 1);
+                    log.WriteLine($"\t{birthdayPerson.Debtor}'s birthday happiness cost each other person {amount / 100:c}.");
                     amountSpent = amountSpent
-                        .Select(tup => Tuple.Create(tup.Item1, tup.Item2 + (tup.Item1 == birthdayPerson.Item1 ? 0 : amount)))
+                        .Select(tup => new Debt(tup.Debtor, tup.Amount + (tup.Debtor == birthdayPerson.Debtor ? 0 : amount)))
                         .ToList();
                 }
 
-                checkTotal(totalBillValue, amountSpent.Sum(p => p.Item2));
+                checkTotal(totalBillValue, amountSpent.Sum(p => p.Amount));
             }
 
             //Take each freeloader and evenly split their meal across all the non-freeloaders
-            var freeloadersFound = amountSpent.Where(p => mFreeLoaders.Contains(p.Item1)).ToList();
+            var freeloadersFound = amountSpent.Where(p => mFreeLoaders.Contains(p.Debtor)).ToList();
             var nonFreeLoaderCount = amountSpent.Count - freeloadersFound.Count;
             if (freeloadersFound.Count != 0)
             {
-                var freeloaderSum = freeloadersFound.Select(p => p.Item2).Sum();
+                var freeloaderSum = freeloadersFound.Select(p => p.Amount).Sum();
                 log.WriteLine($"{freeloadersFound.Count} freeloaders found, owing a total of {freeloaderSum / 100:c}:");
                 foreach (var freeloader in freeloadersFound)
                 {
-                    log.WriteLine($"\t{freeloader.Item1.FullName}: {freeloader.Item2 / 100:c}");
+                    log.WriteLine($"\t{freeloader.Debtor.FullName}: {freeloader.Amount / 100:c}");
                 }
                 var extraPerPerson = freeloaderSum / nonFreeLoaderCount;
                 log.WriteLine($"adding {extraPerPerson / 100:c} to each non-freeloader's debts");
                 amountSpent = amountSpent
-                    .Where(p => !mFreeLoaders.Contains(p.Item1))
-                    .Select(p => Tuple.Create(p.Item1, p.Item2 + freeloaderSum / nonFreeLoaderCount))
+                    .Where(p => !mFreeLoaders.Contains(p.Debtor))
+                    .Select(p => new Debt(p.Debtor, p.Amount + freeloaderSum / nonFreeLoaderCount))
                     .ToList();
                 foreach (var p in freeloadersFound)
                 {
-                    amountSpent.Add(Tuple.Create(p.Item1, 0d));
+                    amountSpent.Add(new Debt(p.Debtor, 0d));
                 }
 
-                checkTotal(totalBillValue, amountSpent.Sum(p => p.Item2));
+                checkTotal(totalBillValue, amountSpent.Sum(p => p.Amount));
                 log.WriteLine();
             }
 
             //Evenly split each person's debt to each payer.
             var debtsToPayers = SplitDebtsBetweenPayers(amountSpent);
-            checkTotal(totalBillValue, debtsToPayers.SelectMany(p => p.Item2).Sum(p => p.Item2));
+            checkTotal(totalBillValue, debtsToPayers.SelectMany(p => p.debts).Sum(p => p.amount));
 
             //Take all the fractional pennies and distrubte them to each debtor, round robin to each payer.
             var pennySplits = SplitPennies(debtsToPayers);
-            checkTotal(totalBillValue, pennySplits.Sum(p => p.Item3));
+            checkTotal(totalBillValue, pennySplits.Sum(p => p.pennies));
 
             foreach (var p in pennySplits)
             {
-                if (p.Item3 < 0)
+                if (p.pennies < 0)
                     throw new Exception("Negative debt.");
             }
 
@@ -241,17 +254,17 @@ namespace Austin.DkpLib
                 throw new Exception("Something terrible has happened.");
         }
 
-        List<Tuple<Person, List<Tuple<Person, double>>>> SplitDebtsBetweenPayers(List<Tuple<Person, double>> amountSpent)
+        MultiCreditorDebtList SplitDebtsBetweenPayers(List<Debt> amountSpent)
         {
-            var ret = new List<Tuple<Person, List<Tuple<Person, double>>>>();
+            var ret = new MultiCreditorDebtList();
             foreach (var p in amountSpent)
             {
-                var creditors = new List<Tuple<Person, double>>();
+                var creditors = new List<(Person creditor, double amount)>();
                 foreach (var payer in mPayer)
                 {
-                    creditors.Add(Tuple.Create(payer, p.Item2 / mPayer.Length));
+                    creditors.Add((payer, p.Amount / mPayer.Length));
                 }
-                ret.Add(Tuple.Create(p.Item1, creditors));
+                ret.Add((p.Debtor, creditors));
             }
             return ret;
         }
@@ -266,14 +279,14 @@ namespace Austin.DkpLib
         /// Thie method rounds peoples debts to the nearest penny, while preserving the invarient that
         /// the total amount owed in this group of debts does not change.
         /// </remarks>
-        List<Tuple<Person, Person, int>> SplitPennies(List<Tuple<Person, List<Tuple<Person, double>>>> amountSpent)
+        List<(Person debtor, Person creditor, int pennies)> SplitPennies(MultiCreditorDebtList amountSpent)
         {
             var pennies = amountSpent
                 .Select(tup => new
                 {
-                    Debtor = tup.Item1,
-                    Debts = tup.Item2.Select(debt => new Tuple<Person, int>(debt.Item1, (int)Math.Floor(debt.Item2))).ToList(),
-                    PennyFraction = tup.Item2.Select(debt => debt.Item2 - Math.Floor(debt.Item2)).Sum()
+                    Debtor = tup.debtor,
+                    Debts = tup.debts.Select(debt => (creditor: debt.creditor, amount: (int)Math.Floor(debt.amount))).ToList(),
+                    PennyFraction = tup.debts.Select(debt => debt.amount - Math.Floor(debt.amount)).Sum()
                 })
                 .OrderByDescending(p => p.PennyFraction)
                 .ToList();
@@ -298,13 +311,13 @@ namespace Austin.DkpLib
                     if (mFreeLoaders.Contains(d.Debtor))
                         continue;
                     var ndx = payerNdx++ % d.Debts.Count;
-                    var tup = d.Debts[ndx];
-                    d.Debts[ndx] = new Tuple<Person, int>(tup.Item1, tup.Item2 + 1);
+                    var (creditor, amount) = d.Debts[ndx];
+                    d.Debts[ndx] = (creditor, amount + 1);
                     totalPennies--;
                 }
             }
 
-            return pennies.SelectMany(p => p.Debts.Select(d => new Tuple<Person, Person, int>(p.Debtor, d.Item1, d.Item2))).ToList();
+            return pennies.SelectMany(p => p.Debts.Select(d => (p.Debtor, d.creditor, d.amount))).ToList();
         }
     }
 }
