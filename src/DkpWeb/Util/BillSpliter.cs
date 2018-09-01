@@ -201,6 +201,7 @@ namespace Austin.DkpLib
                 }
 
                 checkTotal(totalBillValue, amountSpent.Sum(p => p.Amount));
+                log.WriteLine();
             }
 
             //Take each freeloader and evenly split their meal across all the non-freeloaders
