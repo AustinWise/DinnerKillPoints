@@ -69,6 +69,12 @@ namespace DkpWeb
 
             services.AddTransient<MailMerge>();
 
+            services.AddLogging(builder =>
+            {
+                builder.AddConsole();
+                builder.AddDebug();
+            });
+
             return services.BuildServiceProvider();
         }
 
@@ -76,9 +82,6 @@ namespace DkpWeb
         {
             var env = app.ApplicationServices.GetRequiredService<IHostingEnvironment>();
             var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
-
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
             {
