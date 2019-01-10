@@ -6,7 +6,7 @@ REMOTE_SERVER=10.5.2.106
 REMOTE_USER=dkp
 REMOTE_PATH=/home/dkp/
 PUBLISH_OS=linux-x64
-PUBLISH_FOLDER=bin/Release/netcoreapp2.1/${PUBLISH_OS}
+PUBLISH_FOLDER=bin/Release/netcoreapp2.2/${PUBLISH_OS}
 
 
 dotnet restore
