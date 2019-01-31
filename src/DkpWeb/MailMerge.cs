@@ -54,7 +54,7 @@ namespace DkpWeb
                 transactions = transactions.Where(t => t.DebtorId != p && t.CreditorId != p);
             }
 
-            var netMoney = DebtGraph.TestAlgo(mDb, transactions, true, TextWriter.Null);
+            var netMoney = DebtGraph.CalculateDebts(mDb, transactions, true, TextWriter.Null);
 
             var swGraph = new StringWriter();
             DebtGraph.WriteGraph(netMoney, swGraph);
@@ -106,7 +106,7 @@ namespace DkpWeb
             Debt debt = null;
             while (allTrans.Count != 0)
             {
-                debt = DebtGraph.TestAlgo(mDb, allTrans, false, TextWriter.Null).SingleOrDefault();
+                debt = DebtGraph.CalculateDebts(mDb, allTrans, false, TextWriter.Null).SingleOrDefault();
                 if (debt == null)
                     break; //this indicates that there is no debt between the two people
                 if (debt.Debtor.Id == creditor.Id)

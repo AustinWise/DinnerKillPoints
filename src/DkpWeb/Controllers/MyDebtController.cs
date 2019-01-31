@@ -49,7 +49,7 @@ namespace DkpWeb.Controllers
                     && (t.CreditorId == person.Id || t.DebtorId == person.Id))
                 .ToList();
 
-            var netMoney = DebtGraph.TestAlgo(mData, transactions, true, TextWriter.Null);
+            var netMoney = DebtGraph.CalculateDebts(mData, transactions, true, TextWriter.Null);
 
             var swGraph = new StringWriter();
             DebtGraph.WriteGraph(netMoney, swGraph);

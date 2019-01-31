@@ -141,7 +141,7 @@ namespace DkpWeb
             {
                 using (var infoOutput = new StreamWriter(fs))
                 {
-                    netMoney = DebtGraph.TestAlgo(db, people, removeCycles, infoOutput ?? Console.Out);
+                    netMoney = DebtGraph.CalculateDebts(db, people, removeCycles, infoOutput ?? Console.Out);
                 }
             }
             Console.WriteLine("{0:c}", netMoney.Sum(m => m.Amount) / 100d);
@@ -167,7 +167,7 @@ namespace DkpWeb
 
         private static void DebtTransfer(ApplicationDbContext db, Person debtor, Person oldCreditor, Person newCreditor, DateTime when)
         {
-            var netMoney = DebtGraph.TestAlgo(db, new[] { debtor, oldCreditor }, false, null);
+            var netMoney = DebtGraph.CalculateDebts(db, new[] { debtor, oldCreditor }, false, null);
             if (netMoney.Count != 1)
                 throw new Exception("No debt to transfer.");
 

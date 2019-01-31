@@ -34,7 +34,7 @@ namespace DkpWeb.Controllers
                 .Select(i => dc.Person.Where(p => p.Id == i).Single())
                 .ToArray();
             var swLog = new StringWriter();
-            var netMoney = DebtGraph.TestAlgo(dc, people, true, swLog);
+            var netMoney = DebtGraph.CalculateDebts(dc, people, true, swLog);
             
             var swGraph = new StringWriter();
             DebtGraph.WriteGraph(netMoney, swGraph);

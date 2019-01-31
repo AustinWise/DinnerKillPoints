@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Xml.Linq;
@@ -13,10 +12,6 @@ namespace Austin.DkpLib
 {
     public static class DebtGraph
     {
-        static DebtGraph()
-        {
-        }
-
         static List<Tuple<int, int>> sDebtFloaters = new List<Tuple<int, int>>();
         private static void AddDebtFloater(int p1, int p2)
         {
@@ -41,18 +36,18 @@ namespace Austin.DkpLib
         }
 
 
-        public static List<Debt> TestAlgo(ApplicationDbContext db, IEnumerable<Transaction> rawTrans, bool RemoveCycles, TextWriter logger)
+        public static List<Debt> CalculateDebts(ApplicationDbContext db, IEnumerable<Transaction> rawTrans, bool RemoveCycles, TextWriter logger)
         {
             var people = rawTrans.SelectMany(t => new[] { t.Creditor, t.Debtor }).Distinct().ToArray();
-            return TestAlgo(db, rawTrans, people, RemoveCycles, logger);
+            return CalculateDebts(db, rawTrans, people, RemoveCycles, logger);
         }
 
-        public static List<Debt> TestAlgo(ApplicationDbContext db, Person[] people, bool RemoveCycles, TextWriter logger)
+        public static List<Debt> CalculateDebts(ApplicationDbContext db, Person[] people, bool RemoveCycles, TextWriter logger)
         {
-            return TestAlgo(db, db.Transaction.Where(t => t.CreditorId != t.DebtorId), people, RemoveCycles, logger);
+            return CalculateDebts(db, db.Transaction.Where(t => t.CreditorId != t.DebtorId), people, RemoveCycles, logger);
         }
 
-        public static List<Debt> TestAlgo(ApplicationDbContext db, IEnumerable<Transaction> trans, Person[] people, bool RemoveCycles, TextWriter logger)
+        public static List<Debt> CalculateDebts(ApplicationDbContext db, IEnumerable<Transaction> trans, Person[] people, bool RemoveCycles, TextWriter logger)
         {
             var netMoney = new List<Debt>();
             var peopleMap = db.Person.Select(p => p.Clone()).Cast<Person>().ToDictionary(p => p.Id);
