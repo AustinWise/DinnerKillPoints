@@ -10,7 +10,7 @@ using MultiCreditorDebtList = System.Collections.Generic.List<(DkpWeb.Models.Per
 
 namespace Austin.DkpLib
 {
-    public class BillSpliter
+    public class BillSplitter
     {
         class Debt
         {
@@ -42,7 +42,7 @@ namespace Austin.DkpLib
         readonly SortedSet<Person> mFreeLoaders;
         readonly SortedSet<Person> mFremontBirthday;
 
-        public BillSpliter(string name, DateTime date, params Person[] payer)
+        public BillSplitter(string name, DateTime date, params Person[] payer)
         {
             if (payer == null)
                 throw new ArgumentNullException("payer");
