@@ -10,14 +10,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DkpWeb
 {
     public class Program
     {
-        private static string sGitCommitHash;
-        public static string GitCommitHash => sGitCommitHash;
+        public static string GitCommitHash { get; private set; }
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
@@ -26,15 +26,7 @@ namespace DkpWeb
 
         public static void Main(string[] args)
         {
-            var gitCommitHashPath = Path.Combine(AppContext.BaseDirectory, "GITHASH.txt");
-            if (File.Exists(gitCommitHashPath))
-            {
-                sGitCommitHash = File.ReadAllText(gitCommitHashPath);
-            }
-            else
-            {
-                sGitCommitHash = "UNKONWN";
-            }
+            GitCommitHash = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
             var host = BuildWebHost(args);
             var cfg = host.Services.GetService<IConfiguration>();
