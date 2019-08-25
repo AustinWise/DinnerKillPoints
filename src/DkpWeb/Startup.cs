@@ -87,7 +87,6 @@ namespace DkpWeb
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
             }
             else
             {
