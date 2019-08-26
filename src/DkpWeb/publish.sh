@@ -10,6 +10,7 @@ PUBLISH_FOLDER=bin/Release/netcoreapp2.2/${PUBLISH_OS}
 
 
 dotnet restore
+bower update
 dotnet publish -r ${PUBLISH_OS} -c Release
 tar cf publish.tar -C $PUBLISH_FOLDER publish
 scp publish.tar $REMOTE_USER@$REMOTE_SERVER:$REMOTE_PATH
