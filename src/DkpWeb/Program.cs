@@ -1,11 +1,11 @@
 ﻿using Austin.DkpLib;
 using DkpWeb.Data;
 using DkpWeb.Models;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,21 +19,30 @@ namespace DkpWeb
     {
         public static string GitCommitHash { get; private set; }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+        public static IHostBuilder BuildWebHost(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureHostConfiguration(cfg =>
+                {
+                    cfg.AddEnvironmentVariables();
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
 
         public static void Main(string[] args)
         {
             GitCommitHash = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
-            var host = BuildWebHost(args);
+            var host = BuildWebHost(args).Build();
             var cfg = host.Services.GetService<IConfiguration>();
 
-            var roles = host.Services.GetService<RoleManager<IdentityRole>>();
-            EnsureRole(roles, "Admin").Wait();
-            EnsureRole(roles, "DKP").Wait();
+            using (var scope = host.Services.CreateScope())
+            {
+                var roles = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                EnsureRole(roles, "Admin").Wait();
+                EnsureRole(roles, "DKP").Wait();
+            }
 
             if (cfg["split"] != null)
             {

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DkpWeb.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using DkpWeb.Models;
-using Microsoft.EntityFrameworkCore.Metadata;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DkpWeb.Data
 {

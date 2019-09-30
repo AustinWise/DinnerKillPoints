@@ -1,46 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using DkpWeb.Config;
 using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Services;
-using Sakura.AspNetCore.Mvc;
-using DkpWeb.Config;
-using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Sakura.AspNetCore.Mvc;
+using System;
 
 namespace DkpWeb
 {
-    public class Startup : IStartup
+    public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets("aspnet-DkpWeb-2b015ff0-fd48-420f-9465-4b03498245a8");
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
             services.Configure<EmailOptions>(Configuration.GetSection("Gmail"));
@@ -50,12 +34,8 @@ namespace DkpWeb
                 options.UseNpgsql(Configuration["psql"]));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddAuthentication();
-
-            services.AddMvc();
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -75,14 +55,12 @@ namespace DkpWeb
                 builder.AddDebug();
             });
 
-            return services.BuildServiceProvider();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var env = app.ApplicationServices.GetRequiredService<IHostingEnvironment>();
-            var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -95,15 +73,17 @@ namespace DkpWeb
 
             app.UseStaticFiles();
 
+            app.UseRouting();
+
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
-
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
