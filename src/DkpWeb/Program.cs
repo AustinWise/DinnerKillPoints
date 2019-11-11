@@ -46,7 +46,8 @@ namespace DkpWeb
 
             if (cfg["split"] != null)
             {
-                var db = host.Services.GetService<ApplicationDbContext>();
+                using var scope = host.Services.CreateScope();
+                var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
                 var peopleMap = db.Person.ToDictionary(p => p.Id);
                 Func<int, Person> GetPerson = id => peopleMap[id];
 
@@ -63,7 +64,7 @@ namespace DkpWeb
                 var jeff = GetPerson(11);
                 var ryuho = GetPerson(12);
                 //var laura = GetPerson(13);
-                var minh = GetPerson(14);
+                //var minh = GetPerson(14);
                 var george = GetPerson(15);
                 var justine = GetPerson(16);
                 //var matt = GetPerson(17);
@@ -73,7 +74,7 @@ namespace DkpWeb
                 var katherine = GetPerson(21);
                 //var ryanSund = GetPerson(22);
                 //var adrian = GetPerson(23);
-                var ed = GetPerson(24);
+                //var eddy = GetPerson(24);
                 var randy = GetPerson(25);
                 //var becky = GetPerson(26);
                 var andrew = GetPerson(29);
@@ -89,32 +90,32 @@ namespace DkpWeb
                 var adam = GetPerson(39);
                 var benKwong = GetPerson(40);
                 var jasonBanich = GetPerson(41);
-                var changLiu = GetPerson(42);
-                var mike = GetPerson(43);
+                //var changLiu = GetPerson(42);
+                //var mike = GetPerson(43);
                 //var spencer = GetPerson(44);
                 //var jessie = GetPerson(45);
                 var pat = GetPerson(46);
                 var cam = GetPerson(47);
-                var zack = GetPerson(48);
+                //var zack = GetPerson(48);
                 var mary = GetPerson(49);
-                var monica = GetPerson(50);
-                var ryanWeinstein = GetPerson(51);
+                //var monica = GetPerson(50);
+                //var ryanWeinstein = GetPerson(51);
                 var michelle = GetPerson(52);
                 var allison = GetPerson(53);
                 var alexBruk = GetPerson(54);
                 var dennis = GetPerson(55);
-                var salsa = GetPerson(57);
+                //var salsa = GetPerson(57);
                 var stephen = GetPerson(100);
-                var elisha = GetPerson(101);
+                //var elisha = GetPerson(101);
                 var maya = GetPerson(102);
                 var charles = GetPerson(103);
-                var menglu = GetPerson(104);
-                var nate = GetPerson(105);
-                var ryanKwan = GetPerson(106);
+                //var menglu = GetPerson(104);
+                //var nate = GetPerson(105);
+                //var ryanKwan = GetPerson(106);
                 var will = GetPerson(107);
                 var anthony = GetPerson(108);
                 var helen = GetPerson(109);
-                var john = GetPerson(110);
+                //var john = GetPerson(110);
 
 
                 WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
