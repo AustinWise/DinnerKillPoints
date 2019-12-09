@@ -3,7 +3,10 @@
 }
 
 <h2>Bill Splits</h2>
-
+@if (Context.User.IsInRole("DKP"))
+{
+    @Html.ActionLink("Add", "Add", (object)null, new { @class = "btn btn-default" })
+}
 <table>
     <thead>
         <tr>

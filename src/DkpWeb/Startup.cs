@@ -1,8 +1,10 @@
-﻿using DkpWeb.Config;
+﻿using DkpWeb.Areas.Identity;
+using DkpWeb.Config;
 using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Sakura.AspNetCore.Mvc;
-using System;
 
 namespace DkpWeb
 {
@@ -57,6 +58,8 @@ namespace DkpWeb
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddServerSideBlazor();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -83,6 +86,10 @@ namespace DkpWeb
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapBlazorHub();
+
+                //The Microsoft.AspNetCore.Identity.UI package uses Razor Pages
+                //for the login view.
                 endpoints.MapRazorPages();
             });
         }

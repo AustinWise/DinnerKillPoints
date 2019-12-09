@@ -59,6 +59,17 @@ namespace DkpWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        //
+        // GET: /BillSpit/Add
+        // Just a shell to contain Blazor pages
+
+        [HttpGet]
+        [Authorize(Roles = "DKP")]
+        public ActionResult Add()
+        {
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
