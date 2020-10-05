@@ -144,23 +144,31 @@ namespace DkpWeb
             {
                 using (var infoOutput = new StreamWriter(fs))
                 {
-                    netMoney = DebtGraph.CalculateDebts(db, people, removeCycles, infoOutput ?? Console.Out);
+                    netMoney = DebtGraph.CalculateDebts(db, people, removeCycles, infoOutput);
                 }
             }
             Console.WriteLine("{0:c}", netMoney.Sum(m => m.Amount) / 100d);
 
-            const string gvPath = @"c:\temp\graph\test.gv";
-            using (var fs = new FileStream(gvPath, FileMode.Create, FileAccess.Write))
+            string gvPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".gv");
+            try
             {
-                using (var sw = new StreamWriter(fs))
+                using (var fs = new FileStream(gvPath, FileMode.Create, FileAccess.Write))
                 {
-                    DebtGraph.WriteGraph(netMoney, sw);
+                    using (var sw = new StreamWriter(fs))
+                    {
+                        DebtGraph.WriteGraph(netMoney, sw);
+                    }
                 }
-            }
 
-            DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, removeCycles ? "current.png" : "nocycles.png"));
-            if (removeCycles)
-                DebtGraph.RenderGraphAsPng(gvPath, Path.Combine(outDir, DateTime.Now.ToString("yyyy-MM-dd") + ".png"));
+                string outFile = Path.Combine(outDir, removeCycles ? "current.png" : "nocycles.png");
+                DebtGraph.RenderGraphAsPng(gvPath, outFile);
+                if (removeCycles)
+                    File.Copy(outFile, Path.Combine(outDir, DateTime.Now.ToString("yyyy-MM-dd") + ".png"), overwrite: true);
+            }
+            finally
+            {
+                File.Delete(gvPath);
+            }
         }
 
         private static void DebtTransfer(ApplicationDbContext db, Person debtor, Person oldCreditor, Person newCreditor)
