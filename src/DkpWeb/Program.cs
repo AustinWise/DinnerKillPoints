@@ -137,7 +137,7 @@ namespace DkpWeb
 
         private static void WriteData(ApplicationDbContext db, bool removeCycles, Person[] people)
         {
-            const string outDir = @"C:\Users\AustinWise\Dropbox\DKP";
+            const string outDir = @"E:\AustinWise\OneDrive\DKP";
 
             List<Debt> netMoney = null;
             using (Stream fs = removeCycles ? new FileStream(Path.Combine(outDir, "Info.txt"), FileMode.Create, FileAccess.Write) : Stream.Null)
