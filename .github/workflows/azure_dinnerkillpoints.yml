@@ -26,10 +26,18 @@ jobs:
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+    - name: install nuget
+      uses: nuget/setup-nuget@v1.0.2
+      with:
+        nuget-version: latest
+
+    - name: install Graphviz
+      run: nuget install Graphviz -version 2.38.0.2 -NonInteractive -OutputDirectory ${{env.DOTNET_ROOT}}/myapp/graphviz
+
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'dinnerkillpoints'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_f333d2798e43497ebab8d1d92d762f8f }}
-        package: ${{env.DOTNET_ROOT}}/myapp 
+        package: ${{env.DOTNET_ROOT}}/myapp

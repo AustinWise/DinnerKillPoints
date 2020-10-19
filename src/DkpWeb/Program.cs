@@ -31,6 +31,19 @@ namespace DkpWeb
         {
             GitCommitHash = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
+            string graphvizNugetPackages = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "graphviz");
+            if (Directory.Exists(graphvizNugetPackages))
+            {
+                //The "nuget install" command places the contents of packages in folders name "{package}.{version}".
+                //Add them all to the path.
+                foreach (var dir in Directory.GetDirectories(graphvizNugetPackages))
+                {
+                    string path = Environment.GetEnvironmentVariable("PATH");
+                    path = path + Path.PathSeparator + dir;
+                    Environment.SetEnvironmentVariable("PATH", path);
+                }
+            }
+
             var host = CreateHostBuilder(args).Build();
             var cfg = host.Services.GetService<IConfiguration>();
 
