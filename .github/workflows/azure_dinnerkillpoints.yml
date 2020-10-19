@@ -3,6 +3,9 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App
 
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
 on:
   push:
     branches:
@@ -15,6 +18,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: install nuget
+      uses: nuget/setup-nuget@v1.0.2
+      with:
+        nuget-version: latest
+
     - name: Set up .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -25,11 +33,6 @@ jobs:
 
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
-    - name: install nuget
-      uses: nuget/setup-nuget@v1.0.2
-      with:
-        nuget-version: latest
 
     - name: install Graphviz
       run: nuget install Graphviz -version 2.38.0.2 -NonInteractive -OutputDirectory ${{env.DOTNET_ROOT}}/myapp/graphviz
