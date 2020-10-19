@@ -17,3 +17,4 @@ packages/*
 *.tar
 node_modules
 
+myapp/

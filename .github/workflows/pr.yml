@@ -1,0 +1,24 @@
+
+
+
+name: Build on PR
+
+on: pull_request
+
+
+
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.x'
+
+    - name: Build with dotnet
+      run: dotnet build -c Release
