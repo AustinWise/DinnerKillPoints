@@ -23,10 +23,5 @@ jobs:
       with:
         nuget-version: latest
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '6.0.x'
-
     - name: Build with dotnet
       run: dotnet build -c Release
