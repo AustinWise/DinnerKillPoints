@@ -23,12 +23,6 @@ jobs:
       with:
         nuget-version: latest
 
-    - name: Build with dotnet
-      run: dotnet build -c Release
-
-    - name: dotnet info
-      run: dotnet --info
-
     - name: dotnet publish
       run: dotnet publish -c Release -r win-x86 --no-self-contained -o ${{env.DOTNET_ROOT}}/myapp
 
