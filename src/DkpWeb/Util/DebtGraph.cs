@@ -41,7 +41,13 @@ namespace Austin.DkpLib
             var summedDebts = new Dictionary<Tuple<Person, Person>, int>();
             foreach (var t in trans)
             {
-                var tup = new Tuple<Person, Person>(peopleMap[t.DebtorId], peopleMap[t.CreditorId]);
+                Person debtor, creditor;
+                if (!peopleMap.TryGetValue(t.DebtorId, out debtor))
+                    continue;
+                if (!peopleMap.TryGetValue(t.CreditorId, out creditor))
+                    continue;
+
+                var tup = new Tuple<Person, Person>(debtor, creditor);
                 int net = 0;
                 if (summedDebts.ContainsKey(tup))
                     net = summedDebts[tup];
