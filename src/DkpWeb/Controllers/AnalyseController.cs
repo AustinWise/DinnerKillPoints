@@ -37,7 +37,7 @@ namespace DkpWeb.Controllers
             var netMoney = DebtGraph.CalculateDebts(dc, people, true, swLog);
             
             var swGraph = new StringWriter();
-            DebtGraph.WriteGraph(netMoney, swGraph);
+            DebtGraph.WriteGraphviz(netMoney, swGraph);
             var svg = DebtGraph.RenderGraphAsSvg(swGraph.ToString());
 
             var mod = new AnalyseModel();

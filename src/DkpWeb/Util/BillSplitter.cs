@@ -126,6 +126,29 @@ namespace Austin.DkpLib
             db.SaveChanges();
         }
 
+        /// <summary>
+        /// Generate transactions without persisting to a database.
+        /// </summary>
+        public IEnumerable<Transaction> ToTransactions(TextWriter log)
+        {
+            var debts = SplitBill(log);
+
+            foreach (var (debtor, creditor, pennies) in debts)
+            {
+                yield return new Transaction()
+                {
+                    Id = Guid.NewGuid(),
+                    Creditor = creditor,
+                    CreditorId = creditor.Id,
+                    Debtor = debtor,
+                    DebtorId = debtor.Id,
+                    Amount = pennies,
+                    Description = mName,
+                    Created = mDate,
+                };
+            }
+        }
+
         private void ValidateBill()
         {
             if (mParty.Count == 0)

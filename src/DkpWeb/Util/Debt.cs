@@ -1,8 +1,4 @@
 ﻿using DkpWeb.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Austin.DkpLib
 {
@@ -14,7 +10,7 @@ namespace Austin.DkpLib
 
         public override string ToString()
         {
-            return string.Format("{2}: {0} -> {1}", Debtor, Creditor, Amount);
+            return string.Format("{2:c}: {0} -> {1}", Debtor, Creditor, Amount / 100m);
         }
 
         public Debt Clone()

@@ -12,13 +12,6 @@ namespace Austin.DkpLib
 {
     public static class DebtGraph
     {
-        static List<Tuple<int, int>> sDebtFloaters = new List<Tuple<int, int>>();
-        private static void AddDebtFloater(int p1, int p2)
-        {
-            sDebtFloaters.Add(new Tuple<int, int>(p1, p2));
-            sDebtFloaters.Add(new Tuple<int, int>(p2, p1));
-        }
-
         static List<Tuple<int, int>> sMutuallyAssuredUnpayment = new List<Tuple<int, int>>();
         private static void AddUnPayment(int p1, int p2)
         {
@@ -26,36 +19,23 @@ namespace Austin.DkpLib
             sMutuallyAssuredUnpayment.Add(new Tuple<int, int>(p2, p1));
         }
 
-        private static void replace(Dictionary<Tuple<Person, Person>, int> summedDebts, Tuple<Person, Person> oldKey, Tuple<Person, Person> newKey)
-        {
-            var val = summedDebts[oldKey];
-            summedDebts.Remove(oldKey);
-            if (summedDebts.ContainsKey(newKey))
-                val += summedDebts[newKey];
-            summedDebts[newKey] = val;
-        }
-
-
-        public static List<Debt> CalculateDebts(ApplicationDbContext db, IEnumerable<Transaction> rawTrans, bool RemoveCycles, TextWriter logger)
+        public static List<Debt> CalculateDebts(IEnumerable<Transaction> rawTrans, bool RemoveCycles, TextWriter logger)
         {
             var people = rawTrans.SelectMany(t => new[] { t.Creditor, t.Debtor }).Distinct().ToArray();
-            return CalculateDebts(db, rawTrans, people, RemoveCycles, logger);
+            return CalculateDebts(rawTrans, people, RemoveCycles, logger);
         }
 
         public static List<Debt> CalculateDebts(ApplicationDbContext db, Person[] people, bool RemoveCycles, TextWriter logger)
         {
-            return CalculateDebts(db, db.Transaction.Where(t => t.CreditorId != t.DebtorId), people, RemoveCycles, logger);
+            return CalculateDebts(db.Transaction.Where(t => t.CreditorId != t.DebtorId), people, RemoveCycles, logger);
         }
 
-        public static List<Debt> CalculateDebts(ApplicationDbContext db, IEnumerable<Transaction> trans, Person[] people, bool RemoveCycles, TextWriter logger)
+        public static List<Debt> CalculateDebts(IEnumerable<Transaction> trans, Person[] people, bool RemoveCycles, TextWriter logger)
         {
             var netMoney = new List<Debt>();
-            var peopleMap = db.Person.Select(p => p.Clone()).Cast<Person>().ToDictionary(p => p.Id);
-            people = people.Select(p => peopleMap[p.Id]).ToArray();
+            var peopleMap = people.ToDictionary(p => p.Id);
 
             logger = logger ?? TextWriter.Null;
-
-            var DebtFloaters = sDebtFloaters.Select(tup => new Tuple<Person, Person>(peopleMap[tup.Item1], peopleMap[tup.Item2])).ToList();
 
             //sum all debts from one person to another
             var summedDebts = new Dictionary<Tuple<Person, Person>, int>();
@@ -71,38 +51,6 @@ namespace Austin.DkpLib
 
             if (RemoveCycles)
             {
-                //combine debt floaters
-                while (DebtFloaters.Count != 0)
-                {
-                    var tup = DebtFloaters[0];
-                    var mainPerson = tup.Item1;
-                    var removedPerson = tup.Item2;
-
-                    if (summedDebts.ContainsKey(DebtFloaters[0]))
-                        summedDebts.Remove(DebtFloaters[0]);
-                    if (summedDebts.ContainsKey(DebtFloaters[1]))
-                        summedDebts.Remove(DebtFloaters[1]);
-
-                    foreach (var t in summedDebts.Keys.ToArray())
-                    {
-                        if (t.Item1 == removedPerson)
-                        {
-                            replace(summedDebts, t, new Tuple<Person, Person>(mainPerson, t.Item2));
-                        }
-                        else if (t.Item2 == removedPerson)
-                        {
-                            replace(summedDebts, t, new Tuple<Person, Person>(t.Item1, mainPerson));
-                        }
-                    }
-
-
-                    mainPerson.FirstName = mainPerson.FirstName + " " + mainPerson.LastName + ", ";
-                    mainPerson.LastName = removedPerson.FirstName + " " + removedPerson.LastName;
-                    removedPerson.FirstName += "<removed>";
-                    DebtFloaters.RemoveAt(0);
-                    DebtFloaters.RemoveAt(0);
-                }
-
                 //remove mutually assured unpayment
                 foreach (var mut in sMutuallyAssuredUnpayment)
                 {
@@ -197,7 +145,7 @@ namespace Austin.DkpLib
             return ret;
         }
 
-        public static void WriteGraph(IEnumerable<Debt> netMoney, TextWriter sw)
+        public static void WriteGraphviz(IEnumerable<Debt> netMoney, TextWriter sw)
         {
             sw.WriteLine("digraph Test {");
             foreach (var d in netMoney)
@@ -214,15 +162,9 @@ namespace Austin.DkpLib
             p.WaitForExit();
         }
 
-        public static byte[] RenderGraphAsPng(string gvFileContents)
-        {
-            return RengerGraphAs(gvFileContents, "png").ToArray();
-        }
-
         public static HtmlString RenderGraphAsSvg(string gvFileContents)
         {
             var mem = RengerGraphAs(gvFileContents, "svg");
-            mem.Seek(0, SeekOrigin.Begin);
             var doc = XDocument.Load(mem);
             return new HtmlString(doc.Root.ToString(SaveOptions.DisableFormatting));
         }
@@ -243,6 +185,10 @@ namespace Austin.DkpLib
             p.StandardOutput.BaseStream.CopyTo(mem);
             p.WaitForExit();
 
+            if (p.ExitCode != 0)
+                throw new Exception("Graphviz exited with code: " + p.ExitCode);
+
+            mem.Seek(0, SeekOrigin.Begin);
             return mem;
         }
 

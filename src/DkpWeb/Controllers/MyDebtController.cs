@@ -49,10 +49,10 @@ namespace DkpWeb.Controllers
                     && (t.CreditorId == person.Id || t.DebtorId == person.Id))
                 .ToList();
 
-            var netMoney = DebtGraph.CalculateDebts(mData, transactions, true, TextWriter.Null);
+            var netMoney = DebtGraph.CalculateDebts(transactions, true, TextWriter.Null);
 
             var swGraph = new StringWriter();
-            DebtGraph.WriteGraph(netMoney, swGraph);
+            DebtGraph.WriteGraphviz(netMoney, swGraph);
             var svg = DebtGraph.RenderGraphAsSvg(swGraph.ToString());
 
             var creditors = DebtGraph.GreatestDebtor(netMoney);

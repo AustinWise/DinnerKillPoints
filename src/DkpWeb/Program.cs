@@ -176,7 +176,7 @@ namespace DkpWeb
                 {
                     using (var sw = new StreamWriter(fs))
                     {
-                        DebtGraph.WriteGraph(netMoney, sw);
+                        DebtGraph.WriteGraphviz(netMoney, sw);
                     }
                 }
 

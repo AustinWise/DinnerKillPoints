@@ -54,11 +54,7 @@ namespace DkpWeb
                 transactions = transactions.Where(t => t.DebtorId != p && t.CreditorId != p);
             }
 
-            var netMoney = DebtGraph.CalculateDebts(mDb, transactions, true, TextWriter.Null);
-
-            var swGraph = new StringWriter();
-            DebtGraph.WriteGraph(netMoney, swGraph);
-            var bytes = DebtGraph.RenderGraphAsPng(swGraph.ToString());
+            var netMoney = DebtGraph.CalculateDebts(transactions, true, TextWriter.Null);
 
             var debtors = DebtGraph.GreatestDebtor(netMoney);
             var myDebt = debtors.Where(d => d.Item1.Id == person.Id).SingleOrDefault();
@@ -106,7 +102,7 @@ namespace DkpWeb
             Debt debt = null;
             while (allTrans.Count != 0)
             {
-                debt = DebtGraph.CalculateDebts(mDb, allTrans, false, TextWriter.Null).SingleOrDefault();
+                debt = DebtGraph.CalculateDebts(allTrans, false, TextWriter.Null).SingleOrDefault();
                 if (debt == null)
                     break; //this indicates that there is no debt between the two people
                 if (debt.Debtor.Id == creditor.Id)
