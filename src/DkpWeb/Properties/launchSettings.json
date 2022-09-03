@@ -8,6 +8,12 @@
     }
   },
   "profiles": {
+    "web": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "Split": {
       "commandName": "Project",
       "commandLineArgs": "--split 1",
@@ -19,12 +25,6 @@
     "mail": {
       "commandName": "Project",
       "commandLineArgs": "--sendmail 1",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "web": {
-      "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
