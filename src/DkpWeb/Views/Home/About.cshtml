@@ -1,13 +1,13 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
+<h2>@ViewData["Title"]</h2>
+<h3>Version Info</h3>
 
 <ul>
     <li>Git commit: @Program.GitCommitHash</li>
-    <li>.NET Core @Environment.Version</li>
-    <li>IntPtr.Size: @IntPtr.Size</li>
+    <li>.NET: @Environment.Version</li>
+    <li>Process Architecture: @System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture</li>
     <li>CorLib location: @typeof(object).Assembly.Location</li>
     <li>Entry Location: @System.Reflection.Assembly.GetEntryAssembly().Location</li>
 </ul>
