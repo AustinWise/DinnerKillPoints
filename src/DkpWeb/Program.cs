@@ -69,7 +69,7 @@ namespace DkpWeb
                 using var scope = host.Services.CreateScope();
                 var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
                 var peopleMap = db.Person.ToDictionary(p => p.Id);
-                Func<int, Person> GetPerson = id => peopleMap[id];
+                Person GetPerson(int id) => peopleMap[id];
 
                 var austin = GetPerson(1);
                 var caspar = GetPerson(2);
@@ -161,11 +161,9 @@ namespace DkpWeb
 
             List<Debt> netMoney = null;
             using (Stream fs = removeCycles ? new FileStream(Path.Combine(outDir, "Info.txt"), FileMode.Create, FileAccess.Write) : Stream.Null)
+            using (var infoOutput = new StreamWriter(fs))
             {
-                using (var infoOutput = new StreamWriter(fs))
-                {
-                    netMoney = DebtGraph.CalculateDebts(db, people, removeCycles, infoOutput);
-                }
+                netMoney = DebtGraph.CalculateDebts(db, people, removeCycles, infoOutput);
             }
             Console.WriteLine("{0:c}", netMoney.Sum(m => m.Amount) / 100d);
 
@@ -173,11 +171,9 @@ namespace DkpWeb
             try
             {
                 using (var fs = new FileStream(gvPath, FileMode.Create, FileAccess.Write))
+                using (var sw = new StreamWriter(fs))
                 {
-                    using (var sw = new StreamWriter(fs))
-                    {
-                        DebtGraph.WriteGraphviz(netMoney, sw);
-                    }
+                    DebtGraph.WriteGraphviz(netMoney, sw);
                 }
 
                 string outFile = Path.Combine(outDir, removeCycles ? "current.png" : "nocycles.png");
@@ -209,8 +205,10 @@ namespace DkpWeb
 
             var msg = Transaction.CreateDebtTransferString(debtor, oldCreditor, newCreditor);
 
-            var bs = new BillSplit();
-            bs.Name = msg;
+            var bs = new BillSplit
+            {
+                Name = msg
+            };
             db.BillSplit.Add(bs);
 
             var cancelTrans = new Transaction()
