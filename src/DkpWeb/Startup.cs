@@ -2,6 +2,7 @@
 using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Services;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -59,7 +60,10 @@ namespace DkpWeb
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
+            services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions()
+            {
+                ConnectionString = Configuration["APPINSIGHTS_CONNECTIONSTRING"],
+            });
 
         }
 
