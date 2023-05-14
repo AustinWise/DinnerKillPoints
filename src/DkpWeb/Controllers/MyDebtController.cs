@@ -2,15 +2,18 @@
 using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Models.MyDebtViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 
 namespace DkpWeb.Controllers
 {
+    [Authorize(Roles = "DKP")]
     public class MyDebtController : Controller
     {
         readonly ApplicationDbContext mData;

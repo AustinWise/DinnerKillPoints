@@ -8,6 +8,7 @@ using System.Linq;
 
 namespace DkpWeb.Controllers
 {
+    [Authorize(Roles = "DKP")]
     public class PeopleController : Controller
     {
         private ApplicationDbContext mData;

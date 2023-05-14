@@ -1,16 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using DkpWeb.Data;
 using DkpWeb.Models;
 using Microsoft.AspNetCore.Authorization;
-using Sakura.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Sakura.AspNetCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DkpWeb.Controllers
 {
+    [Authorize(Roles = "DKP")]
     public class TransactionController : Controller
     {
         //
@@ -70,7 +70,6 @@ namespace DkpWeb.Controllers
             return View(q);
         }
 
-        [Authorize(Roles = "DKP")]
         public ActionResult Add()
         {
             ViewBag.People = mData.ActivePeopleOrderedByName.ToList();
@@ -90,7 +89,6 @@ namespace DkpWeb.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "DKP")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Add(NewTransactionModel model)
         {

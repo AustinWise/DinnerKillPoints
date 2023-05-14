@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Austin.DkpLib;
-using DkpWeb.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+﻿using DkpWeb.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DkpWeb.Controllers
 {
+    [Authorize(Roles = "DKP")]
     public class BillSplitController : Controller
     {
         readonly ApplicationDbContext mData;

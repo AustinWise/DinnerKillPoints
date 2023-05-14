@@ -1,13 +1,16 @@
-﻿using System.Linq;
-using Austin.DkpLib;
-using System.IO;
-using Microsoft.AspNetCore.Mvc;
+﻿using Austin.DkpLib;
 using DkpWeb.Data;
 using DkpWeb.Models.AnalyzeViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.IO;
+using System.Linq;
 
 namespace DkpWeb.Controllers
 {
-	public class AnalyseController : Controller
+    [Authorize(Roles = "DKP")]
+    public class AnalyseController : Controller
     {
 		ApplicationDbContext dc;
 
