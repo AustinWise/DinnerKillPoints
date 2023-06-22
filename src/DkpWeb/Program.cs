@@ -136,6 +136,7 @@ namespace DkpWeb
                 var anthony = GetPerson(108);
                 var helen = GetPerson(109);
                 //var john = GetPerson(110);
+                var kevin = GetPerson(111);
 
 
                 WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
