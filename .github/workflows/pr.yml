@@ -18,10 +18,5 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: install nuget
-      uses: nuget/setup-nuget@v1.0.5
-      with:
-        nuget-version: latest
-
     - name: Build with dotnet
       run: dotnet build -c Release
