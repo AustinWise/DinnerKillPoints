@@ -24,10 +24,10 @@ jobs:
         nuget-version: latest
 
     - name: dotnet publish
-      run: dotnet publish -c Release -r win-x86 --no-self-contained -o ${{env.DOTNET_ROOT}}/myapp src/DkpWeb/DkpWeb.csproj
+      run: dotnet publish -c Release -r win-x86 --no-self-contained -o myapp src/DkpWeb/DkpWeb.csproj
 
     - name: install Graphviz
-      run: nuget install Graphviz -version 2.38.0.2 -NonInteractive -OutputDirectory ${{env.DOTNET_ROOT}}/myapp/graphviz
+      run: nuget install Graphviz -version 2.38.0.2 -NonInteractive -OutputDirectory myapp/graphviz
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
@@ -35,4 +35,4 @@ jobs:
         app-name: 'dinnerkillpoints'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_f333d2798e43497ebab8d1d92d762f8f }}
-        package: ${{env.DOTNET_ROOT}}/myapp
+        package: myapp
