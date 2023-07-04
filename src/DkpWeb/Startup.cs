@@ -65,10 +65,13 @@ namespace DkpWeb
                 ConnectionString = Configuration["APPINSIGHTS_CONNECTIONSTRING"],
             });
 
+            services.AddHealthChecks();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseHealthChecks("/healthz");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
