@@ -2,9 +2,31 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-DkpWeb-2b015ff0-fd48-420f-9465-4b03498245a8</UserSecretsId>
-    <ApplicationInsightsResourceId>/subscriptions/43a4dbcf-0619-4578-9236-be28f602d994/resourceGroups/dkp/providers/microsoft.insights/components/dinnerkillpoints</ApplicationInsightsResourceId>
+    <ApplicationInsightsResourceId>
+      /subscriptions/43a4dbcf-0619-4578-9236-be28f602d994/resourceGroups/dkp/providers/microsoft.insights/components/dinnerkillpoints</ApplicationInsightsResourceId>
     <PublishReadyToRun>True</PublishReadyToRun>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(CNB_STACK_ID)' != ''">
+    <!--
+          The build pack publishes without specifying a runtime identifier:
+            https://github.com/GoogleCloudPlatform/buildpacks/blob/b7d38158cb7dabdb969266e029876af617820f5c/cmd/dotnet/publish/main.go#L104-L112
+          Which causes the following error:
+            NETSDK1047: Assets file '/workspaces/IdentityAwareProxy-AspNetCore/obj/project.assets.json'
+            doesn't have a target for 'net7.0/linux-x64'. Ensure that restore has run and that you have
+            included 'net7.0' in the TargetFrameworks for your project. You may also need to include
+            'linux-x64' in your project's RuntimeIdentifiers.
+          The workaround is to define the RID in the project file.
+        -->
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <!--
+          Specifying the RID changes the build to be self-contained by default currently.
+          Also it prints a warning about the behavior changing.
+          Switch back to a self-contained publish.
+        -->
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="MailKit" Version="2.12.0" />
