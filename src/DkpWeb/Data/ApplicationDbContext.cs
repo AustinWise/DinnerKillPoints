@@ -84,7 +84,6 @@ namespace DkpWeb.Data
                 entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
                 entity.Property(e => e.LastName)
-                    .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Ignore(e => e.FullName);

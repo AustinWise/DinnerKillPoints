@@ -27,6 +27,10 @@ namespace DkpWeb.Models
 
         public override string ToString()
         {
+            if (string.IsNullOrEmpty(LastName))
+            {
+                return FirstName;
+            }
             return FirstName + " " + LastName;
         }
 
@@ -68,9 +72,9 @@ namespace DkpWeb.Models
 
         public int CompareTo(Person other)
         {
-            int ret = this.FirstName.CompareTo(other.FirstName);
+            int ret = string.Compare(this.FirstName, other.FirstName, StringComparison.InvariantCulture);
             if (ret == 0)
-                ret = this.LastName.CompareTo(other.LastName);
+                ret = string.Compare(this.LastName, other.LastName, StringComparison.InvariantCulture);
             return ret;
         }
     }

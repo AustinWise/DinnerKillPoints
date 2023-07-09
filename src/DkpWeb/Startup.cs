@@ -2,7 +2,6 @@
 using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Services;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Sakura.AspNetCore.Mvc;
-using System;
 
 namespace DkpWeb
 {
@@ -32,7 +30,7 @@ namespace DkpWeb
 
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -60,10 +58,6 @@ namespace DkpWeb
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions()
-            {
-                ConnectionString = Configuration["APPINSIGHTS_CONNECTIONSTRING"],
-            });
 
             services.AddHealthChecks();
         }

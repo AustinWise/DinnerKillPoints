@@ -1,15 +1,9 @@
-
-
-
 name: Build on PR
 
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
 on: pull_request
-
-
-
 
 jobs:
   build-and-deploy:
