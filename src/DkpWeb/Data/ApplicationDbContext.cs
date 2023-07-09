@@ -102,6 +102,8 @@ namespace DkpWeb.Data
 
                 entity.Property(e => e.DebtorId).HasColumnName("DebtorID");
 
+                entity.Property(e => e.Created).HasConversion<UtcDateTimeConverter>();
+
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -125,6 +127,7 @@ namespace DkpWeb.Data
                     .HasConstraintName("FK_Transaction_Person_Debtor");
 
                 entity.Ignore(e => e.PrettyDescription);
+
             });
         }
 
