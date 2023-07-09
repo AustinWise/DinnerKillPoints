@@ -9,19 +9,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DkpWeb
 {
     public class Program
     {
-        public static string GitCommitHash { get; private set; }
-
         public static async Task Main(string[] args)
         {
-            GitCommitHash = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-
             var builder = WebApplication.CreateBuilder(args);
             var startup = new Startup(builder.Configuration);
             startup.ConfigureServices(builder.Services, builder.Environment);

@@ -5,8 +5,11 @@
 <h3>Version Info</h3>
 
 <ul>
-    <li>Git commit: @Program.GitCommitHash</li>
+    <li>Cloud Run Service: @Environment.GetEnvironmentVariable("K_SERVICE")</li>
+    <li>Cloud Run Service: @Environment.GetEnvironmentVariable("K_REVISION")</li>
+    <li>Cloud Run Configuration: @Environment.GetEnvironmentVariable("K_CONFIGURATION")</li>
     <li>.NET: @Environment.Version</li>
+    <li>.NET Framework Description: @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription</li>
     <li>Process Architecture: @System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture</li>
     <li>CorLib location: @typeof(object).Assembly.Location</li>
     <li>Entry Location: @System.Reflection.Assembly.GetEntryAssembly().Location</li>
