@@ -53,9 +53,10 @@ namespace DkpWeb
 
             services.AddLogging(builder =>
             {
-                builder.AddConsole();
-                builder.AddDebug();
-                builder.AddAzureWebAppDiagnostics();
+                if (env.IsDevelopment())
+                {
+                    builder.AddConsole();
+                }
             });
 
             services.AddControllersWithViews();
