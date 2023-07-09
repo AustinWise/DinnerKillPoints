@@ -2,7 +2,8 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 80
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends graphviz
 
