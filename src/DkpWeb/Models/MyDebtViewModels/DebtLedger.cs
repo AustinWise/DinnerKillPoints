@@ -15,9 +15,6 @@ namespace DkpWeb.Models.MyDebtViewModels
         public Person Creditor { get; set; }
 
         [Required]
-        public int AmountCents { get; set; }
-
-        [Required]
-        public string AmountDollars { get; set; }
+        public Money Amount { get; set; }
     }
 }

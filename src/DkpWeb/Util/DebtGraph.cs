@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Diagnostics;
-using System.Xml.Linq;
-using DkpWeb.Models;
+﻿using DkpWeb;
 using DkpWeb.Data;
+using DkpWeb.Models;
 using Microsoft.AspNetCore.Html;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Austin.DkpLib
 {
@@ -38,7 +39,7 @@ namespace Austin.DkpLib
             logger = logger ?? TextWriter.Null;
 
             //sum all debts from one person to another
-            var summedDebts = new Dictionary<Tuple<Person, Person>, int>();
+            var summedDebts = new Dictionary<Tuple<Person, Person>, Money>();
             foreach (var t in trans)
             {
                 Person debtor, creditor;
@@ -48,7 +49,7 @@ namespace Austin.DkpLib
                     continue;
 
                 var tup = new Tuple<Person, Person>(debtor, creditor);
-                int net = 0;
+                Money net = Money.Zero;
                 if (summedDebts.ContainsKey(tup))
                     net = summedDebts[tup];
                 net += t.Amount;
@@ -72,8 +73,8 @@ namespace Austin.DkpLib
                 for (int j = i + 1; j < people.Length; j++)
                 {
                     var p2 = people[j];
-                    var net = 0;
-                    int temp = 0;
+                    Money net = Money.Zero;
+                    Money temp = Money.Zero;
                     if (summedDebts.TryGetValue(new Tuple<Person, Person>(p1, p2), out temp))
                     {
                         net = temp;
@@ -82,9 +83,9 @@ namespace Austin.DkpLib
                     {
                         net -= temp;
                     }
-                    if (net > 0)
+                    if (net > Money.Zero)
                         netMoney.Add(new Debt() { Debtor = p1, Creditor = p2, Amount = net });
-                    else if (net < 0)
+                    else if (net < Money.Zero)
                         netMoney.Add(new Debt() { Debtor = p2, Creditor = p1, Amount = -net });
                 }
             }
@@ -112,12 +113,12 @@ namespace Austin.DkpLib
                             var p1 = cycle[(i - 1 + cycle.Count) % cycle.Count];
                             var p2 = cycle[i];
                             var debt = netMoney.Where(d => d.Debtor == p1 && d.Creditor == p2).Single();
-                            logger.WriteLine("\t\t{0} -> {1} ({2:c})", p1, p2, debt.Amount / 100d);
+                            logger.WriteLine("\t\t{0} -> {1} ({2})", p1, p2, debt.Amount);
                             cycleTrans.Add(debt);
                         }
 
                         var subAmount = cycleTrans.Select(c => c.Amount).Min();
-                        logger.WriteLine("\t\t{0:c}", subAmount / 100d);
+                        logger.WriteLine("\t\t{0:}", subAmount);
                         foreach (var d in cycleTrans)
                         {
                             d.Amount -= subAmount;
@@ -125,7 +126,7 @@ namespace Austin.DkpLib
                     }
 
                     //remove 0-value debts
-                    foreach (var d in netMoney.Where(d => d.Amount == 0).ToList())
+                    foreach (var d in netMoney.Where(d => d.Amount == Money.Zero).ToList())
                     {
                         netMoney.Remove(d);
                     }
@@ -138,15 +139,15 @@ namespace Austin.DkpLib
             return netMoney;
         }
 
-        public static List<Tuple<Person, int>> GreatestDebtor(List<Debt> netMoney)
+        public static List<Tuple<Person, Money>> GreatestDebtor(List<Debt> netMoney)
         {
-            var ret = new List<Tuple<Person, int>>();
+            var ret = new List<Tuple<Person, Money>>();
             var people = netMoney.SelectMany(p => new[] { p.Creditor, p.Debtor }).Distinct().ToList();
             foreach (var tup in people
                 .Select(p => new { Debtor = p, Owes = netMoney.Where(d => d.Debtor == p).Sum(d => d.Amount) - netMoney.Where(d => d.Creditor == p).Sum(d => d.Amount) })
                 .OrderByDescending(obj => obj.Owes))
             {
-                ret.Add(new Tuple<Person, int>(tup.Debtor, tup.Owes));
+                ret.Add(new Tuple<Person, Money>(tup.Debtor, tup.Owes));
             }
             return ret;
         }
@@ -156,7 +157,7 @@ namespace Austin.DkpLib
             sw.WriteLine("digraph Test {");
             foreach (var d in netMoney)
             {
-                sw.WriteLine("\"{0} {1}\" -> \"{2} {3}\" [label=\"{4:c}\"];", d.Debtor.FirstName, d.Debtor.LastName, d.Creditor.FirstName, d.Creditor.LastName, d.Amount / 100d);
+                sw.WriteLine("\"{0} {1}\" -> \"{2} {3}\" [label=\"{4}\"];", d.Debtor.FirstName, d.Debtor.LastName, d.Creditor.FirstName, d.Creditor.LastName, d.Amount);
             }
             sw.WriteLine("}");
         }

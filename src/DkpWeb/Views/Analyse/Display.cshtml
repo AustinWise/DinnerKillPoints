@@ -19,9 +19,9 @@ else
     <div id="chart_div" style="width: 900px; height: 500px;"></div>
 
 
-<pre><code>
-@Model.LogOutput
-</code></pre>
+    <pre><code>
+            @Model.LogOutput
+    </code></pre>
 
 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -31,21 +31,21 @@ else
         google.setOnLoadCallback(drawChart);
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-            ['Person', 'Debt'],
+                ['Person', 'Debt'],
         @foreach (var d in Model.Debtors)
         {
-            Write(new HtmlString(string.Format("['{0}', {1}],", d.Item1.ToString(), d.Item2 / 100d)));
+            Write(new HtmlString(string.Format("['{0}', {1}],", d.Item1.ToString(), Math.Round((double)d.Item2.ToPennies() / 100d, 2))));
         }
-        ]);
+                ]);
 
-        var options = {
-            title: 'Greatest Debtor',
-            //vAxis: { title: 'Year', titleTextStyle: { color: 'red'} },
-            hAxis: { title: 'Debt ($)', titleTextStyle: { color: 'red' } },
-        };
+            var options = {
+                title: 'Greatest Debtor',
+                //vAxis: { title: 'Year', titleTextStyle: { color: 'red'} },
+                hAxis: { title: 'Debt ($)', titleTextStyle: { color: 'red' } },
+            };
 
-        var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    }
+            var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
     </script>
 }

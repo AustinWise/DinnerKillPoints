@@ -4,13 +4,13 @@ namespace Austin.DkpLib
 {
     public class Debt
     {
-        public int Amount { get; set; }
+        public Money Amount { get; set; }
         public Person Creditor { get; set; }
         public Person Debtor { get; set; }
 
         public override string ToString()
         {
-            return string.Format("{2:c}: {0} -> {1}", Debtor, Creditor, Amount / 100m);
+            return string.Format("{2}: {0} -> {1}", Debtor, Creditor, Amount);
         }
 
         public Debt Clone()

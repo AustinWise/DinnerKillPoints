@@ -7,21 +7,21 @@
 
 <h2>Debt owed from @Model.Debtor to @Model.Creditor</h2>
 
-@if (Model.AmountCents > 0)
+@if (Model.Amount > Money.Zero)
 {
     <p>
-        You owe @Model.AmountDollars to @Model.Creditor.
-        @await Html.PartialAsync("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Payment, Model.AmountCents))
+        You owe @Model.Amount to @Model.Creditor.
+        @await Html.PartialAsync("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Payment, Model.Amount.ToPennies()))
     </p>
 }
-@if (Model.AmountCents < 0)
+@if (Model.Amount < Money.Zero)
 {
     <p>
-        You are owed @Model.AmountDollars by @Model.Creditor.
-        @await Html.PartialAsync("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Request, -Model.AmountCents))
+        You are owed @Model.Amount by @Model.Creditor.
+        @await Html.PartialAsync("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Request, -Model.Amount.ToPennies()))
     </p>
 }
-@if (Model.AmountCents == 0)
+@if (Model.Amount == Money.Zero)
 {
     <p>
         There is no debt between you and @Model.Creditor.
@@ -49,7 +49,7 @@
             <td>Inital balance</td>
             <td />
             <td />
-            <td>@((0).ToString("C"))</td>
+            <td>$0.00</td>
         </tr>
         @foreach (var entry in Model.Entries)
         {
@@ -60,17 +60,17 @@
                     </a>
                 </td>
                 <td>@entry.Description</td>
-                @if (entry.Amount < 0)
+                @if (entry.Amount < Money.Zero)
                 {
                     <td />
-                    <td>@((Math.Abs(entry.Amount) / 100d).ToString("C"))</td>
+                    <td>@entry.Amount</td>
                 }
                 else
                 {
-                    <td>@((entry.Amount / 100d).ToString("C"))</td>
+                    <td>@entry.Amount</td>
                     <td />
                 }
-                <td>@((entry.RunningTotal / 100d).ToString("C"))</td>
+                <td>@entry.RunningTotal</td>
             </tr>
         }
     </tbody>

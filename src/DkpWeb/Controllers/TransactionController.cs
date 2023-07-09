@@ -120,7 +120,7 @@ namespace DkpWeb.Controllers
                     trans.CreditorId = creditor.Id;
                     trans.DebtorId = debtor.Id;
                     trans.Description = model.Description;
-                    trans.Amount = (int)Math.Round(model.Amount * 100d);
+                    trans.Amount = new Money((int)Math.Round(model.Amount * 100d));
                     trans.Created = DateTime.UtcNow;
                     trans.Id = Guid.NewGuid();
                     mData.Transaction.Add(trans);

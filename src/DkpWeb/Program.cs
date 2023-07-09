@@ -146,7 +146,7 @@ namespace DkpWeb
             {
                 netMoney = DebtGraph.CalculateDebts(db, people, removeCycles, infoOutput);
             }
-            Console.WriteLine("{0:c}", netMoney.Sum(m => m.Amount) / 100d);
+            Console.WriteLine("{0}", netMoney.Sum(m => m.Amount));
 
             string gvPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".gv");
             try

@@ -17,7 +17,7 @@
     </tr>
     <tr>
         <th>Total</th>
-        <td>@((Model.Transaction.Sum(t => t.Amount) / 100d).ToString("c"))</td>
+        <td>@Model.TotalAmount</td>
     </tr>
     <tr>
         <th>Transactions</th>
@@ -36,7 +36,7 @@
                         <tr>
                             <td>@Html.ActionLink(t.Debtor.ToString(), "Detail", "People", new { id = t.DebtorId }, null)</td>
                             <td>@Html.ActionLink(t.Creditor.ToString(), "Detail", "People", new { id = t.CreditorId }, null)</td>
-                            <td>@Html.ActionLink((t.Amount / 100d).ToString("c"), "View", "Transaction", new { id = t.Id }, null)</td>
+                            <td>@Html.ActionLink(t.Amount.ToString(), "View", "Transaction", new { id = t.Id }, null)</td>
                         </tr>
                     }
                 </tbody>

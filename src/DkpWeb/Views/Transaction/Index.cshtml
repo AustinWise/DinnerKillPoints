@@ -40,7 +40,7 @@
                 @Html.ActionLink(t.Creditor.FirstName + " " + t.Creditor.LastName, "Detail", "People", new { id = t.CreditorId }, null)
             </td>
             <td>
-                @(((double)t.Amount / 100d).ToString("c"))
+                @t.Amount
             </td>
             <td>
                 @t.PrettyDescription

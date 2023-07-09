@@ -61,7 +61,7 @@ namespace DkpWeb
             if (myDebt != null)
                 debtors.Remove(myDebt);
 
-            debtors = debtors.Where(tup => tup.Item2 > 1000 && !string.IsNullOrEmpty(tup.Item1.Email)).ToList();
+            debtors = debtors.Where(tup => tup.Item2 > new Money(1000) && !string.IsNullOrEmpty(tup.Item1.Email)).ToList();
 
             int sentSoFar = 0;
             foreach (var tup in debtors)
@@ -84,9 +84,8 @@ namespace DkpWeb
             public string BODY { get; set; }
         }
 
-        MyRecord ProcessOnePerson(Person creditor, Person debtor, int amount)
+        MyRecord ProcessOnePerson(Person creditor, Person debtor, Money amount)
         {
-
             var q = from t in mDb.Transaction
                     where (t.CreditorId == debtor.Id && t.DebtorId == creditor.Id)
                        || (t.CreditorId == creditor.Id && t.DebtorId == debtor.Id)
@@ -115,8 +114,6 @@ namespace DkpWeb
             //TODO: grenerate a pretty table, maybe
             //It seems like a duplication of effort to try to create a subset of the website's debt table here.
 
-            double amountInDollars = Math.Round(amount / 100d, 2);
-
 
             var sb = new StringBuilder();
             sb.AppendFormat("Hi {0},", debtor.FirstName);
@@ -126,7 +123,7 @@ namespace DkpWeb
             sb.Append("Including ");
             sb.Append(souceTrans[0].Description);
             sb.Append(", our most recent time together, you owe ");
-            sb.AppendFormat("{0:c}.", amountInDollars);
+            sb.AppendFormat("{0}.", amount);
             sb.AppendLine("<br/>");
 
             sb.Append("For more information about the transaction history see <a href=\"http://dkp.awise.us/MyDebt/DebtHistory?");
@@ -139,7 +136,7 @@ namespace DkpWeb
             {
                 if (!payId.PaymentMeth.HasPayLink)
                     continue;
-                sb.AppendFormat("<li><a href=\"{0}\">{1}</a></li>", payId.CreatePayLink(amount), payId.PaymentMeth.Name.Trim());
+                sb.AppendFormat("<li><a href=\"{0}\">{1}</a></li>", payId.CreatePayLink(amount.ToPennies()), payId.PaymentMeth.Name.Trim());
             }
             sb.Append("</ul>");
             sb.AppendLine("<br/>");

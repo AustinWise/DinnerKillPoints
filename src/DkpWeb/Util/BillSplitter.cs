@@ -162,7 +162,7 @@ namespace Austin.DkpLib
                 throw new NotSupportedException("Negative bill attribute.");
         }
 
-        public List<(Person debtor, Person creditor, int pennies)> SplitBill(TextWriter log)
+        public List<(Person debtor, Person creditor, Money pennies)> SplitBill(TextWriter log)
         {
             ValidateBill();
 
@@ -262,11 +262,11 @@ namespace Austin.DkpLib
 
             //Take all the fractional pennies and distrubte them to each debtor, round robin to each payer.
             var pennySplits = SplitPennies(debtsToPayers);
-            checkTotal(totalBillValue, pennySplits.Sum(p => p.pennies));
+            checkTotal(totalBillValue, pennySplits.Sum(p => p.pennies.ToPennies()));
 
             foreach (var p in pennySplits)
             {
-                if (p.pennies < 0)
+                if (p.pennies < Money.Zero)
                     throw new Exception("Negative debt.");
             }
 
@@ -306,7 +306,7 @@ namespace Austin.DkpLib
         /// Thie method rounds peoples debts to the nearest penny, while preserving the invarient that
         /// the total amount owed in this group of debts does not change.
         /// </remarks>
-        List<(Person debtor, Person creditor, int pennies)> SplitPennies(MultiCreditorDebtList amountSpent)
+        List<(Person debtor, Person creditor, Money pennies)> SplitPennies(MultiCreditorDebtList amountSpent)
         {
             var pennies = amountSpent
                 .Select(tup => new
@@ -344,7 +344,7 @@ namespace Austin.DkpLib
                 }
             }
 
-            return pennies.SelectMany(p => p.Debts.Select(d => (p.Debtor, d.creditor, d.amount))).ToList();
+            return pennies.SelectMany(p => p.Debts.Select(d => (p.Debtor, d.creditor, new Money(d.amount)))).ToList();
         }
     }
 }

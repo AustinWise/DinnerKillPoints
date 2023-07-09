@@ -5,7 +5,7 @@ namespace DkpWeb.Models.MyDebtViewModels
 {
     public class DebtLedgerEntry
     {
-        public DebtLedgerEntry(Transaction t, int amount, int runningTotal)
+        public DebtLedgerEntry(Transaction t, Money amount, Money runningTotal)
         {
             this.TransactionId = t.Id;
             this.Description = t.PrettyDescription;
@@ -24,9 +24,9 @@ namespace DkpWeb.Models.MyDebtViewModels
         public DateTime Created { get; set; }
 
         [Required]
-        public int Amount { get; set; }
+        public Money Amount { get; set; }
 
         [Required]
-        public int RunningTotal { get; set; }
+        public Money RunningTotal { get; set; }
     }
 }

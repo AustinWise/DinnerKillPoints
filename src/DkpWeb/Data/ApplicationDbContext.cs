@@ -28,6 +28,7 @@ namespace DkpWeb.Data
                     .HasMaxLength(50);
 
                 entity.Ignore(e => e.PrettyName);
+                entity.Ignore(e => e.TotalAmount);
             });
 
             modelBuilder.Entity<PaymentIdentity>(entity =>
@@ -102,6 +103,8 @@ namespace DkpWeb.Data
                 entity.Property(e => e.DebtorId).HasColumnName("DebtorID");
 
                 entity.Property(e => e.Created).HasConversion<UtcDateTimeConverter>();
+
+                entity.Property(e => e.Amount).HasConversion<MoneyConverter>();
 
                 entity.Property(e => e.Description)
                     .IsRequired()

@@ -64,7 +64,7 @@ namespace DkpWeb.Controllers
                 creditors.Remove(myDebt);
 
             //change the list of debtors in to creditors
-            creditors = creditors.Select(c => new Tuple<Person, int>(c.Item1, -c.Item2))
+            creditors = creditors.Select(c => new Tuple<Person, Money>(c.Item1, -c.Item2))
                 .Reverse()
                 .ToList();
 
@@ -72,7 +72,7 @@ namespace DkpWeb.Controllers
             mod.Person = person;
             mod.ImageSvg = svg;
             mod.Creditors = creditors;
-            mod.OverallDebt = (myDebt == null) ? 0 : myDebt.Item2;
+            mod.OverallDebt = (myDebt == null) ? Money.Zero : myDebt.Item2;
 
             return View(mod);
         }
@@ -91,14 +91,14 @@ namespace DkpWeb.Controllers
                 .OrderBy(t => t.Created);
 
             var personMap = mData.Person.ToDictionary(p => p.Id);
-            int runningTotal = 0;
+            Money runningTotal = Money.Zero;
             var entries = new List<DebtLedgerEntry>();
 
             foreach (var t in trans)
             {
                 t.SetPrettyDescription(personMap);
 
-                int amount;
+                Money amount;
                 if (t.DebtorId == debtor.Id)
                     amount = t.Amount;
                 else
@@ -113,8 +113,7 @@ namespace DkpWeb.Controllers
             ret.Debtor = debtor;
             ret.Creditor = creditor;
             ret.Entries = entries;
-            ret.AmountCents = runningTotal;
-            ret.AmountDollars = Math.Abs(runningTotal / 100d).ToString("C");
+            ret.Amount = runningTotal;
 
             return View(ret);
         }

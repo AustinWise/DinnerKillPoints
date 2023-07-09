@@ -5,8 +5,8 @@
     ViewBag.Title = title;
 
     //these conditions are supposed to be different
-    string overviewFontColor = Model.OverallDebt <= 0 ? "green" : "red";
-    string debtName = Model.OverallDebt < 0 ? "are owed" : "owe";
+    string overviewFontColor = Model.OverallDebt <= Money.Zero ? "green" : "red";
+    string debtName = Model.OverallDebt < Money.Zero ? "are owed" : "owe";
 }
 
 <h2>@title</h2>
@@ -15,7 +15,7 @@
     Overall, you
     <span style="color: @overviewFontColor; font-weight: bold; font-size: larger;">
         @debtName
-        @Math.Abs(Model.OverallDebt / 100d).ToString("C")
+        @Model.OverallDebt
     </span>
 </p>
 
@@ -42,7 +42,7 @@ else
             {
                 <tr>
                     <td>@debt.Item1.ToString()</td>
-                    <td>@((debt.Item2 / 100d).ToString("C"))</td>
+                    <td>@debt.Item2</td>
                     <td>@Html.ActionLink("Why?", "DebtHistory", new { debtorId = Model.Person.Id, creditorId = debt.Item1.Id })</td>
                 </tr>
             }

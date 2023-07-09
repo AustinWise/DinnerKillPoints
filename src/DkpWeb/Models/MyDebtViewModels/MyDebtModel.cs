@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Html;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using Austin.DkpLib;
-using Microsoft.AspNetCore.Html;
 
 namespace DkpWeb.Models.MyDebtViewModels
 {
@@ -16,10 +14,10 @@ namespace DkpWeb.Models.MyDebtViewModels
         public HtmlString ImageSvg { get; set; }
 
         [Required]
-        public List<Tuple<Person, int>> Creditors { get; set; }
+        public List<Tuple<Person, Money>> Creditors { get; set; }
 
         [Required]
-        public int OverallDebt { get; set; }
+        public Money OverallDebt { get; set; }
     }
 
 }

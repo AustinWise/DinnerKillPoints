@@ -51,13 +51,13 @@ namespace DkpWeb
 
             services.AddTransient<MailMerge>();
 
-            services.AddLogging(builder =>
+            if (env.IsDevelopment())
             {
-                if (env.IsDevelopment())
+                services.AddLogging(builder =>
                 {
                     builder.AddConsole();
-                }
-            });
+                });
+            }
 
             services.AddControllersWithViews();
             services.AddRazorPages();

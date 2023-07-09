@@ -16,6 +16,8 @@ namespace DkpWeb.Models
 
         public virtual ICollection<Transaction> Transaction { get; set; }
 
+        public Money TotalAmount => Transaction.Select(t => t.Amount).Sum();
+
 
         string _PrettyName = null;
         public string PrettyName

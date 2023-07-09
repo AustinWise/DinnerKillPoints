@@ -10,7 +10,7 @@ namespace DkpWeb.Models
     public class TopScoreEntry
     {
         public string Name { get; set; }
-        public int Amount { get; set; }
+        public Money Amount { get; set; }
     }
 
     public class TransactionList

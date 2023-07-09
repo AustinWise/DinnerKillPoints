@@ -14,6 +14,6 @@ namespace DkpWeb.Models.AnalyzeViewModels
         public HtmlString ImageSvg { get; set; }
 
         [Required]
-        public List<Tuple<Person, int>> Debtors { get; set; }
+        public List<Tuple<Person, Money>> Debtors { get; set; }
     }
 }
