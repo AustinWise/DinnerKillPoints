@@ -65,7 +65,7 @@ namespace DkpWeb
 
             if (!env.IsDevelopment())
             {
-                services.AddGoogleDiagnosticsForAspNetCore();
+                services.AddGoogleDiagnosticsForAspNetCore(projectId: Configuration["GcpProjectId"]);
                 var dpSection = Configuration.GetSection("DataProtection");
                 services.AddDataProtection().PersistKeysToGoogleCloudStorage(dpSection["Bucket"], dpSection["ObjectName"]);
             }
