@@ -2,7 +2,9 @@
 using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Services;
+using Google.Cloud.Diagnostics.AspNetCore3;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +25,7 @@ namespace DkpWeb
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IWebHostEnvironment env)
         {
             services.AddOptions();
             services.Configure<EmailOptions>(Configuration.GetSection("Gmail"));
@@ -60,6 +62,13 @@ namespace DkpWeb
             services.AddRazorPages();
 
             services.AddHealthChecks();
+
+            if (!env.IsDevelopment())
+            {
+                services.AddGoogleDiagnosticsForAspNetCore();
+                var dpSection = Configuration.GetSection("DataProtection");
+                services.AddDataProtection().PersistKeysToGoogleCloudStorage(dpSection["Bucket"], dpSection["ObjectName"]);
+            }
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

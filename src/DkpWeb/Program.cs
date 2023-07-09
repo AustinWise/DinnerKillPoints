@@ -1,12 +1,10 @@
 ﻿using Austin.DkpLib;
 using DkpWeb.Data;
 using DkpWeb.Models;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,41 +18,19 @@ namespace DkpWeb
     {
         public static string GitCommitHash { get; private set; }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostContext, builder) =>
-                {
-                    if (hostContext.HostingEnvironment.IsDevelopment())
-                    {
-                        builder.AddUserSecrets<Program>();
-                    }
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-
         public static async Task Main(string[] args)
         {
-            GitCommitHash = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            GitCommitHash = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
-            string graphvizNugetPackages = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "graphviz");
-            if (Directory.Exists(graphvizNugetPackages))
-            {
-                //The "nuget install" command places the contents of packages in folders name "{package}.{version}".
-                //Add them all to the path.
-                foreach (var dir in Directory.GetDirectories(graphvizNugetPackages))
-                {
-                    string path = Environment.GetEnvironmentVariable("PATH");
-                    path = path + Path.PathSeparator + dir;
-                    Environment.SetEnvironmentVariable("PATH", path);
-                }
-            }
+            var builder = WebApplication.CreateBuilder(args);
+            var startup = new Startup(builder.Configuration);
+            startup.ConfigureServices(builder.Services, builder.Environment);
+            var app = builder.Build();
+            startup.Configure(app, builder.Environment);
 
-            var host = CreateHostBuilder(args).Build();
-            var cfg = host.Services.GetService<IConfiguration>();
+            var cfg = app.Configuration;
 
-            using (var scope = host.Services.CreateScope())
+            using (var scope = app.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
                 await db.Database.MigrateAsync();
@@ -66,7 +42,7 @@ namespace DkpWeb
 
             if (cfg["split"] != null)
             {
-                using var scope = host.Services.CreateScope();
+                using var scope = app.Services.CreateScope();
                 var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
                 var peopleMap = db.Person.ToDictionary(p => p.Id);
                 Person GetPerson(int id) => peopleMap[id];
@@ -147,13 +123,22 @@ namespace DkpWeb
 
             if (cfg["sendmail"] != null)
             {
-                using var scope = host.Services.CreateScope();
+                using var scope = app.Services.CreateScope();
                 var mail = scope.ServiceProvider.GetRequiredService<MailMerge>();
                 await mail.Send(1);
                 return;
             }
 
-            await host.RunAsync();
+            string port = Environment.GetEnvironmentVariable("PORT");
+
+            if (!string.IsNullOrEmpty(port))
+            {
+                await app.RunAsync("http://0.0.0.0:" + port);
+            }
+            else
+            {
+                await app.RunAsync();
+            }
         }
 
         private static void WriteData(ApplicationDbContext db, bool removeCycles, Person[] people)
