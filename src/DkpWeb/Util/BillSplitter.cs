@@ -45,9 +45,11 @@ namespace Austin.DkpLib
         public BillSplitter(string name, DateTime date, params Person[] payer)
         {
             if (payer == null)
-                throw new ArgumentNullException("payer");
+                throw new ArgumentNullException(nameof(payer));
             if (payer.Length < 1)
-                throw new ArgumentOutOfRangeException("payer", "Need at least one payer.");
+                throw new ArgumentOutOfRangeException(nameof(payer), "Need at least one payer.");
+            if (date.Year < 2010)
+                throw new ArgumentOutOfRangeException(nameof(date), "The date is prior to existence of DKP, that seems unlikly.");
 
             mName = name;
             mDate = date.ToUniversalTime();
