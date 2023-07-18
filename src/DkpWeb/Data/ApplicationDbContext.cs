@@ -21,7 +21,8 @@ namespace DkpWeb.Data
             {
                 entity.Property(e => e.Id)
                       .HasColumnName("ID")
-                      .UseIdentityColumn();
+                      .UseIdentityColumn()
+                      .HasIdentityOptions(startValue: 2000);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -34,7 +35,8 @@ namespace DkpWeb.Data
             modelBuilder.Entity<PaymentIdentity>(entity =>
             {
                 entity.Property(e => e.Id)
-                      .UseIdentityColumn();
+                      .UseIdentityColumn()
+                      .HasIdentityOptions(startValue: 200);
 
                 entity.Property(e => e.PaymentMethId).HasColumnName("PaymentMethID");
 
@@ -60,7 +62,8 @@ namespace DkpWeb.Data
             modelBuilder.Entity<PaymentMethod>(entity =>
             {
                 entity.Property(e => e.Id)
-                      .UseIdentityColumn();
+                      .UseIdentityColumn()
+                      .HasIdentityOptions(startValue: 4);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -74,7 +77,8 @@ namespace DkpWeb.Data
             {
                 entity.Property(e => e.Id)
                       .HasColumnName("ID")
-                      .UseIdentityColumn();
+                      .UseIdentityColumn()
+                      .HasIdentityOptions(startValue: 200);
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 

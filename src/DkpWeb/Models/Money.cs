@@ -1,7 +1,10 @@
-﻿using System;
+﻿using DkpWeb.Data;
+using System;
+using System.Text.Json.Serialization;
 
 namespace DkpWeb.Models
 {
+    [JsonConverter(typeof(MoneyJsonConverter))]
     public readonly struct Money : IEquatable<Money>, IComparable<Money>, IFormattable
     {
         public static Money Zero => default;
@@ -79,7 +82,7 @@ namespace DkpWeb.Models
             if (isNeg)
             {
                 return $"(${dollars}.{cents:00})";
-            }   
+            }
             else
             {
                 return $"${dollars}.{cents:00}";
