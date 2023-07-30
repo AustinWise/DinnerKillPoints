@@ -42,7 +42,7 @@ substitutions:
   _PLATFORM: managed
   _SERVICE_NAME: dkpweb
   REPO_NAME: dinnerkillpoints
-  _TRIGGER_ID: 382f9163-3e5c-406d-8694-38650839fccd
+  _TRIGGER_ID: unspecified
 tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed
