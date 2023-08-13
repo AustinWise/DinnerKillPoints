@@ -6,6 +6,7 @@ using Google.Cloud.Diagnostics.AspNetCore3;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -84,6 +85,13 @@ namespace DkpWeb
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+
+                // Use forwarded headers from Cloud Run
+                var forwardOpts = new ForwardedHeadersOptions();
+                forwardOpts.KnownProxies.Add(System.Net.IPAddress.Parse("169.254.1.1"));
+                forwardOpts.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                app.UseForwardedHeaders(forwardOpts);
+
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
