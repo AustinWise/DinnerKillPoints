@@ -25,14 +25,16 @@ namespace DkpWeb
 
             var cfg = app.Configuration;
 
-            using (var scope = app.Services.CreateScope())
+            if (cfg["migrate"] != null)
             {
+                using var scope = app.Services.CreateScope();
                 var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
                 await db.Database.MigrateAsync();
 
                 var roles = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 await EnsureRole(roles, "Admin");
                 await EnsureRole(roles, "DKP");
+                return;
             }
 
             if (cfg["split"] != null)
