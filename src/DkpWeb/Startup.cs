@@ -92,6 +92,8 @@ namespace DkpWeb
                 forwardOpts.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
                 app.UseForwardedHeaders(forwardOpts);
 
+                app.UseHsts();
+
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
