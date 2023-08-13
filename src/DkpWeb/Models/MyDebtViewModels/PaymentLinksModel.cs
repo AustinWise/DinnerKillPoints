@@ -10,20 +10,20 @@ namespace DkpWeb.Models.MyDebtViewModels
 
     public class PaymentLinksModel
     {
-        public PaymentLinksModel(Person target, PaymentLinkType type, int amountCents)
+        public PaymentLinksModel(Person target, PaymentLinkType type, Money amount)
         {
             if (target == null)
-                throw new ArgumentNullException("target");
-            if (amountCents <= 0)
-                throw new ArgumentOutOfRangeException("amountCents", "must be positive");
+                throw new ArgumentNullException(nameof(target));
+            if (amount <= Money.Zero)
+                throw new ArgumentOutOfRangeException(nameof(amount), "must be positive");
 
             this.Target = target;
             this.Type = type;
-            this.AmountCents = amountCents;
+            this.Amount = amount;
         }
 
         public Person Target { get; private set; }
         public PaymentLinkType Type { get; private set; }
-        public int AmountCents { get; private set; }
+        public Money Amount { get; private set; }
     }
 }

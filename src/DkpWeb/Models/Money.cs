@@ -7,6 +7,8 @@ namespace DkpWeb.Models
     [JsonConverter(typeof(MoneyJsonConverter))]
     public readonly struct Money : IEquatable<Money>, IComparable<Money>, IFormattable
     {
+        public const string FORMAT_BARE = "bare";
+
         public static Money Zero => default;
 
         private readonly int _pennies;
@@ -71,6 +73,11 @@ namespace DkpWeb.Models
 
         public override string ToString()
         {
+            return ToString(null, null);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
             int pennies = _pennies;
             bool isNeg = _pennies < 0;
             if (isNeg)
@@ -79,19 +86,32 @@ namespace DkpWeb.Models
             int dollars = pennies / 100;
             int cents = pennies % 100;
 
-            if (isNeg)
+            if (string.IsNullOrEmpty(format))
             {
-                return $"(${dollars}.{cents:00})";
+                if (isNeg)
+                {
+                    return $"(${dollars}.{cents:00})";
+                }
+                else
+                {
+                    return $"${dollars}.{cents:00}";
+                }
+            }
+            else if (format == FORMAT_BARE)
+            {
+                if (isNeg)
+                {
+                    return $"-{dollars}.{cents:00}";
+                }
+                else
+                {
+                    return $"{dollars}.{cents:00}";
+                }
             }
             else
             {
-                return $"${dollars}.{cents:00}";
+                throw new ArgumentOutOfRangeException(nameof(format), "Unkown format string: " + format);
             }
-        }
-
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            return ToString();
         }
 
         public override bool Equals(object obj)

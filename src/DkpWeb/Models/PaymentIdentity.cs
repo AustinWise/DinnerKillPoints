@@ -15,30 +15,32 @@ namespace DkpWeb.Models
         public virtual Person Person { get; set; }
 
 
-        public string CreatePayLink(int amountCents)
+        public string CreatePayLink(Money amount)
         {
-            return createLink(this.PaymentMeth.PayLinkFormat.Trim(), amountCents);
+            return createLink(this.PaymentMeth.PayLinkFormat.Trim(), amount);
         }
 
-        public string CreateRequestMoneyLink(int amountCents)
+        public string CreateRequestMoneyLink(Money amount)
         {
-            return createLink(this.PaymentMeth.RequestMoneyLinkFormat.Trim(), amountCents);
+            return createLink(this.PaymentMeth.RequestMoneyLinkFormat.Trim(), amount);
         }
 
-        private string createLink(string format, int amountCents)
+        private string createLink(string format, Money amount)
         {
-            if (amountCents <= 0)
-                throw new ArgumentOutOfRangeException("amountCents", "must be positive");
+            if (amount <= Money.Zero)
+                throw new ArgumentOutOfRangeException(nameof(amount), "must be positive");
             if (string.IsNullOrEmpty(format))
                 throw new NotSupportedException("");
 
             var param = new Formattable[]
             {
                 new Formattable(UserName),
-                new Formattable((amountCents / 100d).ToString("0.00")),
+                new Formattable(amount.ToString(Money.FORMAT_BARE, null)),
             };
 
-            return string.Format(format, param);
+            string ret = string.Format(format, param);
+
+            return ret;
         }
     }
 }

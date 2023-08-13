@@ -136,7 +136,7 @@ namespace DkpWeb
             {
                 if (!payId.PaymentMeth.HasPayLink)
                     continue;
-                sb.AppendFormat("<li><a href=\"{0}\">{1}</a></li>", payId.CreatePayLink(amount.ToPennies()), payId.PaymentMeth.Name.Trim());
+                sb.AppendFormat("<li><a href=\"{0}\">{1}</a></li>", payId.CreatePayLink(amount), payId.PaymentMeth.Name.Trim());
             }
             sb.Append("</ul>");
             sb.AppendLine("<br/>");

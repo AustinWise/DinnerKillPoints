@@ -7,7 +7,7 @@
         if (Model.Type == PaymentLinkType.Payment && ident.PaymentMeth.HasPayLink)
         {
             <li>
-                <a href="@ident.CreatePayLink(Model.AmountCents)">
+                <a href="@ident.CreatePayLink(Model.Amount)">
                     Send payment to @Model.Target with @ident.PaymentMeth.Name
                 </a>
             </li>
@@ -15,7 +15,7 @@
         if (Model.Type == PaymentLinkType.Request && ident.PaymentMeth.HasRequestMoneyLink)
         {
             <li>
-                <a href="@ident.CreateRequestMoneyLink(Model.AmountCents)">
+                <a href="@ident.CreateRequestMoneyLink(Model.Amount)">
                     Request repayment from @Model.Target with @ident.PaymentMeth.Name
                 </a>
             </li>

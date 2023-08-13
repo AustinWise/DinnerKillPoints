@@ -11,14 +11,14 @@
 {
     <p>
         You owe @Model.Amount to @Model.Creditor.
-        @await Html.PartialAsync("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Payment, Model.Amount.ToPennies()))
+        @await Html.PartialAsync("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Payment, Model.Amount))
     </p>
 }
 @if (Model.Amount < Money.Zero)
 {
     <p>
         You are owed @Model.Amount by @Model.Creditor.
-        @await Html.PartialAsync("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Request, -Model.Amount.ToPennies()))
+        @await Html.PartialAsync("~/Views/Shared/_PaymentLinks.cshtml", new PaymentLinksModel(Model.Creditor, PaymentLinkType.Request, -Model.Amount))
     </p>
 }
 @if (Model.Amount == Money.Zero)
