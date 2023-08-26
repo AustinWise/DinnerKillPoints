@@ -1,7 +1,9 @@
-﻿using DkpWeb.Config;
+﻿using Austin.DkpLib;
+using DkpWeb.Config;
 using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Services;
+using Google.Api;
 using Google.Cloud.Diagnostics.AspNetCore3;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -43,6 +45,7 @@ namespace DkpWeb
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddScoped<IBillSplitterServices, InProcessBillSplitterServices>();
 
             services.AddBootstrapPagerGenerator(options =>
             {
@@ -81,6 +84,7 @@ namespace DkpWeb
             {
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
+                app.UseWebAssemblyDebugging();
             }
             else
             {
@@ -96,6 +100,8 @@ namespace DkpWeb
 
             }
             app.UseHttpsRedirection();
+
+            app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
 
             app.UseRouting();

@@ -1,8 +1,6 @@
-﻿using DkpWeb.Data;
-using System;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace DkpWeb.Models
+namespace Austin.DkpLib
 {
     [JsonConverter(typeof(MoneyJsonConverter))]
     public readonly struct Money : IEquatable<Money>, IComparable<Money>, IFormattable
@@ -76,7 +74,7 @@ namespace DkpWeb.Models
             return ToString(null, null);
         }
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string? format, IFormatProvider? formatProvider)
         {
             int pennies = _pennies;
             bool isNeg = _pennies < 0;
@@ -114,7 +112,7 @@ namespace DkpWeb.Models
             }
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is Money)
                 return Equals((Money)obj);

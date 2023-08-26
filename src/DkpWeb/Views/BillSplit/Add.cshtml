@@ -1,0 +1,12 @@
+﻿@using DkpWeb.Blazor.Pages
+@{
+    ViewBag.Title = "Split a Bill";
+}
+
+<h2>Split a Bill</h2>
+
+<component type="typeof(BillSplitterUi)" render-mode="WebAssemblyPrerendered" />
+
+@section Scripts {
+    <script src="_framework/blazor.webassembly.js"></script>
+}

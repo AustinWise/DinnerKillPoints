@@ -1,0 +1,247 @@
+﻿@using Austin.DkpLib;
+@inject IBillSplitterServices SplitterServices
+@inject NavigationManager NavManager
+
+@if (mPeople == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>Name</h3>
+    <InputText @bind-Value="mName" @onblur="UpdateSplitBill"></InputText>
+    <h3>
+        Payers:
+    </h3>
+    <ul>
+        @foreach (var p in mPayers)
+        {
+            <li @key="p.Id">@p.FullName <button @onclick="() => RemovePayer(p)">Remove</button></li>
+        }
+    </ul>
+    <p>Add Payer:</p>
+    <EditForm Model="@mAddPayerModel" OnValidSubmit="OnAddPayer">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <InputSelect @bind-Value="mAddPayerModel.SelectedPerson">
+            @foreach (var p in mPeople)
+            {
+                <option value="@p.Id">@p.FullName</option>
+            }
+        </InputSelect>
+        <button type="submit">Add</button>
+    </EditForm>
+    <h3>
+        Freeloaders:
+    </h3>
+    <ul>
+        @foreach (var p in mFreeLoaders)
+        {
+            <li @key="p.Id">@p.FullName <button @onclick="() => RemoveFreeloader(p)">Remove</button></li>
+        }
+    </ul>
+    <p>Add Free Loader:</p>
+    <EditForm Model="@mAddFreeloadModel" OnValidSubmit="OnAddFreeloader">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <InputSelect @bind-Value="mAddFreeloadModel.SelectedPerson">
+            @foreach (var p in mPeople)
+            {
+                <option value="@p.Id">@p.FullName</option>
+            }
+        </InputSelect>
+        <button type="submit">Add</button>
+    </EditForm>
+    <h3>
+        Transactions:
+    </h3>
+    <ul>
+        @foreach (var s in mSpend)
+        {
+            <li @key="s.Key">@s.Value.PersonName: @s.Value.Amount <button @onclick="() => RemoveSpend(s.Key)">Remove</button></li>
+        }
+    </ul>
+    <p>Add transaction</p>
+    <EditForm Model="@mAddSpendModel" OnValidSubmit="OnAddSpend">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <InputSelect @bind-Value="mAddSpendModel.SelectedPerson">
+            @foreach (var p in mPeople)
+            {
+                <option value="@p.Id">@p.FullName</option>
+            }
+        </InputSelect>
+        <InputNumber @bind-Value="mAddSpendModel.Amount"></InputNumber>
+        <button type="submit">Add</button>
+    </EditForm>
+    <h3>Other Amounts</h3>
+    <ul>
+        <li>Shared Food: <InputNumber id="shared-food" @bind-Value="@mSharedFood" @onblur="UpdateSplitBill"></InputNumber></li>
+        <li>Tax: <InputNumber id="tax" @bind-Value="@mTax" @onblur="UpdateSplitBill"></InputNumber></li>
+        <li>Tip: <InputNumber id="tip" @bind-Value="@mTip" @onblur="UpdateSplitBill"></InputNumber></li>
+    </ul>
+    <h3>
+        Split Transactions
+    </h3>
+    <ul>
+        @foreach (var t in mSplitTransactions)
+        {
+            <li @key="t.Id">@mPeopleMap[t.DebtorId].FullName owse @mPeopleMap[t.CreditorId].FullName @t.Amount</li>
+        }
+    </ul>
+    @if (mBillOk)
+    {
+        <button @onclick="SaveBillSplit">Save</button>
+    }
+    <h3>Split Log</h3>
+    <pre>
+        @mSplitLog
+                            </pre>
+}
+
+@code {
+
+    private SplitPerson[]? mPeople;
+    private Dictionary<int, SplitPerson> mPeopleMap;
+
+    private int mSpendCount = 0;
+    private Dictionary<int, Spend> mSpend = new();
+    private List<SplitPerson> mPayers = new();
+    private List<SplitPerson> mFreeLoaders = new();
+    private double mTax;
+    private double mTip;
+    private double mSharedFood;
+    private string mName = string.Empty;
+
+    private AddPayerModle mAddPayerModel = new();
+    private AddPayerModle mAddFreeloadModel = new();
+    private AddSpendModle mAddSpendModel = new();
+
+    private List<SplitTransaction> mSplitTransactions = new();
+    private string mSplitLog = string.Empty;
+    private bool mBillOk = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        mPeople = await SplitterServices.GetAllPeopleAsync();
+        mPeopleMap = mPeople.ToDictionary(p => p.Id);
+    }
+
+    private void OnAddPayer()
+    {
+        if (!mPeopleMap.TryGetValue(mAddPayerModel.SelectedPerson, out SplitPerson? splitPerson))
+            return;
+        mPayers.Add(splitPerson);
+
+        UpdateSplitBill();
+    }
+
+    private void RemovePayer(SplitPerson p)
+    {
+        mPayers.Remove(p);
+        UpdateSplitBill();
+    }
+
+    private void OnAddFreeloader()
+    {
+        if (!mPeopleMap.TryGetValue(mAddPayerModel.SelectedPerson, out SplitPerson? splitPerson))
+            return;
+        mFreeLoaders.Add(splitPerson);
+
+        UpdateSplitBill();
+    }
+
+    private void RemoveFreeloader(SplitPerson p)
+    {
+        mFreeLoaders.Remove(p);
+        UpdateSplitBill();
+    }
+
+    private void OnAddSpend()
+    {
+        int spendId = mSpendCount++;
+        if (!mPeopleMap.TryGetValue(mAddSpendModel.SelectedPerson, out SplitPerson? splitPerson))
+            return;
+        mSpend.Add(spendId, new Spend(splitPerson.Id, splitPerson.FullName, new Money(ToPennies(mAddSpendModel.Amount))));
+        mAddSpendModel.Amount = 0;
+
+        UpdateSplitBill();
+    }
+
+    private void RemoveSpend(int id)
+    {
+        mSpend.Remove(id);
+        UpdateSplitBill();
+    }
+
+    private BillSplitter SplitBill()
+    {
+        var bs = new BillSplitter("text", DateTime.Now, mPayers.ToArray());
+        foreach (var p in mFreeLoaders)
+        {
+            bs.AddFreeLoader(p);
+        }
+        foreach (var s in mSpend.Values)
+        {
+            bs[mPeopleMap[s.PersonId]] = s.Amount.ToPennies();
+        }
+        bs.SharedFood = ToPennies(mSharedFood);
+        bs.Tax = ToPennies(mTax);
+        bs.Tip = ToPennies(mTip);
+        return bs;
+    }
+
+    private void UpdateSplitBill()
+    {
+        mSplitTransactions.Clear();
+        mSplitLog = string.Empty;
+        mBillOk = false;
+
+        if (mPayers.Count == 0 || mSpend.Count == 0 || string.IsNullOrEmpty(mName) || mName.Trim().Length == 0)
+        {
+            return;
+        }
+
+        var bs = SplitBill();
+
+        try
+        {
+            StringWriter sw = new();
+            mSplitTransactions.AddRange(bs.ToTransactions(sw));
+            mSplitLog = sw.ToString();
+        }
+        catch (Exception ex)
+        {
+            mSplitLog = ex.ToString();
+            return;
+        }
+
+        mBillOk = true;
+    }
+
+    private async Task SaveBillSplit()
+    {
+        await SplitterServices.SaveBillSplitResult(new BillSplitResult() { Name = mName, Transactions = mSplitTransactions });
+        NavManager.NavigateTo("/BillSplit", forceLoad: true);
+    }
+
+    private static int ToPennies(double d)
+    {
+        return (int)Math.Round(d * 100);
+    }
+
+    record Spend(int PersonId, string PersonName, Money Amount)
+    {
+    }
+
+    class AddSpendModle
+    {
+        public int SelectedPerson { get; set; }
+        public double Amount { get; set; }
+    }
+
+    class AddPayerModle
+    {
+        public int SelectedPerson { get; set; }
+    }
+}

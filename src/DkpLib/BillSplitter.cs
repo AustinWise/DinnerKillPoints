@@ -1,12 +1,6 @@
-﻿using DkpWeb.Data;
-using DkpWeb.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.Diagnostics;
 
-using MultiCreditorDebtList = System.Collections.Generic.List<(DkpWeb.Models.Person debtor, System.Collections.Generic.List<(DkpWeb.Models.Person creditor, double amount)> debts)>;
+using MultiCreditorDebtList = System.Collections.Generic.List<(Austin.DkpLib.SplitPerson debtor, System.Collections.Generic.List<(Austin.DkpLib.SplitPerson creditor, double amount)> debts)>;
 
 namespace Austin.DkpLib
 {
@@ -14,10 +8,10 @@ namespace Austin.DkpLib
     {
         class Debt
         {
-            public Person Debtor { get; }
+            public SplitPerson Debtor { get; }
             public double Amount { get; }
 
-            public Debt(Person debtor, double amount)
+            public Debt(SplitPerson debtor, double amount)
             {
                 Debtor = debtor;
                 Amount = amount;
@@ -37,29 +31,32 @@ namespace Austin.DkpLib
 
         readonly string mName;
         readonly DateTime mDate;
-        readonly Person[] mPayer;
+        readonly SplitPerson[] mPayer;
         readonly List<Debt> mParty;
-        readonly SortedSet<Person> mFreeLoaders;
-        readonly SortedSet<Person> mFremontBirthday;
+        readonly SortedSet<SplitPerson> mFreeLoaders;
+        readonly SortedSet<SplitPerson> mFremontBirthday;
 
-        public BillSplitter(string name, DateTime date, params Person[] payer)
+        [Obsolete]
+        public BillSplitter(string name, DateTime date, params SplitPerson[] payer)
+            : this(name, payer)
+        {
+        }
+
+        public BillSplitter(string name, params SplitPerson[] payer)
         {
             if (payer == null)
                 throw new ArgumentNullException(nameof(payer));
             if (payer.Length < 1)
                 throw new ArgumentOutOfRangeException(nameof(payer), "Need at least one payer.");
-            if (date.Year < 2010)
-                throw new ArgumentOutOfRangeException(nameof(date), "The date is prior to existence of DKP, that seems unlikly.");
 
             mName = name;
-            mDate = date.ToUniversalTime();
-            mPayer = (Person[])payer.Clone();
+            mPayer = (SplitPerson[])payer.Clone();
             mParty = new List<Debt>();
-            mFreeLoaders = new SortedSet<Person>();
-            mFremontBirthday = new SortedSet<Person>();
+            mFreeLoaders = new SortedSet<SplitPerson>();
+            mFremontBirthday = new SortedSet<SplitPerson>();
         }
 
-        public double this[Person person]
+        public double this[SplitPerson person]
         {
             get
             {
@@ -87,66 +84,38 @@ namespace Austin.DkpLib
             }
         }
 
-        public void AddFreeLoader(Person p)
+        public void AddFreeLoader(SplitPerson p)
         {
             bool added = mFreeLoaders.Add(p);
             Debug.Assert(added);
         }
 
-        public void AddFremontBirthday(Person p)
+        public void AddFremontBirthday(SplitPerson p)
         {
             bool added = mFremontBirthday.Add(p);
             Debug.Assert(added);
         }
 
-        public void Save(ApplicationDbContext db)
+        public IEnumerable<SplitTransaction> ToTransactions()
         {
-            Save(db, TextWriter.Null);
-        }
-
-        public void Save(ApplicationDbContext db, TextWriter log)
-        {
-            var debts = SplitBill(log);
-
-            var bs = new BillSplit() { Name = mName };
-            db.BillSplit.Add(bs);
-            foreach (var (debtor, creditor, pennies) in debts)
-            {
-                var t = new Transaction()
-                {
-                    Id = Guid.NewGuid(),
-                    Creditor = creditor,
-                    Debtor = debtor,
-                    Amount = pennies,
-                    Bill = bs,
-                    Description = mName,
-                    Created = mDate,
-                };
-                db.Transaction.Add(t);
-            }
-
-            db.SaveChanges();
+            return ToTransactions(TextWriter.Null);
         }
 
         /// <summary>
         /// Generate transactions without persisting to a database.
         /// </summary>
-        public IEnumerable<Transaction> ToTransactions(TextWriter log)
+        public IEnumerable<SplitTransaction> ToTransactions(TextWriter log)
         {
             var debts = SplitBill(log);
 
             foreach (var (debtor, creditor, pennies) in debts)
             {
-                yield return new Transaction()
+                yield return new SplitTransaction()
                 {
                     Id = Guid.NewGuid(),
-                    Creditor = creditor,
                     CreditorId = creditor.Id,
-                    Debtor = debtor,
                     DebtorId = debtor.Id,
                     Amount = pennies,
-                    Description = mName,
-                    Created = mDate,
                 };
             }
         }
@@ -164,7 +133,7 @@ namespace Austin.DkpLib
                 throw new NotSupportedException("Negative bill attribute.");
         }
 
-        public List<(Person debtor, Person creditor, Money pennies)> SplitBill(TextWriter log)
+        public List<(SplitPerson debtor, SplitPerson creditor, Money pennies)> SplitBill(TextWriter log)
         {
             ValidateBill();
 
@@ -288,7 +257,7 @@ namespace Austin.DkpLib
             var ret = new MultiCreditorDebtList();
             foreach (var p in amountSpent)
             {
-                var creditors = new List<(Person creditor, double amount)>();
+                var creditors = new List<(SplitPerson creditor, double amount)>();
                 foreach (var payer in mPayer)
                 {
                     creditors.Add((payer, p.Amount / mPayer.Length));
@@ -308,7 +277,7 @@ namespace Austin.DkpLib
         /// Thie method rounds peoples debts to the nearest penny, while preserving the invarient that
         /// the total amount owed in this group of debts does not change.
         /// </remarks>
-        List<(Person debtor, Person creditor, Money pennies)> SplitPennies(MultiCreditorDebtList amountSpent)
+        List<(SplitPerson debtor, SplitPerson creditor, Money pennies)> SplitPennies(MultiCreditorDebtList amountSpent)
         {
             var pennies = amountSpent
                 .Select(tup => new

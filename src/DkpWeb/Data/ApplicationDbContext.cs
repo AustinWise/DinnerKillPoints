@@ -143,7 +143,7 @@ namespace DkpWeb.Data
         public virtual DbSet<Person> Person { get; set; }
         public virtual DbSet<Transaction> Transaction { get; set; }
 
-        public IEnumerable<Person> ActivePeopleOrderedByName
+        public IQueryable<Person> ActivePeopleOrderedByName
         {
             get
             {

@@ -1,10 +1,8 @@
-﻿using DkpWeb.Models;
-using System;
-using System.Buffers.Text;
+﻿using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DkpWeb.Data
+namespace Austin.DkpLib
 {
     public class MoneyJsonConverter : JsonConverter<Money>
     {
