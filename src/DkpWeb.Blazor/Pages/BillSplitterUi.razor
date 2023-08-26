@@ -1,6 +1,8 @@
 ﻿@using Austin.DkpLib;
+@implements IDisposable
 @inject IBillSplitterServices SplitterServices
 @inject NavigationManager NavManager
+@inject PersistentComponentState ApplicationState
 
 @if (mPeople == null)
 {
@@ -103,6 +105,7 @@ else
 
     private SplitPerson[]? mPeople;
     private Dictionary<int, SplitPerson> mPeopleMap;
+    private PersistingComponentStateSubscription persistingSubscription;
 
     private int mSpendCount = 0;
     private Dictionary<int, Spend> mSpend = new();
@@ -123,7 +126,17 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        mPeople = await SplitterServices.GetAllPeopleAsync();
+        persistingSubscription = ApplicationState.RegisterOnPersisting(PersistPeople);
+
+        if (ApplicationState.TryTakeFromJson<SplitPerson[]>("fetchdata", out var restored))
+        {
+            mPeople = restored!;
+        }
+        else
+        {
+            mPeople = await SplitterServices.GetAllPeopleAsync();
+        }
+
         mPeopleMap = mPeople.ToDictionary(p => p.Id);
     }
 
@@ -228,6 +241,18 @@ else
     private static int ToPennies(double d)
     {
         return (int)Math.Round(d * 100);
+    }
+
+    private Task PersistPeople()
+    {
+        ApplicationState.PersistAsJson("fetchdata", mPeople);
+
+        return Task.CompletedTask;
+    }
+
+    void IDisposable.Dispose()
+    {
+        persistingSubscription.Dispose();
     }
 
     record Spend(int PersonId, string PersonName, Money Amount)
