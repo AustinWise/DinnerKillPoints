@@ -73,14 +73,14 @@ else
                 <option value="@p.Id">@p.FullName</option>
             }
         </InputSelect>
-        <InputNumber @bind-Value="mAddSpendModel.Amount"></InputNumber>
+        <InputNumber @bind-Value="mAddSpendModel.Amount" inputmode="decimal" pattern="[0-9]*(\.[0-9]{1,2})?"></InputNumber>
         <button type="submit">Add</button>
     </EditForm>
     <h3>Other Amounts</h3>
     <ul>
-        <li>Shared Food: <InputNumber id="shared-food" @bind-Value="@mSharedFood" @onblur="UpdateSplitBill"></InputNumber></li>
-        <li>Tax: <InputNumber id="tax" @bind-Value="@mTax" @onblur="UpdateSplitBill"></InputNumber></li>
-        <li>Tip: <InputNumber id="tip" @bind-Value="@mTip" @onblur="UpdateSplitBill"></InputNumber></li>
+        <li>Shared Food: <InputNumber id="shared-food" inputmode="decimal" pattern="[0-9]*(\.[0-9]{1,2})?" @bind-Value="@mSharedFood" @onblur="UpdateSplitBill"></InputNumber></li>
+        <li>Tax: <InputNumber id="tax" inputmode="decimal" pattern="[0-9]*(\.[0-9]{1,2})?" @bind-Value="@mTax" @onblur="UpdateSplitBill"></InputNumber></li>
+        <li>Tip: <InputNumber id="tip" inputmode="decimal" pattern="[0-9]*(\.[0-9]{1,2})?" @bind-Value="@mTip" @onblur="UpdateSplitBill"></InputNumber></li>
     </ul>
     <h3>
         Split Transactions
