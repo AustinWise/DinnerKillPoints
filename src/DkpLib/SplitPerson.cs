@@ -1,6 +1,6 @@
 ﻿namespace Austin.DkpLib
 {
-    public class Person
+    public class SplitPerson
     {
         public int Id { get; set; }
 
