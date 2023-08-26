@@ -3,7 +3,11 @@
     ViewBag.Title = "Split a Bill";
 }
 
-<component type="typeof(Counter)" render-mode="WebAssemblyPrerendered" />
+<!--
+    TODO: switch back to WebAssemblyPrerendered. See this for ideas:
+    https://jonhilton.net/blazor-wasm-prerendering-missing-http-client/
+-->
+<component type="typeof(BillSplitterUi)" render-mode="WebAssembly" />
 
 @section Scripts {
     <script src="_framework/blazor.webassembly.js"></script>

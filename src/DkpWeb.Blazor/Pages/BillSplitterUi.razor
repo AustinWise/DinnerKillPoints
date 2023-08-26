@@ -1,0 +1,25 @@
+﻿@using Austin.DkpLib;
+@inject HttpClient Http
+
+@if (mPeople == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ul>
+        @foreach (var p in mPeople)
+        {
+            <li>@p.Id: @p.FullName</li>
+        }
+    </ul>
+}
+
+@code {
+    private SplitPerson[]? mPeople;
+
+    protected override async Task OnInitializedAsync()
+    {
+        mPeople = await Http.GetFromJsonAsync<SplitPerson[]>("api/Person/");
+    }
+}

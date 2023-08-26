@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
 
-        public string FullName => throw new NotImplementedException();
+        public string? FullName { get; set; }
     }
 }
