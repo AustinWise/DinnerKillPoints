@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <UserSecretsId>aspnet-DkpWeb-2b015ff0-fd48-420f-9465-4b03498245a8</UserSecretsId>
     <PublishReadyToRun>True</PublishReadyToRun>
     <InvariantGlobalization>true</InvariantGlobalization>
