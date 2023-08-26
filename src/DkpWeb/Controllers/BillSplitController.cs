@@ -31,6 +31,14 @@ namespace DkpWeb.Controllers
         }
 
         //
+        // GET: /BillSplit/Add
+
+        public ActionResult Add()
+        {
+            return View();
+        }
+
+        //
         // GET: /BillSplit/Details/5
 
         public ActionResult Details(int id)

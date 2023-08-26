@@ -2,6 +2,7 @@
 using DkpWeb.Data;
 using DkpWeb.Models;
 using DkpWeb.Services;
+using Google.Api;
 using Google.Cloud.Diagnostics.AspNetCore3;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -81,6 +82,7 @@ namespace DkpWeb
             {
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
+                app.UseWebAssemblyDebugging();
             }
             else
             {
@@ -96,6 +98,8 @@ namespace DkpWeb
 
             }
             app.UseHttpsRedirection();
+
+            app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
 
             app.UseRouting();
