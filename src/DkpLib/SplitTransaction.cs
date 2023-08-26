@@ -1,6 +1,6 @@
 ﻿namespace Austin.DkpLib
 {
-    public class Transaction
+    public class SplitTransaction
     {
         public Guid Id { get; set; }
         public int DebtorId { get; set; }

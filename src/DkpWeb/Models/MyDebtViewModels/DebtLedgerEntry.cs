@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Austin.DkpLib;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace DkpWeb.Models.MyDebtViewModels

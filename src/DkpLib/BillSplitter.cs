@@ -93,7 +93,7 @@ namespace Austin.DkpLib
             Debug.Assert(added);
         }
 
-        public IEnumerable<Transaction> ToTransactions()
+        public IEnumerable<SplitTransaction> ToTransactions()
         {
             return ToTransactions(TextWriter.Null);
         }
@@ -101,13 +101,13 @@ namespace Austin.DkpLib
         /// <summary>
         /// Generate transactions without persisting to a database.
         /// </summary>
-        public IEnumerable<Transaction> ToTransactions(TextWriter log)
+        public IEnumerable<SplitTransaction> ToTransactions(TextWriter log)
         {
             var debts = SplitBill(log);
 
             foreach (var (debtor, creditor, pennies) in debts)
             {
-                yield return new Transaction()
+                yield return new SplitTransaction()
                 {
                     Id = Guid.NewGuid(),
                     CreditorId = creditor.Id,

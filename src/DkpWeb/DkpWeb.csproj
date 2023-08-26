@@ -53,4 +53,8 @@
     <PackageReference Include="Sakura.AspNetCore.PagedList" Version="2.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.8" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DkpLib\DkpLib.csproj" />
+  </ItemGroup>
 </Project>
