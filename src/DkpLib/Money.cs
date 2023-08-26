@@ -74,7 +74,7 @@ namespace Austin.DkpLib
             return ToString(null, null);
         }
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string? format, IFormatProvider? formatProvider)
         {
             int pennies = _pennies;
             bool isNeg = _pennies < 0;
@@ -112,7 +112,7 @@ namespace Austin.DkpLib
             }
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is Money)
                 return Equals((Money)obj);
