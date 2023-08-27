@@ -1,4 +1,5 @@
 ﻿using Austin.DkpLib;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -6,6 +7,7 @@ namespace DkpWeb.Areas.API
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "DKP")]
     public class PersonController : ControllerBase
     {
         private readonly IBillSplitterServices mData;
