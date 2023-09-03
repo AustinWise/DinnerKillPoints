@@ -1,0 +1,20 @@
+[
+    {
+        "name": "delete-old",
+        "action": {
+            "type": "Delete"
+        },
+        "condition": {
+            "olderThan": "30d"
+        }
+    },
+    {
+        "name": "keep-minimum-versions",
+        "action": {
+            "type": "Keep"
+        },
+        "mostRecentVersions": {
+            "keepCount": 5
+        }
+    }
+]
