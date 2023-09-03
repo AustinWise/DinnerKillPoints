@@ -1,0 +1,38 @@
+{
+  "version": "1.0",
+  "defaultProvider": "jsdelivr",
+  "defaultDestination": "wwwroot/lib",
+  "libraries": [
+    {
+      "library": "bootstrap@3.3.7",
+      "files": [
+        "dist/js/bootstrap.js",
+        "dist/js/bootstrap.min.js",
+        "dist/css/bootstrap.css",
+        "dist/css/bootstrap.min.css"
+      ]
+    },
+    {
+      "library": "jquery@2.2.0",
+      "files": [
+        "dist/jquery.js",
+        "dist/jquery.min.js",
+        "dist/jquery.min.map"
+      ]
+    },
+    {
+      "library": "jquery-validation@1.14.0",
+      "files": [
+        "dist/jquery.validate.js",
+        "dist/jquery.validate.min.js"
+      ]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@3.2.6",
+      "files": [
+        "jquery.validate.unobtrusive.js",
+        "jquery.validate.unobtrusive.min.js"
+      ]
+    }
+  ]
+}
