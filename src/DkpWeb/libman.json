@@ -4,10 +4,11 @@
   "defaultDestination": "wwwroot/lib",
   "libraries": [
     {
-      "library": "bootstrap@3.3.7",
+      "library": "bootstrap@5.3.1",
       "files": [
         "dist/js/bootstrap.js",
         "dist/js/bootstrap.min.js",
+        "dist/js/bootstrap.min.js.map",
         "dist/css/bootstrap.css",
         "dist/css/bootstrap.min.css",
         "dist/css/bootstrap.min.css.map"
