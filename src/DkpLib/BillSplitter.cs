@@ -30,7 +30,6 @@ namespace Austin.DkpLib
         const double PENNY_THRESHOLD = 0.01;
 
         readonly string mName;
-        readonly DateTime mDate;
         readonly SplitPerson[] mPayer;
         readonly List<Debt> mParty;
         readonly SortedSet<SplitPerson> mFreeLoaders;
@@ -146,7 +145,6 @@ namespace Austin.DkpLib
                 throw new Exception("Non-int number of pennies.");
 
             log.WriteLine($"name: {this.mName}");
-            log.WriteLine($"date: {this.mDate}");
             log.WriteLine($"payer(s): {string.Join(", ", mPayer.Select(p => p.FullName))}");
             log.WriteLine($"pool: {pool / 100:c}");
             log.WriteLine($"totalBillValue: {totalBillValue / 100:c}");

@@ -2,9 +2,9 @@
 {
     public class SplitPerson : IEquatable<SplitPerson>
     {
-        public int Id { get; set; }
+        public required int Id { get; init; }
 
-        public string? FullName { get; set; }
+        public required string FullName { get; init; }
 
         public override int GetHashCode()
         {

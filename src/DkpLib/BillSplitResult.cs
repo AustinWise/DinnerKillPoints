@@ -1,7 +1,5 @@
 ﻿namespace Austin.DkpLib;
 
-public class BillSplitResult
+public record BillSplitResult(string Name, List<SplitTransaction> Transactions)
 {
-    public string Name { get; set; }
-    public List<SplitTransaction> Transactions { get; set; }
 }

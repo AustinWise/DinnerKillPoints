@@ -104,7 +104,7 @@ else
 @code {
 
     private SplitPerson[]? mPeople;
-    private Dictionary<int, SplitPerson> mPeopleMap;
+    private Dictionary<int, SplitPerson>? mPeopleMap;
     private PersistingComponentStateSubscription persistingSubscription;
 
     private int mSpendCount = 0;
@@ -124,6 +124,10 @@ else
     private string mSplitLog = string.Empty;
     private bool mBillOk = false;
 
+    // C# nullability analysis does not know we set this in OnInitializedAsync,
+    // so use a property to let the rest of the class know that it is not null.
+    private Dictionary<int, SplitPerson> PeopleMap => mPeopleMap!;
+
     protected override async Task OnInitializedAsync()
     {
         persistingSubscription = ApplicationState.RegisterOnPersisting(PersistPeople);
@@ -142,7 +146,7 @@ else
 
     private void OnAddPayer()
     {
-        if (!mPeopleMap.TryGetValue(mAddPayerModel.SelectedPerson, out SplitPerson? splitPerson))
+        if (!PeopleMap.TryGetValue(mAddPayerModel.SelectedPerson, out SplitPerson? splitPerson))
             return;
         mPayers.Add(splitPerson);
 
@@ -157,7 +161,7 @@ else
 
     private void OnAddFreeloader()
     {
-        if (!mPeopleMap.TryGetValue(mAddPayerModel.SelectedPerson, out SplitPerson? splitPerson))
+        if (!PeopleMap.TryGetValue(mAddPayerModel.SelectedPerson, out SplitPerson? splitPerson))
             return;
         mFreeLoaders.Add(splitPerson);
 
@@ -173,7 +177,7 @@ else
     private void OnAddSpend()
     {
         int spendId = mSpendCount++;
-        if (!mPeopleMap.TryGetValue(mAddSpendModel.SelectedPerson, out SplitPerson? splitPerson))
+        if (!PeopleMap.TryGetValue(mAddSpendModel.SelectedPerson, out SplitPerson? splitPerson))
             return;
         mSpend.Add(spendId, new Spend(splitPerson.Id, splitPerson.FullName, new Money(ToPennies(mAddSpendModel.Amount))));
         mAddSpendModel.Amount = 0;
@@ -189,14 +193,14 @@ else
 
     private BillSplitter SplitBill()
     {
-        var bs = new BillSplitter("text", DateTime.Now, mPayers.ToArray());
+        var bs = new BillSplitter("text", mPayers.ToArray());
         foreach (var p in mFreeLoaders)
         {
             bs.AddFreeLoader(p);
         }
         foreach (var s in mSpend.Values)
         {
-            bs[mPeopleMap[s.PersonId]] = s.Amount.ToPennies();
+            bs[PeopleMap[s.PersonId]] = s.Amount.ToPennies();
         }
         bs.SharedFood = ToPennies(mSharedFood);
         bs.Tax = ToPennies(mTax);
@@ -234,7 +238,7 @@ else
 
     private async Task SaveBillSplit()
     {
-        await SplitterServices.SaveBillSplitResult(new BillSplitResult() { Name = mName, Transactions = mSplitTransactions });
+        await SplitterServices.SaveBillSplitResult(new BillSplitResult(mName, mSplitTransactions));
         NavManager.NavigateTo("/BillSplit", forceLoad: true);
     }
 
