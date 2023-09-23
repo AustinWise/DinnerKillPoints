@@ -35,12 +35,6 @@ namespace Austin.DkpLib
         readonly SortedSet<SplitPerson> mFreeLoaders;
         readonly SortedSet<SplitPerson> mFremontBirthday;
 
-        [Obsolete]
-        public BillSplitter(string name, DateTime date, params SplitPerson[] payer)
-            : this(name, payer)
-        {
-        }
-
         public BillSplitter(string name, params SplitPerson[] payer)
         {
             if (payer == null)
