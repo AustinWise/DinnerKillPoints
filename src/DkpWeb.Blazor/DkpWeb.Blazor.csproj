@@ -16,9 +16,4 @@
         <ProjectReference Include="..\DkpLib\DkpLib.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Shared\" />
-      <Folder Include="wwwroot\" />
-    </ItemGroup>
-
 </Project>
