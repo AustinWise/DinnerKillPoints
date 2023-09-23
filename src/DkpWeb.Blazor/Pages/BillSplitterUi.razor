@@ -193,7 +193,7 @@ else
 
     private BillSplitter SplitBill()
     {
-        var bs = new BillSplitter("text", mPayers.ToArray());
+        var bs = new BillSplitter(mName, mPayers.ToArray());
         foreach (var p in mFreeLoaders)
         {
             bs.AddFreeLoader(p);
