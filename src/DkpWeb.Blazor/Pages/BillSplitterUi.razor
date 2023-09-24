@@ -88,17 +88,16 @@ else
     <ul>
         @foreach (var t in mSplitTransactions)
         {
-            <li @key="t.Id">@mPeopleMap[t.DebtorId].FullName owse @mPeopleMap[t.CreditorId].FullName @t.Amount</li>
+            <li @key="t.Id">@PeopleMap[t.DebtorId].FullName owse @PeopleMap[t.CreditorId].FullName @t.Amount</li>
         }
     </ul>
-    @if (mBillOk)
-    {
-        <button @onclick="SaveBillSplit">Save</button>
-    }
+    <form @onsubmit="SaveBillSplit">
+        <button type="submit" class="@(mBillOk ? string.Empty : "d-none")">Save</button>
+    </form>
     <h3>Split Log</h3>
     <pre>
         @mSplitLog
-                            </pre>
+    </pre>
 }
 
 @code {
