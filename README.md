@@ -13,15 +13,15 @@ splitting feature to split bills and then be immediately paid back.
 
 ### Bill Splitter
 
-The bill splitting logic live in the [`BillSplitter`](src/DkpWeb/Util/BillSplitter.cs) class. This
-bill splitter has some intersting features:
+The bill splitting logic live in the [`BillSplitter`](src/DkpLib/BillSplitter.cs) class. This
+bill splitter has some interesting features:
 
-* Obnoxiously fair and accurate bill splitting. It tracks debt in terms of pennies using floating
+- Obnoxiously fair and accurate bill splitting. It tracks debt in terms of pennies using floating
   point. Once all debts are allocated, it distributes the sub-penny debts fairly to make everything
   add up.
-* Support for items bought by person or shared with the party.
-* Distributes tax, tip, and group discounts proportionally to each person's spend amount.
-* Supports two styles of having one or more people not pay for their meals, for the case of
+- Support for items bought by person or shared with the party.
+- Distributes tax, tip, and group discounts proportionally to each person's spend amount.
+- Supports two styles of having one or more people not pay for their meals, for the case of
   birthdays or other circumstances. In the case of `AddFreeLoader` function the person pays nothing.
   In the case of the `AddFremontBirthday` function, the person does not payform their own meal but
   does contribute to the cost of other people to whom the `AddFremontBirthday` is used.
@@ -35,5 +35,7 @@ debt out. This leaves an acrylic graph of debts that easily actionable by the de
 
 ## About the name
 
-It is an allusion to Dragon Kill Points, a system used in World of Warcraft and similar games to
+It is an allusion to
+[Dragon Kill Points](https://en.wikipedia.org/wiki/Dragon_kill_points),
+a system used in World of Warcraft and similar games to
 decide gets the loot from the dragon.
