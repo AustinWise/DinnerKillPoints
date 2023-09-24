@@ -18,6 +18,7 @@ namespace DkpWeb.Areas.API
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromBody] BillSplitResult result)
         {
             await mData.SaveBillSplitResult(result);

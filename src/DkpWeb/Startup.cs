@@ -6,6 +6,7 @@ using DkpWeb.Services;
 using Google.Api;
 using Google.Cloud.Diagnostics.AspNetCore3;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -30,6 +31,8 @@ namespace DkpWeb
 
         public void ConfigureServices(IServiceCollection services, IWebHostEnvironment env)
         {
+            services.AddScoped<AntiforgeryStateProvider, AustinEndpointAntiforgeryStateProvider>();
+
             services.AddOptions();
             services.Configure<EmailOptions>(Configuration.GetSection("Gmail"));
 

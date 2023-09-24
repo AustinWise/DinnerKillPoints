@@ -1,5 +1,6 @@
 using Austin.DkpLib;
 using DkpWeb.Blazor.Services;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -14,6 +15,7 @@ namespace DkpWeb.Blazor
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddScoped<IBillSplitterServices, HttpBillSplitterServices>();
+            builder.Services.AddSingleton<AntiforgeryStateProvider, AustinAntiforgeryStateProvider>();
 
             await builder.Build().RunAsync();
         }
