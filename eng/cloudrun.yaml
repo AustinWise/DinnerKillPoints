@@ -5,12 +5,12 @@ metadata:
     run.googleapis.com/client-name: cloud-console
     run.googleapis.com/ingress: all
     run.googleapis.com/ingress-status: all
-    run.googleapis.com/operation-id: f7bd3ca3-06a5-43bb-86de-3e7f4ed73b0f
-    serving.knative.dev/creator: austinwise@gmail.com
-    serving.knative.dev/lastModifier: austinwise@gmail.com
     run.googleapis.com/launch-stage: BETA
+    run.googleapis.com/operation-id: ff01b866-d843-4e7a-b798-32d2fc9327ee
+    serving.knative.dev/creator: austinwise@gmail.com
+    serving.knative.dev/lastModifier: AustinWise@gmail.com
   creationTimestamp: '2023-07-09T19:53:12.930459Z'
-  generation: 51
+  generation: 54
   labels:
     cloud.googleapis.com/location: us-central1
     commit-sha: 2937f08220f4a59facf4861ccef6c46c75a2ad29
@@ -20,7 +20,7 @@ metadata:
     managed-by: gcp-cloud-build-deploy-cloud-run
   name: dkpweb
   namespace: '216611213396'
-  resourceVersion: AAYGrXso0gk
+  resourceVersion: AAYGsuHgxyU
   selfLink: /apis/serving.knative.dev/v1/namespaces/216611213396/services/dkpweb
   uid: 83053708-04d8-4a54-981f-77c2ed887ef2
 spec:
@@ -42,8 +42,7 @@ spec:
     spec:
       containerConcurrency: 80
       containers:
-      - name: dkp
-        env:
+      - env:
         - name: DataProtection__Bucket
           value: dkp-settings
         - name: DataProtection__ObjectName
@@ -51,8 +50,10 @@ spec:
         - name: GcpProjectId
           value: '216611213396'
         - name: ConnectionStrings__Postgres
-          value: host=127.0.0.1; database=dkp; username=dkp-service-account@dinnerkillpoints.iam; password=test;
+          value: host=127.0.0.1; database=dkp; username=dkp-service-account@dinnerkillpoints.iam;
+            password=test;
         image: us-central1-docker.pkg.dev/dinnerkillpoints/cloud-run-source-deploy/dinnerkillpoints/dkpweb:2937f08220f4a59facf4861ccef6c46c75a2ad29
+        name: dkp
         ports:
         - containerPort: 8080
           name: http1
@@ -67,14 +68,18 @@ spec:
             port: 8080
           periodSeconds: 2
           timeoutSeconds: 1
-      - name: sql
+      - args:
+        - --structured-logs
+        - --auto-iam-authn
+        - --health-check
+        - --http-address=0.0.0.0
+        - austinsql:us-central1:austinsql
         image: us.gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.7.0
-        args:
-          - "--structured-logs"
-          - "--auto-iam-authn"
-          - "--health-check"
-          - "--http-address=0.0.0.0"
-          - "austinsql:us-central1:austinsql"
+        name: sql
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 256Mi
         startupProbe:
           failureThreshold: 5
           httpGet:
@@ -91,20 +96,20 @@ status:
   address:
     url: https://dkpweb-cvempurorq-uc.a.run.app
   conditions:
-  - lastTransitionTime: '2023-10-01T20:27:05.556280Z'
+  - lastTransitionTime: '2023-10-02T02:53:43.743004Z'
     status: 'True'
     type: Ready
-  - lastTransitionTime: '2023-10-01T20:26:48.613552Z'
+  - lastTransitionTime: '2023-10-02T02:53:27.585048Z'
     status: 'True'
     type: ConfigurationsReady
-  - lastTransitionTime: '2023-10-01T20:27:05.645577Z'
+  - lastTransitionTime: '2023-10-02T02:53:43.813925Z'
     status: 'True'
     type: RoutesReady
-  latestCreatedRevisionName: dkpweb-00050-j7m
-  latestReadyRevisionName: dkpweb-00050-j7m
-  observedGeneration: 51
+  latestCreatedRevisionName: dkpweb-00053-hmx
+  latestReadyRevisionName: dkpweb-00053-hmx
+  observedGeneration: 54
   traffic:
   - latestRevision: true
     percent: 100
-    revisionName: dkpweb-00050-j7m
+    revisionName: dkpweb-00053-hmx
   url: https://dkpweb-cvempurorq-uc.a.run.app
