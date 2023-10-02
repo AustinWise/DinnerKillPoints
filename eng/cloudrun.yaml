@@ -6,21 +6,21 @@ metadata:
     run.googleapis.com/ingress: all
     run.googleapis.com/ingress-status: all
     run.googleapis.com/launch-stage: BETA
-    run.googleapis.com/operation-id: ff01b866-d843-4e7a-b798-32d2fc9327ee
+    run.googleapis.com/operation-id: 4e0fc5a4-8680-48be-a484-714ac6a72204
     serving.knative.dev/creator: austinwise@gmail.com
-    serving.knative.dev/lastModifier: AustinWise@gmail.com
+    serving.knative.dev/lastModifier: austinwise@gmail.com
   creationTimestamp: '2023-07-09T19:53:12.930459Z'
-  generation: 54
+  generation: 58
   labels:
     cloud.googleapis.com/location: us-central1
-    commit-sha: 2937f08220f4a59facf4861ccef6c46c75a2ad29
-    gcb-build-id: 0340fa3c-584f-4596-a762-f0db4aa7600c
-    gcb-trigger-id: 622a5ef0-2695-4cda-90f0-901d2dbbab0d
+    commit-sha: 7f75bdacdff102e8b7a6fc3f4c8a1dbfaf9fa88d
+    gcb-build-id: e2cdb1e1-7cc1-4db8-ae30-cb7b4e477ac6
+    gcb-trigger-id: 382f9163-3e5c-406d-8694-38650839fccd
     gcb-trigger-region: global
     managed-by: gcp-cloud-build-deploy-cloud-run
   name: dkpweb
   namespace: '216611213396'
-  resourceVersion: AAYGsuHgxyU
+  resourceVersion: AAYGsxw+QYw
   selfLink: /apis/serving.knative.dev/v1/namespaces/216611213396/services/dkpweb
   uid: 83053708-04d8-4a54-981f-77c2ed887ef2
 spec:
@@ -28,14 +28,14 @@ spec:
     metadata:
       annotations:
         autoscaling.knative.dev/maxScale: '3'
-        run.googleapis.com/client-name: cloud-console
-        run.googleapis.com/cloudsql-instances: austinsql:us-central1:austinsql
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 448.0.0
         run.googleapis.com/startup-cpu-boost: 'true'
       labels:
-        client.knative.dev/nonce: 95264036-ccd7-4c1b-9634-2879904d62a4
-        commit-sha: 2937f08220f4a59facf4861ccef6c46c75a2ad29
-        gcb-build-id: 0340fa3c-584f-4596-a762-f0db4aa7600c
-        gcb-trigger-id: 622a5ef0-2695-4cda-90f0-901d2dbbab0d
+        client.knative.dev/nonce: avknqyqzod
+        commit-sha: 7f75bdacdff102e8b7a6fc3f4c8a1dbfaf9fa88d
+        gcb-build-id: e2cdb1e1-7cc1-4db8-ae30-cb7b4e477ac6
+        gcb-trigger-id: 382f9163-3e5c-406d-8694-38650839fccd
         gcb-trigger-region: global
         managed-by: gcp-cloud-build-deploy-cloud-run
         run.googleapis.com/startupProbeType: Custom
@@ -52,7 +52,7 @@ spec:
         - name: ConnectionStrings__Postgres
           value: host=127.0.0.1; database=dkp; username=dkp-service-account@dinnerkillpoints.iam;
             password=test;
-        image: us-central1-docker.pkg.dev/dinnerkillpoints/cloud-run-source-deploy/dinnerkillpoints/dkpweb:2937f08220f4a59facf4861ccef6c46c75a2ad29
+        image: us-central1-docker.pkg.dev/dinnerkillpoints/cloud-run-source-deploy/dinnerkillpoints/dkpweb:7f75bdacdff102e8b7a6fc3f4c8a1dbfaf9fa88d
         name: dkp
         ports:
         - containerPort: 8080
@@ -96,20 +96,20 @@ status:
   address:
     url: https://dkpweb-cvempurorq-uc.a.run.app
   conditions:
-  - lastTransitionTime: '2023-10-02T02:53:43.743004Z'
+  - lastTransitionTime: '2023-10-02T03:10:02.913288Z'
     status: 'True'
     type: Ready
-  - lastTransitionTime: '2023-10-02T02:53:27.585048Z'
+  - lastTransitionTime: '2023-10-02T03:02:27.404485Z'
     status: 'True'
     type: ConfigurationsReady
-  - lastTransitionTime: '2023-10-02T02:53:43.813925Z'
+  - lastTransitionTime: '2023-10-02T03:10:03.018636Z'
     status: 'True'
     type: RoutesReady
-  latestCreatedRevisionName: dkpweb-00053-hmx
-  latestReadyRevisionName: dkpweb-00053-hmx
-  observedGeneration: 54
+  latestCreatedRevisionName: dkpweb-00055-6sq
+  latestReadyRevisionName: dkpweb-00055-6sq
+  observedGeneration: 58
   traffic:
   - latestRevision: true
     percent: 100
-    revisionName: dkpweb-00053-hmx
+    revisionName: dkpweb-00055-6sq
   url: https://dkpweb-cvempurorq-uc.a.run.app
