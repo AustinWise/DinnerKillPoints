@@ -1,0 +1,94 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+    run.googleapis.com/client-name: cloud-console
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+    run.googleapis.com/operation-id: f7bd3ca3-06a5-43bb-86de-3e7f4ed73b0f
+    serving.knative.dev/creator: austinwise@gmail.com
+    serving.knative.dev/lastModifier: austinwise@gmail.com
+  creationTimestamp: '2023-07-09T19:53:12.930459Z'
+  generation: 51
+  labels:
+    cloud.googleapis.com/location: us-central1
+    commit-sha: 2937f08220f4a59facf4861ccef6c46c75a2ad29
+    gcb-build-id: 0340fa3c-584f-4596-a762-f0db4aa7600c
+    gcb-trigger-id: 622a5ef0-2695-4cda-90f0-901d2dbbab0d
+    gcb-trigger-region: global
+    managed-by: gcp-cloud-build-deploy-cloud-run
+  name: dkpweb
+  namespace: '216611213396'
+  resourceVersion: AAYGrXso0gk
+  selfLink: /apis/serving.knative.dev/v1/namespaces/216611213396/services/dkpweb
+  uid: 83053708-04d8-4a54-981f-77c2ed887ef2
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '3'
+        run.googleapis.com/client-name: cloud-console
+        run.googleapis.com/cloudsql-instances: austinsql:us-central1:austinsql
+        run.googleapis.com/startup-cpu-boost: 'true'
+      labels:
+        client.knative.dev/nonce: 95264036-ccd7-4c1b-9634-2879904d62a4
+        commit-sha: 2937f08220f4a59facf4861ccef6c46c75a2ad29
+        gcb-build-id: 0340fa3c-584f-4596-a762-f0db4aa7600c
+        gcb-trigger-id: 622a5ef0-2695-4cda-90f0-901d2dbbab0d
+        gcb-trigger-region: global
+        managed-by: gcp-cloud-build-deploy-cloud-run
+        run.googleapis.com/startupProbeType: Custom
+    spec:
+      containerConcurrency: 80
+      containers:
+      - env:
+        - name: DataProtection__Bucket
+          value: dkp-settings
+        - name: DataProtection__ObjectName
+          value: DataProtectionKeys.xml
+        - name: GcpProjectId
+          value: '216611213396'
+        - name: ConnectionStrings__Postgres
+          value: host=/cloudsql/austinsql:us-central1:austinsql; database=dkp; username=dkp-service-account@dinnerkillpoints.iam;
+            password=test;
+        image: us-central1-docker.pkg.dev/dinnerkillpoints/cloud-run-source-deploy/dinnerkillpoints/dkpweb:2937f08220f4a59facf4861ccef6c46c75a2ad29
+        ports:
+        - containerPort: 8080
+          name: http1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        startupProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 2
+          timeoutSeconds: 1
+      serviceAccountName: dkp-service-account@dinnerkillpoints.iam.gserviceaccount.com
+      timeoutSeconds: 300
+  traffic:
+  - latestRevision: true
+    percent: 100
+status:
+  address:
+    url: https://dkpweb-cvempurorq-uc.a.run.app
+  conditions:
+  - lastTransitionTime: '2023-10-01T20:27:05.556280Z'
+    status: 'True'
+    type: Ready
+  - lastTransitionTime: '2023-10-01T20:26:48.613552Z'
+    status: 'True'
+    type: ConfigurationsReady
+  - lastTransitionTime: '2023-10-01T20:27:05.645577Z'
+    status: 'True'
+    type: RoutesReady
+  latestCreatedRevisionName: dkpweb-00050-j7m
+  latestReadyRevisionName: dkpweb-00050-j7m
+  observedGeneration: 51
+  traffic:
+  - latestRevision: true
+    percent: 100
+    revisionName: dkpweb-00050-j7m
+  url: https://dkpweb-cvempurorq-uc.a.run.app
