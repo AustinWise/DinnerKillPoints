@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DkpLib", "src\DkpLib\DkpLib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DkpWeb.Blazor", "src\DkpWeb.Blazor\DkpWeb.Blazor.csproj", "{4B4A0D4A-914E-4FB0-BDA1-574B22C91CB7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulumiInfra", "src\PulumiInfra\PulumiInfra.csproj", "{5EF29F9A-9AC1-4C77-AB9F-B96DA1BE1710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{4B4A0D4A-914E-4FB0-BDA1-574B22C91CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B4A0D4A-914E-4FB0-BDA1-574B22C91CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B4A0D4A-914E-4FB0-BDA1-574B22C91CB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EF29F9A-9AC1-4C77-AB9F-B96DA1BE1710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EF29F9A-9AC1-4C77-AB9F-B96DA1BE1710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EF29F9A-9AC1-4C77-AB9F-B96DA1BE1710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EF29F9A-9AC1-4C77-AB9F-B96DA1BE1710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 		{D6BD0AE7-7E67-4825-B532-85DCEE1D7710} = {21BC505B-288F-44A4-B304-45E7E38C8128}
 		{D39FC78A-4E85-4037-9247-B058D597A16E} = {21BC505B-288F-44A4-B304-45E7E38C8128}
 		{4B4A0D4A-914E-4FB0-BDA1-574B22C91CB7} = {21BC505B-288F-44A4-B304-45E7E38C8128}
+		{5EF29F9A-9AC1-4C77-AB9F-B96DA1BE1710} = {21BC505B-288F-44A4-B304-45E7E38C8128}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3E79BC8-24FC-4132-8AE6-9D17FEFC262F}
