@@ -1,6 +1,5 @@
 ﻿using Austin.DkpLib;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 
 namespace DkpWeb.Blazor.Services;
@@ -18,7 +17,7 @@ public sealed class HttpBillSplitterServices : IBillSplitterServices
 
     public async Task<SplitPerson[]> GetAllPeopleAsync()
     {
-        return (await mClient.GetFromJsonAsync<SplitPerson[]>("api/Person/")) ?? new SplitPerson[0];
+        return (await mClient.GetFromJsonAsync<SplitPerson[]>("api/Person/")) ?? [];
     }
 
     public async Task SaveBillSplitResult(BillSplitResult result)
