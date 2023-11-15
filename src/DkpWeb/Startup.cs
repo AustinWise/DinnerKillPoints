@@ -31,8 +31,6 @@ namespace DkpWeb
 
         public void ConfigureServices(IServiceCollection services, IWebHostEnvironment env)
         {
-            services.AddScoped<AntiforgeryStateProvider, AustinEndpointAntiforgeryStateProvider>();
-
             services.AddOptions();
             services.Configure<EmailOptions>(Configuration.GetSection("Gmail"));
 
