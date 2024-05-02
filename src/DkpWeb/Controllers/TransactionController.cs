@@ -56,12 +56,16 @@ namespace DkpWeb.Controllers
         {
             var peopleMap = mData.Person.ToDictionary(p => p.Id);
 
-            var q = mData.Transaction
-                .Where(t => !t.Description.StartsWith(Transaction.DebtTransferString))
-                .GroupBy(t => t.Description)
-                .Select(g => new TopScoreEntry { Name = g.Key, Amount = g.Sum(t => t.Amount) })
-                .OrderByDescending(g => g.Amount)
-                .ToList();
+            // TODO: the ORM should have handled this. SQL Server could do it. I should file a bug with NPGSQL...
+            var q = mData.Database.SqlQuery<TopScoreEntry>($"""
+                SELECT "Description" AS Name, SUM("Amount") AS AmountPennies FROM "Transaction" WHERE "Description" != {Transaction.DebtTransferString} GROUP BY "Description" ORDER BY SUM("Amount") DESC
+            """).ToList();
+            //var q = mData.Transaction
+            //    .Where(t => !t.Description.StartsWith(Transaction.DebtTransferString))
+            //    .GroupBy(t => t.Description, (key, ts) => new { Name = key, Amount = ts.Sum(t => t.Amount) })
+            //    .OrderByDescending(g => g.Amount)
+            //    .Select(t => new TopScoreEntry { Name = t.Name, Amount = t.Amount })
+            //    .ToList();
 
             foreach (var t in q)
             {

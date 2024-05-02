@@ -2,13 +2,26 @@
 using Sakura.AspNetCore;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DkpWeb.Models
 {
     public class TopScoreEntry
     {
         public string Name { get; set; }
+        [NotMapped]
         public Money Amount { get; set; }
+        public int AmountPennies
+        {
+            get
+            {
+                return Amount.ToPennies();
+            }
+            set
+            {
+                this.Amount = new Money(value);
+            }
+        }
     }
 
     public class TransactionList

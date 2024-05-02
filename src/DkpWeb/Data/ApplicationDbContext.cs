@@ -1,7 +1,7 @@
-﻿using DkpWeb.Models;
+﻿using Austin.DkpLib;
+using DkpWeb.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace DkpWeb.Data
@@ -11,6 +11,13 @@ namespace DkpWeb.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
+
+            configurationBuilder.Properties<Money>().HaveConversion<MoneyConverter>();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -107,8 +114,6 @@ namespace DkpWeb.Data
                 entity.Property(e => e.DebtorId).HasColumnName("DebtorID");
 
                 entity.Property(e => e.Created).HasConversion<UtcDateTimeConverter>();
-
-                entity.Property(e => e.Amount).HasConversion<MoneyConverter>();
 
                 entity.Property(e => e.Description)
                     .IsRequired()
