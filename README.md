@@ -38,4 +38,4 @@ debt out. This leaves an acrylic graph of debts that easily actionable by the de
 It is an allusion to
 [Dragon Kill Points](https://en.wikipedia.org/wiki/Dragon_kill_points),
 a system used in World of Warcraft and similar games to
-decide gets the loot from the dragon.
+decide who gets the loot from the dragon.
