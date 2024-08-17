@@ -1,5 +1,5 @@
 ﻿namespace Austin.DkpLib;
 
-public record BillSplitResult(string Name, List<SplitTransaction> Transactions)
+public record BillSplitResult(string Name, DateTime Date, List<SplitTransaction> Transactions)
 {
 }

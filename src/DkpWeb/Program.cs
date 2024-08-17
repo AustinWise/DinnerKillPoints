@@ -41,8 +41,9 @@ namespace DkpWeb
             {
                 using var scope = app.Services.CreateScope();
                 var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                var peopleMap = db.Person.ToDictionary(p => p.Id);
-                Person GetPerson(int id) => peopleMap[id];
+                var splitterService = scope.ServiceProvider.GetService<IBillSplitterServices>();
+                var peopleMap = (await splitterService.GetAllPeopleAsync()).ToDictionary(p => p.Id);
+                SplitPerson GetPerson(int id) => peopleMap[id];
 
                 var austin = GetPerson(1);
                 var caspar = GetPerson(2);

@@ -237,7 +237,7 @@ else
 
     private async Task SaveBillSplit()
     {
-        await SplitterServices.SaveBillSplitResult(new BillSplitResult(mName, mSplitTransactions));
+        await SplitterServices.SaveBillSplitResult(new BillSplitResult(mName, DateTime.UtcNow, mSplitTransactions));
         NavManager.NavigateTo("/BillSplit", forceLoad: true);
     }
 

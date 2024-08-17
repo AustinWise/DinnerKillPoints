@@ -30,12 +30,18 @@ namespace Austin.DkpLib
         const double PENNY_THRESHOLD = 0.01;
 
         readonly string mName;
+        readonly DateTime mDate;
         readonly SplitPerson[] mPayer;
         readonly List<Debt> mParty;
         readonly SortedSet<SplitPerson> mFreeLoaders;
         readonly SortedSet<SplitPerson> mFremontBirthday;
 
         public BillSplitter(string name, params SplitPerson[] payer)
+            : this(name, DateTime.UtcNow, payer)
+        {
+        }
+
+        public BillSplitter(string name, DateTime date, params SplitPerson[] payer)
         {
             if (payer == null)
                 throw new ArgumentNullException(nameof(payer));
@@ -43,6 +49,7 @@ namespace Austin.DkpLib
                 throw new ArgumentOutOfRangeException(nameof(payer), "Need at least one payer.");
 
             mName = name;
+            mDate = date;
             mPayer = (SplitPerson[])payer.Clone();
             mParty = new List<Debt>();
             mFreeLoaders = new SortedSet<SplitPerson>();
@@ -113,6 +120,12 @@ namespace Austin.DkpLib
             }
         }
 
+        public async Task Save(IBillSplitterServices services)
+        {
+            var result = new BillSplitResult(mName, mDate, ToTransactions(TextWriter.Null).ToList());
+            await services.SaveBillSplitResult(result);
+        }
+
         private void ValidateBill()
         {
             if (mParty.Count == 0)
@@ -139,6 +152,7 @@ namespace Austin.DkpLib
                 throw new Exception("Non-int number of pennies.");
 
             log.WriteLine($"name: {this.mName}");
+            log.WriteLine($"date: {this.mDate}");
             log.WriteLine($"payer(s): {string.Join(", ", mPayer.Select(p => p.FullName))}");
             log.WriteLine($"pool: {pool / 100:c}");
             log.WriteLine($"totalBillValue: {totalBillValue / 100:c}");

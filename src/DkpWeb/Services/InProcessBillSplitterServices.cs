@@ -30,7 +30,11 @@ namespace DkpWeb.Services
         public async Task SaveBillSplitResult(BillSplitResult result)
         {
             var transToCreate = new List<Transaction>();
-            DateTime created = DateTime.UtcNow;
+            DateTime created = result.Date;
+            if (created < new DateTime(2000, 1, 1))
+            {
+                created = DateTime.UtcNow;
+            }
             var bs = new BillSplit()
             {
                 Name = result.Name,
@@ -48,7 +52,7 @@ namespace DkpWeb.Services
                     Created = created,
                     Id = Guid.NewGuid(),
                     Bill = bs,
-                });;
+                });
             }
 
             using var dbtrans = await mData.Database.BeginTransactionAsync();
