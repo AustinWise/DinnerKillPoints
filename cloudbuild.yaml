@@ -10,6 +10,8 @@ steps:
       - '-f'
       - src/DkpWeb/Dockerfile
     id: Build
+    env:
+      - DOCKER_BUILDKIT=1
   - name: gcr.io/cloud-builders/docker
     args:
       - push
