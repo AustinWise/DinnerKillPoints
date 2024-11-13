@@ -77,7 +77,7 @@ namespace DkpWeb
             }
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(WebApplication app, IWebHostEnvironment env)
         {
             app.UseHealthChecks("/healthz");
 
@@ -103,20 +103,19 @@ namespace DkpWeb
             app.UseHttpsRedirection();
 
             app.UseBlazorFrameworkFiles();
-            app.UseStaticFiles();
+            app.MapStaticAssets();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
-            });
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}")
+                .WithStaticAssets();
+
+            app.MapRazorPages();
         }
     }
 }
