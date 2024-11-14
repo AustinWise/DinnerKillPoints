@@ -110,12 +110,11 @@ namespace DkpWeb
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+            app.MapDefaultControllerRoute()
                 .WithStaticAssets();
 
-            app.MapRazorPages();
+            app.MapRazorPages()
+                .WithStaticAssets();
         }
     }
 }
