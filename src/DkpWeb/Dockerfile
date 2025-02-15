@@ -11,7 +11,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
         apt-get update \
         && apt-get upgrade -y \
-        && apt-get install -y --no-install-recommends -v graphviz
+        && apt-get install -y --no-install-recommends graphviz
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
