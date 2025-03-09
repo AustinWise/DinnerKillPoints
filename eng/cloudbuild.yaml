@@ -1,0 +1,9 @@
+steps:
+  - name: 'marketplace.gcr.io/google/debian12'
+    args:
+    # This is relative to the root of the repo.
+      - src/DkpWeb/appsettings.json
+    id: Deploy
+    entrypoint: cat
+options:
+  substitutionOption: ALLOW_LOOSE
