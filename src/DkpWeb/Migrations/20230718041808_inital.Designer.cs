@@ -9,6 +9,9 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+// The type name only contains lower-cased ascii characters.
+#pragma warning disable CS8981
+
 namespace DkpWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
