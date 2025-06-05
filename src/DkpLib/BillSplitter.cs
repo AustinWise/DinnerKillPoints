@@ -120,9 +120,14 @@ namespace Austin.DkpLib
             }
         }
 
-        public async Task Save(IBillSplitterServices services)
+        public Task Save(IBillSplitterServices services)
         {
-            var result = new BillSplitResult(mName, mDate, ToTransactions(TextWriter.Null).ToList());
+            return Save(services, TextWriter.Null);
+        }
+
+        public async Task Save(IBillSplitterServices services, TextWriter log)
+        {
+            var result = new BillSplitResult(mName, mDate, ToTransactions(log).ToList());
             await services.SaveBillSplitResult(result);
         }
 
