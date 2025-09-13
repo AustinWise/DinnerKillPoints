@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <UserSecretsId>aspnet-DkpWeb-2b015ff0-fd48-420f-9465-4b03498245a8</UserSecretsId>
     <PublishReadyToRun>True</PublishReadyToRun>
     <InvariantGlobalization>true</InvariantGlobalization>
@@ -15,24 +15,25 @@
     <PackageReference Include="Google.Cloud.Diagnostics.AspNetCore3" Version="5.3.0" />
     <PackageReference Include="Google.Cloud.AspNetCore.DataProtection.Storage" Version="1.0.0-alpha04" />
     <PackageReference Include="MailKit" Version="2.12.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.0-rc.1.25451.107" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.0-rc.1.25451.107" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0-rc.1.25451.107" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.0-rc.1.25451.107" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0-rc.1.25451.107" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0-rc.1.25451.107">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0-rc.1.25451.107">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0-preview.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.0-rc.1.25451.107" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="3.0.71" />
     <PackageReference Include="Sakura.AspNetCore.Mvc.PagedList" Version="3.0.2" />
     <PackageReference Include="Sakura.AspNetCore.PagedList" Version="2.0.2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0-rc.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,9 +46,9 @@
   However Static Web Assets looks in the Content item group. So we patch the files in after they are restored.
   This problem is only noticeable on a clean build. On the second build, the files have already been restored and are automatically added to the Content item group.
   -->
+  <!--
   <Target Name="AustinIncludeLibraryManagerFilesInStaticWebAssets" DependsOnTargets="LibraryManagerRestore" BeforeTargets="ResolveProjectStaticWebAssets" Condition="'$(LibraryRestore)' != 'False' And '$(BuildingForLiveUnitTesting)' != 'true'">
     <ItemGroup>
-      <!-- We first have to remove the items in case a prior build already restored the files. -->
       <Content Remove="wwwroot\lib\**" />
 
       <Content Include="wwwroot\lib\**\*.js" />
@@ -55,4 +56,5 @@
       <Content Include="wwwroot\lib\**\*.map" />
     </ItemGroup>
   </Target>
+  -->
 </Project>
