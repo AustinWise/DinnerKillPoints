@@ -46,7 +46,6 @@
   However Static Web Assets looks in the Content item group. So we patch the files in after they are restored.
   This problem is only noticeable on a clean build. On the second build, the files have already been restored and are automatically added to the Content item group.
   -->
-  <!--
   <Target Name="AustinIncludeLibraryManagerFilesInStaticWebAssets" DependsOnTargets="LibraryManagerRestore" BeforeTargets="ResolveProjectStaticWebAssets" Condition="'$(LibraryRestore)' != 'False' And '$(BuildingForLiveUnitTesting)' != 'true'">
     <ItemGroup>
       <Content Remove="wwwroot\lib\**" />
@@ -56,5 +55,4 @@
       <Content Include="wwwroot\lib\**\*.map" />
     </ItemGroup>
   </Target>
-  -->
 </Project>
