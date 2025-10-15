@@ -1,6 +1,7 @@
 ﻿using Austin.DkpLib;
 using DkpWeb.Data;
 using DkpWeb.Models;
+using DkpWeb.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -45,13 +46,16 @@ namespace DkpWeb
                 var peopleMap = (await splitterService.GetAllPeopleAsync()).ToDictionary(p => p.Id);
                 SplitPerson GetPerson(int id) => peopleMap[id];
 
-                var austin = GetPerson(1);
+                var lexi = GetPerson(1);
                 var caspar = GetPerson(2);
                 var wesley = GetPerson(3);
                 var arata = GetPerson(10);
                 var roger = GetPerson(19);
-                var justinShih = GetPerson(30);
-
+                var blue = GetPerson(30);
+                var luna = GetPerson(111);
+                var teatimed = GetPerson(200);
+                var jessica = GetPerson(202);
+                var john = GetPerson(203);
 
                 WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
                 WriteData(db, false, db.Person.ToArray());
