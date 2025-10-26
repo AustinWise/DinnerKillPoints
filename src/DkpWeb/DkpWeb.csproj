@@ -33,7 +33,7 @@
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="3.0.71" />
     <PackageReference Include="Sakura.AspNetCore.Mvc.PagedList" Version="3.0.2" />
     <PackageReference Include="Sakura.AspNetCore.PagedList" Version="2.0.2" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0-rc.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0-rc.2" />
   </ItemGroup>
 
   <ItemGroup>
