@@ -1,4 +1,11 @@
 {
   "image": "mcr.microsoft.com/devcontainers/dotnet:1-10.0",
-  "features": {}
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit"
+      ]
+    }
+  }
 }
