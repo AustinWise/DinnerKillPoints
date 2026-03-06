@@ -31,6 +31,26 @@ First add up each person's share of the bill, splitting shared food items equall
 		tax, tip, and discounts share: ¤9.56
 		total raw share ¤41.76
 
+Splitting debts between payers:
+	Wesley owes the following people money:
+		¤47.60 to Austin
+	Austin owes the following people money:
+		¤53.63 to Austin
+	Carena owes the following people money:
+		¤38.91 to Austin
+	Zoe owes the following people money:
+		¤41.76 to Austin
+
+Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+	Austin owes Austin an extra penny
+	Carena owes Austin an extra penny
+	Wesley owes Austin an extra penny
+
+Final bill split:
+	Austin owes Austin $53.63
+	Carena owes Austin $38.91
+	Wesley owes Austin $47.60
+	Zoe owes Austin $41.76
 name: Longhorn Saloon
 date: 03/03/2026 12:29:00
 payer(s): Zoe
@@ -57,6 +77,22 @@ First add up each person's share of the bill, splitting shared food items equall
 		tax, tip, and discounts share: ¤14.43
 		total raw share ¤63.27
 
+Splitting debts between payers:
+	Wesley owes the following people money:
+		¤52.25 to Zoe
+	Austin owes the following people money:
+		¤85.94 to Zoe
+	Zoe owes the following people money:
+		¤63.27 to Zoe
+
+Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+	Austin owes Zoe an extra penny
+	Zoe owes Zoe an extra penny
+
+Final bill split:
+	Austin owes Zoe $85.94
+	Zoe owes Zoe $63.27
+	Wesley owes Zoe $52.25
 name: Mongolie Grill
 date: 03/01/2026 19:28:00
 payer(s): Zoe
@@ -83,6 +119,21 @@ First add up each person's share of the bill, splitting shared food items equall
 		tax, tip, and discounts share: ¤14.96
 		total raw share ¤71.92
 
+Splitting debts between payers:
+	Zoe owes the following people money:
+		¤54.19 to Zoe
+	Wesley owes the following people money:
+		¤75.56 to Zoe
+	Austin owes the following people money:
+		¤71.92 to Zoe
+
+Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+	Wesley owes Zoe an extra penny
+
+Final bill split:
+	Wesley owes Zoe $75.56
+	Zoe owes Zoe $54.19
+	Austin owes Zoe $71.92
 name: The Keg
 date: 03/02/2026 19:07:00
 payer(s): Austin
@@ -109,6 +160,22 @@ First add up each person's share of the bill, splitting shared food items equall
 		tax, tip, and discounts share: ¤27.51
 		total raw share ¤121.01
 
+Splitting debts between payers:
+	Austin owes the following people money:
+		¤94.48 to Austin
+	Zoe owes the following people money:
+		¤103.54 to Austin
+	Wesley owes the following people money:
+		¤121.01 to Austin
+
+Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+	Wesley owes Austin an extra penny
+	Austin owes Austin an extra penny
+
+Final bill split:
+	Wesley owes Austin $121.01
+	Austin owes Austin $94.48
+	Zoe owes Austin $103.53
 name: 21 Steps
 date: 03/05/2026 18:32:00
 payer(s): Austin
@@ -141,6 +208,25 @@ First add up each person's share of the bill, splitting shared food items equall
 		tax, tip, and discounts share: ¤21.94
 		total raw share ¤94.69
 
+Splitting debts between payers:
+	Austin owes the following people money:
+		¤90.78 to Austin
+	Wesley owes the following people money:
+		¤71.26 to Austin
+	Zoe owes the following people money:
+		¤77.77 to Austin
+	Carena owes the following people money:
+		¤94.69 to Austin
+
+Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+	Carena owes Austin an extra penny
+	Zoe owes Austin an extra penny
+
+Final bill split:
+	Carena owes Austin $94.69
+	Zoe owes Austin $77.77
+	Austin owes Austin $90.78
+	Wesley owes Austin $71.26
 
 
 Calculating Final Debts
