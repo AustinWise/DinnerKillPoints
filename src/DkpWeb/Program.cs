@@ -68,6 +68,17 @@ namespace DkpWeb
             }
 
             {
+                var bs = new BillSplitter("Whistler Grocery Store", new DateTime(2026, 3, 2, 19, 28, 0), austin);
+                bs.Tax = 74;
+                bs.SharedFood = 9716;
+                bs[austin] = 0;
+                bs[wesley] = 0;
+                bs[zoe] = 0;
+                bs[carena] = 0;
+                trans.AddRange(bs.ToTransactions(Console.Out));
+            }
+
+            {
                 var bs = new BillSplitter("Longhorn Saloon", new DateTime(2026, 3, 3, 12, 29, 0), zoe);
                 bs.SharedFood = 3500 + 500 * 4; // fucking nachos
                 bs.Tax = 32 + 430 + 777;

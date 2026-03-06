@@ -40,6 +40,7 @@ Final bill split:
 	Wesley owes Zoe $75.56
 	Zoe owes Zoe $54.19
 	Austin owes Zoe $71.92
+
 name: The Keg
 date: 03/02/2026 19:07:00
 payer(s): Austin
@@ -82,6 +83,59 @@ Final bill split:
 	Wesley owes Austin $121.01
 	Austin owes Austin $94.48
 	Zoe owes Austin $103.53
+
+name: Whistler Grocery Store
+date: 03/02/2026 19:28:00
+payer(s): Austin
+pool: ¤97.16
+totalBillValue: ¤97.90
+
+First add up each person's share of the bill, splitting shared food items equally:
+	Austin:
+		personal food: ¤0.00
+		shared food share: ¤24.29
+		tax, tip, and discounts share: %25
+		tax, tip, and discounts share: ¤0.18
+		total raw share ¤24.48
+	Wesley:
+		personal food: ¤0.00
+		shared food share: ¤24.29
+		tax, tip, and discounts share: %25
+		tax, tip, and discounts share: ¤0.18
+		total raw share ¤24.48
+	Zoe:
+		personal food: ¤0.00
+		shared food share: ¤24.29
+		tax, tip, and discounts share: %25
+		tax, tip, and discounts share: ¤0.18
+		total raw share ¤24.48
+	Carena:
+		personal food: ¤0.00
+		shared food share: ¤24.29
+		tax, tip, and discounts share: %25
+		tax, tip, and discounts share: ¤0.18
+		total raw share ¤24.48
+
+Splitting debts between payers:
+	Austin owes the following people money:
+		¤24.48 to Austin
+	Wesley owes the following people money:
+		¤24.48 to Austin
+	Zoe owes the following people money:
+		¤24.48 to Austin
+	Carena owes the following people money:
+		¤24.48 to Austin
+
+Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+	Austin owes Austin an extra penny
+	Wesley owes Austin an extra penny
+
+Final bill split:
+	Austin owes Austin $24.48
+	Wesley owes Austin $24.48
+	Zoe owes Austin $24.47
+	Carena owes Austin $24.47
+
 name: Longhorn Saloon
 date: 03/03/2026 12:29:00
 payer(s): Zoe
@@ -124,6 +178,7 @@ Final bill split:
 	Austin owes Zoe $85.94
 	Zoe owes Zoe $63.27
 	Wesley owes Zoe $52.25
+
 name: The Old Spaghetti Factory
 date: 03/04/2026 16:45:00
 payer(s): Austin
@@ -176,6 +231,7 @@ Final bill split:
 	Carena owes Austin $38.91
 	Wesley owes Austin $47.60
 	Zoe owes Austin $41.76
+
 name: 21 Steps
 date: 03/05/2026 18:32:00
 payer(s): Austin
@@ -229,6 +285,7 @@ Final bill split:
 	Wesley owes Austin $71.26
 
 
+
 Calculating Final Debts
 Cycles
 
@@ -236,6 +293,6 @@ Cycles
 FINAL TOTAL:
 
 $127.81: Wesley -> Zoe
-$65.20: Zoe -> Austin
-$239.87: Wesley -> Austin
-$133.60: Carena -> Austin
+$89.67: Zoe -> Austin
+$264.35: Wesley -> Austin
+$158.07: Carena -> Austin
