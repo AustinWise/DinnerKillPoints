@@ -1,98 +1,4 @@
 Using launch settings from /workspaces/DinnerKillPoints/src/DkpWeb/Properties/launchSettings.json...
-name: The Old Spaghetti Factory
-date: 03/04/2026 16:45:00
-payer(s): Austin
-pool: ¤140.25
-totalBillValue: ¤181.90
-
-First add up each person's share of the bill, splitting shared food items equally:
-	Wesley:
-		personal food: ¤34.45
-		shared food share: ¤2.25
-		tax, tip, and discounts share: %26.16755793226381
-		tax, tip, and discounts share: ¤10.90
-		total raw share ¤47.60
-	Austin:
-		personal food: ¤39.10
-		shared food share: ¤2.25
-		tax, tip, and discounts share: %29.48306595365419
-		tax, tip, and discounts share: ¤12.28
-		total raw share ¤53.63
-	Carena:
-		personal food: ¤27.75
-		shared food share: ¤2.25
-		tax, tip, and discounts share: %21.390374331550802
-		tax, tip, and discounts share: ¤8.91
-		total raw share ¤38.91
-	Zoe:
-		personal food: ¤29.95
-		shared food share: ¤2.25
-		tax, tip, and discounts share: %22.959001782531193
-		tax, tip, and discounts share: ¤9.56
-		total raw share ¤41.76
-
-Splitting debts between payers:
-	Wesley owes the following people money:
-		¤47.60 to Austin
-	Austin owes the following people money:
-		¤53.63 to Austin
-	Carena owes the following people money:
-		¤38.91 to Austin
-	Zoe owes the following people money:
-		¤41.76 to Austin
-
-Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
-	Austin owes Austin an extra penny
-	Carena owes Austin an extra penny
-	Wesley owes Austin an extra penny
-
-Final bill split:
-	Austin owes Austin $53.63
-	Carena owes Austin $38.91
-	Wesley owes Austin $47.60
-	Zoe owes Austin $41.76
-name: Longhorn Saloon
-date: 03/03/2026 12:29:00
-payer(s): Zoe
-pool: ¤155.50
-totalBillValue: ¤201.46
-
-First add up each person's share of the bill, splitting shared food items equally:
-	Wesley:
-		personal food: ¤22.00
-		shared food share: ¤18.33
-		tax, tip, and discounts share: %25.937834941050376
-		tax, tip, and discounts share: ¤11.92
-		total raw share ¤52.25
-	Austin:
-		personal food: ¤48.00
-		shared food share: ¤18.33
-		tax, tip, and discounts share: %42.658092175777064
-		tax, tip, and discounts share: ¤19.61
-		total raw share ¤85.94
-	Zoe:
-		personal food: ¤30.50
-		shared food share: ¤18.33
-		tax, tip, and discounts share: %31.404072883172564
-		tax, tip, and discounts share: ¤14.43
-		total raw share ¤63.27
-
-Splitting debts between payers:
-	Wesley owes the following people money:
-		¤52.25 to Zoe
-	Austin owes the following people money:
-		¤85.94 to Zoe
-	Zoe owes the following people money:
-		¤63.27 to Zoe
-
-Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
-	Austin owes Zoe an extra penny
-	Zoe owes Zoe an extra penny
-
-Final bill split:
-	Austin owes Zoe $85.94
-	Zoe owes Zoe $63.27
-	Wesley owes Zoe $52.25
 name: Mongolie Grill
 date: 03/01/2026 19:28:00
 payer(s): Zoe
@@ -176,6 +82,100 @@ Final bill split:
 	Wesley owes Austin $121.01
 	Austin owes Austin $94.48
 	Zoe owes Austin $103.53
+name: Longhorn Saloon
+date: 03/03/2026 12:29:00
+payer(s): Zoe
+pool: ¤155.50
+totalBillValue: ¤201.46
+
+First add up each person's share of the bill, splitting shared food items equally:
+	Wesley:
+		personal food: ¤22.00
+		shared food share: ¤18.33
+		tax, tip, and discounts share: %25.937834941050376
+		tax, tip, and discounts share: ¤11.92
+		total raw share ¤52.25
+	Austin:
+		personal food: ¤48.00
+		shared food share: ¤18.33
+		tax, tip, and discounts share: %42.658092175777064
+		tax, tip, and discounts share: ¤19.61
+		total raw share ¤85.94
+	Zoe:
+		personal food: ¤30.50
+		shared food share: ¤18.33
+		tax, tip, and discounts share: %31.404072883172564
+		tax, tip, and discounts share: ¤14.43
+		total raw share ¤63.27
+
+Splitting debts between payers:
+	Wesley owes the following people money:
+		¤52.25 to Zoe
+	Austin owes the following people money:
+		¤85.94 to Zoe
+	Zoe owes the following people money:
+		¤63.27 to Zoe
+
+Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+	Austin owes Zoe an extra penny
+	Zoe owes Zoe an extra penny
+
+Final bill split:
+	Austin owes Zoe $85.94
+	Zoe owes Zoe $63.27
+	Wesley owes Zoe $52.25
+name: The Old Spaghetti Factory
+date: 03/04/2026 16:45:00
+payer(s): Austin
+pool: ¤140.25
+totalBillValue: ¤181.90
+
+First add up each person's share of the bill, splitting shared food items equally:
+	Wesley:
+		personal food: ¤34.45
+		shared food share: ¤2.25
+		tax, tip, and discounts share: %26.16755793226381
+		tax, tip, and discounts share: ¤10.90
+		total raw share ¤47.60
+	Austin:
+		personal food: ¤39.10
+		shared food share: ¤2.25
+		tax, tip, and discounts share: %29.48306595365419
+		tax, tip, and discounts share: ¤12.28
+		total raw share ¤53.63
+	Carena:
+		personal food: ¤27.75
+		shared food share: ¤2.25
+		tax, tip, and discounts share: %21.390374331550802
+		tax, tip, and discounts share: ¤8.91
+		total raw share ¤38.91
+	Zoe:
+		personal food: ¤29.95
+		shared food share: ¤2.25
+		tax, tip, and discounts share: %22.959001782531193
+		tax, tip, and discounts share: ¤9.56
+		total raw share ¤41.76
+
+Splitting debts between payers:
+	Wesley owes the following people money:
+		¤47.60 to Austin
+	Austin owes the following people money:
+		¤53.63 to Austin
+	Carena owes the following people money:
+		¤38.91 to Austin
+	Zoe owes the following people money:
+		¤41.76 to Austin
+
+Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+	Austin owes Austin an extra penny
+	Carena owes Austin an extra penny
+	Wesley owes Austin an extra penny
+
+Final bill split:
+	Austin owes Austin $53.63
+	Carena owes Austin $38.91
+	Wesley owes Austin $47.60
+	Zoe owes Austin $41.76
 name: 21 Steps
 date: 03/05/2026 18:32:00
 payer(s): Austin
@@ -235,7 +235,7 @@ Cycles
 
 FINAL TOTAL:
 
-$133.60: Carena -> Austin
-$239.87: Wesley -> Austin
-$65.20: Zoe -> Austin
 $127.81: Wesley -> Zoe
+$65.20: Zoe -> Austin
+$239.87: Wesley -> Austin
+$133.60: Carena -> Austin

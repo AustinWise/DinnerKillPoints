@@ -48,29 +48,6 @@ namespace DkpWeb
             var trans = new List<SplitTransaction>();
 
             {
-                var bs = new BillSplitter("The Old Spaghetti Factory", new DateTime(2026, 3, 4, 12 + 4, 45, 0), austin);
-                bs.SharedFood = 1095 - 195; // shrimp, minus happy hour
-                bs.Tax = 701 + 432;
-                bs.Tip = 3032;
-                bs[wesley] = 795 - 195 + 2050 + 795; // linquine
-                bs[austin] = (1390 - 190) / 2 + 1990 + 1025 + 295;
-                bs[carena] = (1390 - 190) / 2 + 2175;
-                bs[zoe] = 825 - 125 + 2295; // fettuccine alfredo
-                trans.AddRange(bs.ToTransactions(Console.Out));
-            }
-
-            {
-                var bs = new BillSplitter("Longhorn Saloon", new DateTime(2026, 3, 3, 12, 29, 0), zoe);
-                bs.SharedFood = 3500 + 500 * 4; // fucking nachos
-                bs.Tax = 32 + 430 + 777;
-                bs.Tip = 3357;
-                bs[wesley] = 1100 + 1100; // "cervesa" and budweiser
-                bs[austin] = 1000 + 2700 + 1100; // apres lager and "alpine" chicken burger and budweiser
-                bs[zoe] = 450 + 2400 + 200; // diest coke and wings
-                trans.AddRange(bs.ToTransactions(Console.Out));
-            }
-
-            {
                 var bs = new BillSplitter("Mongolie Grill", new DateTime(2026, 3, 1, 12 + 7, 28, 0), zoe);
                 bs.Tip = 3076;
                 bs.Tax = 799 + 320;
@@ -87,6 +64,29 @@ namespace DkpWeb
                 bs[austin] = 4200 + 1000 + 2100; // 6oz sirloin + molsen + syrah
                 bs[zoe] = 5500 + 1400 + 1100; // 6 oz sirloin / classic + truffle + mock micha colda
                 bs[wesley] = 6200 + 1050 + 2100; // 10 oz prime rib + pale ale + syrah
+                trans.AddRange(bs.ToTransactions(Console.Out));
+            }
+
+            {
+                var bs = new BillSplitter("Longhorn Saloon", new DateTime(2026, 3, 3, 12, 29, 0), zoe);
+                bs.SharedFood = 3500 + 500 * 4; // fucking nachos
+                bs.Tax = 32 + 430 + 777;
+                bs.Tip = 3357;
+                bs[wesley] = 1100 + 1100; // "cervesa" and budweiser
+                bs[austin] = 1000 + 2700 + 1100; // apres lager and "alpine" chicken burger and budweiser
+                bs[zoe] = 450 + 2400 + 200; // diest coke and wings
+                trans.AddRange(bs.ToTransactions(Console.Out));
+            }
+
+            {
+                var bs = new BillSplitter("The Old Spaghetti Factory", new DateTime(2026, 3, 4, 12 + 4, 45, 0), austin);
+                bs.SharedFood = 1095 - 195; // shrimp, minus happy hour
+                bs.Tax = 701 + 432;
+                bs.Tip = 3032;
+                bs[wesley] = 795 - 195 + 2050 + 795; // linquine
+                bs[austin] = (1390 - 190) / 2 + 1990 + 1025 + 295;
+                bs[carena] = (1390 - 190) / 2 + 2175;
+                bs[zoe] = 825 - 125 + 2295; // fettuccine alfredo
                 trans.AddRange(bs.ToTransactions(Console.Out));
             }
 
