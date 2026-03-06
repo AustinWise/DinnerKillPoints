@@ -17,65 +17,116 @@ namespace DkpWeb
     {
         public static async Task Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-            var startup = new Startup(builder.Configuration);
-            startup.ConfigureServices(builder.Services, builder.Environment);
-            var app = builder.Build();
-            startup.Configure(app, builder.Environment);
-
-            var cfg = app.Configuration;
-
-            if (cfg["migrate"] != null)
+            var allSplitPeople = new List<SplitPerson>();
+            int idCounter = 0;
+            var austin = new SplitPerson()
             {
-                using var scope = app.Services.CreateScope();
-                var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                await db.Database.MigrateAsync();
+                Id = ++idCounter,
+                FullName = "Austin",
+            };
+            allSplitPeople.Add(austin);
+            var wesley = new SplitPerson()
+            {
+                Id = ++idCounter,
+                FullName = "Wesley",
+            };
+            allSplitPeople.Add(wesley);
+            var zoe = new SplitPerson()
+            {
+                Id = ++idCounter,
+                FullName = "Zoe",
+            };
+            allSplitPeople.Add(zoe);
+            var carena = new SplitPerson()
+            {
+                Id = ++idCounter,
+                FullName = "Carena",
+            };
+            allSplitPeople.Add(carena);
 
-                var roles = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                await EnsureRole(roles, "Admin");
-                await EnsureRole(roles, "DKP");
-                return;
+
+            var trans = new List<SplitTransaction>();
+
+            {
+                var bs = new BillSplitter("The Old Spaghetti Factory", new DateTime(2026, 3, 4, 12 + 4, 45, 0), austin);
+                bs.SharedFood = 1095 - 195; // shrimp, minus happy hour
+                bs.Tax = 701 + 432;
+                bs.Tip = 3032;
+                bs[wesley] = 795 - 195 + 2050 + 795; // linquine
+                bs[austin] = (1390 - 190) / 2 + 1990 + 1025 + 295;
+                bs[carena] = (1390 - 190) / 2 + 2175;
+                bs[zoe] = 825 - 125 + 2295; // fettuccine alfredo
+                trans.AddRange(bs.ToTransactions(Console.Out));
             }
 
-            if (cfg["split"] != null)
             {
-                using var scope = app.Services.CreateScope();
-                var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                var splitterService = scope.ServiceProvider.GetService<IBillSplitterServices>();
-                var peopleMap = (await splitterService.GetAllPeopleAsync()).ToDictionary(p => p.Id);
-                SplitPerson GetPerson(int id) => peopleMap[id];
-
-                var austin = GetPerson(1);
-                var caspar = GetPerson(2);
-                var wesley = GetPerson(3);
-                var arata = GetPerson(10);
-                var roger = GetPerson(19);
-                var justinShih = GetPerson(30);
-
-
-                WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
-                WriteData(db, false, db.Person.ToArray());
-
-                return;
+                var bs = new BillSplitter("Longhorn Saloon", new DateTime(2026, 3, 3, 12, 29, 0), zoe);
+                bs.SharedFood = 3500 + 500 * 4; // fucking nachos
+                bs.Tax = 32 + 430 + 777;
+                bs.Tip = 3357;
+                bs[wesley] = 1100 + 1100; // "cervesa" and budweiser
+                bs[austin] = 1000 + 2700 + 1100; // apres lager and "alpine" chicken burger and budweiser
+                bs[zoe] = 450 + 2400 + 200; // diest coke and wings
+                trans.AddRange(bs.ToTransactions(Console.Out));
             }
 
-            if (cfg["sendmail"] != null)
             {
-                using var scope = app.Services.CreateScope();
-                var mail = scope.ServiceProvider.GetRequiredService<MailMerge>();
-                await mail.Send(1);
-                return;
+                var bs = new BillSplitter("Mongolie Grill", new DateTime(2026, 3, 1, 12 + 7, 28, 0), zoe);
+                bs.Tip = 3076;
+                bs.Tax = 799 + 320;
+                bs[zoe] = 3392 + 900; // 0.53 kg + lychee lemonade
+                bs[wesley] = 1600 + 4384; // steamworks + 0.685 kg
+                bs[austin] = 1600 + 4096; // steamworks + 0.640 kg
+                trans.AddRange(bs.ToTransactions(Console.Out));
             }
 
-            string port = Environment.GetEnvironmentVariable("PORT");
-
-            if (!string.IsNullOrEmpty(port))
             {
-                await app.RunAsync("http://0.0.0.0:" + port);
+                var bs = new BillSplitter("The Keg", new DateTime(2026, 3, 2, 12 + 7, 7, 0), austin);
+                bs.Tax = 625 + 77 + 1233;
+                bs.Tip = 5317;
+                bs[austin] = 4200 + 1000 + 2100; // 6oz sirloin + molsen + syrah
+                bs[zoe] = 5500 + 1400 + 1100; // 6 oz sirloin / classic + truffle + mock micha colda
+                bs[wesley] = 6200 + 1050 + 2100; // 10 oz prime rib + pale ale + syrah
+                trans.AddRange(bs.ToTransactions(Console.Out));
             }
-            else
+
             {
-                await app.RunAsync();
+                var bs = new BillSplitter("21 Steps", new DateTime(2026, 3, 5, 12 + 6, 32, 0), austin);
+                bs.SharedFood = 1700 + 1400; // fried tofu + cheesecake
+                bs.Tax = 1285 + 890;
+                bs.Tip = 5575;
+                bs[austin] = 1600 + 1700 + 800 + 2100; // corpse reviver #2 + division bell + fernet + salad
+                bs[wesley] = 1700 + 3000; // 2x rotator (stout) + pork pappardelle
+                bs[zoe] = 1500 + 3700; // riesling + lingcod
+                bs[carena] = 1600 + 4900; // new york steak
+                trans.AddRange(bs.ToTransactions(Console.Out));
+            }
+
+            var peopleMap = allSplitPeople.ToDictionary(p => p.Id, p => new Person()
+            {
+                Id = p.Id,
+                FirstName = p.FullName,
+            });
+            var allTrans = trans.Select(t => new Transaction()
+            {
+                Id = t.Id,
+                Amount = t.Amount,
+                Creditor = peopleMap[t.CreditorId],
+                CreditorId = t.CreditorId,
+                Debtor = peopleMap[t.DebtorId],
+                DebtorId = t.DebtorId,
+            }).ToArray();
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Calculating Final Debts");
+            var debts = DebtGraph.CalculateDebts(allTrans, true, Console.Out);
+            Console.WriteLine();
+            Console.WriteLine("FINAL TOTAL:");
+            Console.WriteLine();
+            foreach (var debt in debts)
+            {
+                Console.WriteLine(debt);
             }
         }
 

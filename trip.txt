@@ -1,0 +1,155 @@
+Using launch settings from /workspaces/DinnerKillPoints/src/DkpWeb/Properties/launchSettings.json...
+name: The Old Spaghetti Factory
+date: 03/04/2026 16:45:00
+payer(s): Austin
+pool: ¤140.25
+totalBillValue: ¤181.90
+
+First add up each person's share of the bill, splitting shared food items equally:
+	Wesley:
+		personal food: ¤34.45
+		shared food share: ¤2.25
+		tax, tip, and discounts share: %26.16755793226381
+		tax, tip, and discounts share: ¤10.90
+		total raw share ¤47.60
+	Austin:
+		personal food: ¤39.10
+		shared food share: ¤2.25
+		tax, tip, and discounts share: %29.48306595365419
+		tax, tip, and discounts share: ¤12.28
+		total raw share ¤53.63
+	Carena:
+		personal food: ¤27.75
+		shared food share: ¤2.25
+		tax, tip, and discounts share: %21.390374331550802
+		tax, tip, and discounts share: ¤8.91
+		total raw share ¤38.91
+	Zoe:
+		personal food: ¤29.95
+		shared food share: ¤2.25
+		tax, tip, and discounts share: %22.959001782531193
+		tax, tip, and discounts share: ¤9.56
+		total raw share ¤41.76
+
+name: Longhorn Saloon
+date: 03/03/2026 12:29:00
+payer(s): Zoe
+pool: ¤155.50
+totalBillValue: ¤201.46
+
+First add up each person's share of the bill, splitting shared food items equally:
+	Wesley:
+		personal food: ¤22.00
+		shared food share: ¤18.33
+		tax, tip, and discounts share: %25.937834941050376
+		tax, tip, and discounts share: ¤11.92
+		total raw share ¤52.25
+	Austin:
+		personal food: ¤48.00
+		shared food share: ¤18.33
+		tax, tip, and discounts share: %42.658092175777064
+		tax, tip, and discounts share: ¤19.61
+		total raw share ¤85.94
+	Zoe:
+		personal food: ¤30.50
+		shared food share: ¤18.33
+		tax, tip, and discounts share: %31.404072883172564
+		tax, tip, and discounts share: ¤14.43
+		total raw share ¤63.27
+
+name: Mongolie Grill
+date: 03/01/2026 19:28:00
+payer(s): Zoe
+pool: ¤159.72
+totalBillValue: ¤201.67
+
+First add up each person's share of the bill, splitting shared food items equally:
+	Zoe:
+		personal food: ¤42.92
+		shared food share: ¤0.00
+		tax, tip, and discounts share: %26.872026045579766
+		tax, tip, and discounts share: ¤11.27
+		total raw share ¤54.19
+	Wesley:
+		personal food: ¤59.84
+		shared food share: ¤0.00
+		tax, tip, and discounts share: %37.46556473829201
+		tax, tip, and discounts share: ¤15.72
+		total raw share ¤75.56
+	Austin:
+		personal food: ¤56.96
+		shared food share: ¤0.00
+		tax, tip, and discounts share: %35.662409216128225
+		tax, tip, and discounts share: ¤14.96
+		total raw share ¤71.92
+
+name: The Keg
+date: 03/02/2026 19:07:00
+payer(s): Austin
+pool: ¤246.50
+totalBillValue: ¤319.02
+
+First add up each person's share of the bill, splitting shared food items equally:
+	Austin:
+		personal food: ¤73.00
+		shared food share: ¤0.00
+		tax, tip, and discounts share: %29.61460446247465
+		tax, tip, and discounts share: ¤21.48
+		total raw share ¤94.48
+	Zoe:
+		personal food: ¤80.00
+		shared food share: ¤0.00
+		tax, tip, and discounts share: %32.454361054766736
+		tax, tip, and discounts share: ¤23.54
+		total raw share ¤103.54
+	Wesley:
+		personal food: ¤93.50
+		shared food share: ¤0.00
+		tax, tip, and discounts share: %37.93103448275862
+		tax, tip, and discounts share: ¤27.51
+		total raw share ¤121.01
+
+name: 21 Steps
+date: 03/05/2026 18:32:00
+payer(s): Austin
+pool: ¤257.00
+totalBillValue: ¤334.50
+
+First add up each person's share of the bill, splitting shared food items equally:
+	Austin:
+		personal food: ¤62.00
+		shared food share: ¤7.75
+		tax, tip, and discounts share: %27.140077821011673
+		tax, tip, and discounts share: ¤21.03
+		total raw share ¤90.78
+	Wesley:
+		personal food: ¤47.00
+		shared food share: ¤7.75
+		tax, tip, and discounts share: %21.30350194552529
+		tax, tip, and discounts share: ¤16.51
+		total raw share ¤71.26
+	Zoe:
+		personal food: ¤52.00
+		shared food share: ¤7.75
+		tax, tip, and discounts share: %23.249027237354085
+		tax, tip, and discounts share: ¤18.02
+		total raw share ¤77.77
+	Carena:
+		personal food: ¤65.00
+		shared food share: ¤7.75
+		tax, tip, and discounts share: %28.30739299610895
+		tax, tip, and discounts share: ¤21.94
+		total raw share ¤94.69
+
+
+
+Calculating Final Debts
+Cycles
+
+
+FINAL TOTAL:
+
+$133.60: Carena -> Austin
+$239.87: Wesley -> Austin
+$65.20: Zoe -> Austin
+$127.81: Wesley -> Zoe
