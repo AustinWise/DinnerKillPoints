@@ -107,6 +107,7 @@ namespace Austin.DkpLib
         public IEnumerable<SplitTransaction> ToTransactions(TextWriter log)
         {
             var debts = SplitBill(log);
+            log.WriteLine();
 
             foreach (var (debtor, creditor, pennies) in debts)
             {
