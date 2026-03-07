@@ -1,4 +1,4 @@
-Using launch settings from /workspaces/DinnerKillPoints/src/DkpWeb/Properties/launchSettings.json...
+Using launch settings from src/DkpWeb/Properties/launchSettings.json...
 name: Mongolie Grill
 date: 03/01/2026 19:28:00
 payer(s): Zoe
@@ -284,6 +284,58 @@ Final bill split:
 	Austin owes Austin $90.78
 	Wesley owes Austin $71.26
 
+name: Bar Oso
+date: 03/06/2026 17:41:00
+payer(s): Austin
+pool: ¤295.00
+totalBillValue: ¤388.14
+
+First add up each person's share of the bill, splitting shared food items equally:
+	Austin:
+		personal food: ¤39.00
+		shared food share: ¤39.50
+		tax, tip, and discounts share: %26.610169491525426
+		tax, tip, and discounts share: ¤24.78
+		total raw share ¤103.28
+	Wesley:
+		personal food: ¤39.00
+		shared food share: ¤39.50
+		tax, tip, and discounts share: %26.610169491525426
+		tax, tip, and discounts share: ¤24.78
+		total raw share ¤103.28
+	Zoe:
+		personal food: ¤20.00
+		shared food share: ¤39.50
+		tax, tip, and discounts share: %20.16949152542373
+		tax, tip, and discounts share: ¤18.79
+		total raw share ¤78.29
+	Carena:
+		personal food: ¤39.00
+		shared food share: ¤39.50
+		tax, tip, and discounts share: %26.610169491525426
+		tax, tip, and discounts share: ¤24.78
+		total raw share ¤103.28
+
+Splitting debts between payers:
+	Austin owes the following people money:
+		¤103.28 to Austin
+	Wesley owes the following people money:
+		¤103.28 to Austin
+	Zoe owes the following people money:
+		¤78.29 to Austin
+	Carena owes the following people money:
+		¤103.28 to Austin
+
+Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+	Zoe owes Austin an extra penny
+	Austin owes Austin an extra penny
+
+Final bill split:
+	Zoe owes Austin $78.29
+	Austin owes Austin $103.29
+	Wesley owes Austin $103.28
+	Carena owes Austin $103.28
+
 
 
 Calculating Final Debts
@@ -293,6 +345,6 @@ Cycles
 FINAL TOTAL:
 
 $127.81: Wesley -> Zoe
-$89.67: Zoe -> Austin
-$264.35: Wesley -> Austin
-$158.07: Carena -> Austin
+$167.96: Zoe -> Austin
+$367.63: Wesley -> Austin
+$261.35: Carena -> Austin

@@ -113,6 +113,18 @@ namespace DkpWeb
                 trans.AddRange(bs.ToTransactions(Console.Out));
             }
 
+            {
+                var bs = new BillSplitter("Bar Oso", new DateTime(2026, 3, 6, 12 + 5, 41, 0), austin);
+                bs.Tax = 1475 + 1370;
+                bs.Tip = 6469;
+                bs.SharedFood = 1400 + 2800 + 1200 + 1900 + 1900 + 4800 + 1800;
+                bs[austin] = 2000 + 1900;
+                bs[wesley] = 2000 + 1900;
+                bs[zoe] = 2000;
+                bs[carena] = 2000 + 1900;
+                trans.AddRange(bs.ToTransactions(Console.Out));
+            }
+
             var peopleMap = allSplitPeople.ToDictionary(p => p.Id, p => new Person()
             {
                 Id = p.Id,
