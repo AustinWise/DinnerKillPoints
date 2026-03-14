@@ -1,4 +1,6 @@
-Using launch settings from src/DkpWeb/Properties/launchSettings.json...
+Using launch settings from ./src/DkpWeb/Properties/launchSettings.json...
+/Users/austin/src/DinnerKillPoints/src/DkpWeb/DkpWeb.csproj : warning NU1902: Package 'MimeKit' 2.12.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-g7hc-96xr-gvvx
+/Users/austin/src/DinnerKillPoints/src/DkpWeb/DkpWeb.csproj : warning NU1902: Package 'MimeKit' 2.12.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-g7hc-96xr-gvvx
 name: Mongolie Grill
 date: 03/01/2026 19:28:00
 payer(s): Zoe
@@ -7,33 +9,33 @@ totalBillValue: ¤201.67
 
 First add up each person's share of the bill, splitting shared food items equally:
 	Zoe:
-		personal food: ¤42.92
-		shared food share: ¤0.00
+		personal food: 42.92
+		shared food share: 0
 		tax, tip, and discounts share: %26.872026045579766
-		tax, tip, and discounts share: ¤11.27
-		total raw share ¤54.19
+		tax, tip, and discounts share: 11.272814926120711
+		total raw share 54.19281492612071
 	Wesley:
-		personal food: ¤59.84
-		shared food share: ¤0.00
+		personal food: 59.84
+		shared food share: 0
 		tax, tip, and discounts share: %37.46556473829201
-		tax, tip, and discounts share: ¤15.72
-		total raw share ¤75.56
+		tax, tip, and discounts share: 15.716804407713498
+		total raw share 75.5568044077135
 	Austin:
-		personal food: ¤56.96
-		shared food share: ¤0.00
+		personal food: 56.96
+		shared food share: 0
 		tax, tip, and discounts share: %35.662409216128225
-		tax, tip, and discounts share: ¤14.96
-		total raw share ¤71.92
+		tax, tip, and discounts share: 14.96038066616579
+		total raw share 71.9203806661658
 
 Splitting debts between payers:
 	Zoe owes the following people money:
-		¤54.19 to Zoe
+		54.19281492612071 to Zoe
 	Wesley owes the following people money:
-		¤75.56 to Zoe
+		75.5568044077135 to Zoe
 	Austin owes the following people money:
-		¤71.92 to Zoe
+		71.9203806661658 to Zoe
 
-Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+Debts hard fractional pennies, so the fractional amount will be redistributed in a round-robbin fashion until no more fractional pennies remain:
 	Wesley owes Zoe an extra penny
 
 Final bill split:
@@ -49,33 +51,33 @@ totalBillValue: ¤319.02
 
 First add up each person's share of the bill, splitting shared food items equally:
 	Austin:
-		personal food: ¤73.00
-		shared food share: ¤0.00
+		personal food: 73
+		shared food share: 0
 		tax, tip, and discounts share: %29.61460446247465
-		tax, tip, and discounts share: ¤21.48
-		total raw share ¤94.48
+		tax, tip, and discounts share: 21.476511156186618
+		total raw share 94.4765111561866
 	Zoe:
-		personal food: ¤80.00
-		shared food share: ¤0.00
+		personal food: 80
+		shared food share: 0
 		tax, tip, and discounts share: %32.454361054766736
-		tax, tip, and discounts share: ¤23.54
-		total raw share ¤103.54
+		tax, tip, and discounts share: 23.535902636916834
+		total raw share 103.53590263691683
 	Wesley:
-		personal food: ¤93.50
-		shared food share: ¤0.00
+		personal food: 93.5
+		shared food share: 0
 		tax, tip, and discounts share: %37.93103448275862
-		tax, tip, and discounts share: ¤27.51
-		total raw share ¤121.01
+		tax, tip, and discounts share: 27.507586206896548
+		total raw share 121.00758620689656
 
 Splitting debts between payers:
 	Austin owes the following people money:
-		¤94.48 to Austin
+		94.4765111561866 to Austin
 	Zoe owes the following people money:
-		¤103.54 to Austin
+		103.53590263691683 to Austin
 	Wesley owes the following people money:
-		¤121.01 to Austin
+		121.00758620689656 to Austin
 
-Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+Debts hard fractional pennies, so the fractional amount will be redistributed in a round-robbin fashion until no more fractional pennies remain:
 	Wesley owes Austin an extra penny
 	Austin owes Austin an extra penny
 
@@ -92,41 +94,41 @@ totalBillValue: ¤97.90
 
 First add up each person's share of the bill, splitting shared food items equally:
 	Austin:
-		personal food: ¤0.00
-		shared food share: ¤24.29
+		personal food: 0
+		shared food share: 24.29
 		tax, tip, and discounts share: %25
-		tax, tip, and discounts share: ¤0.18
-		total raw share ¤24.48
+		tax, tip, and discounts share: 0.185
+		total raw share 24.475
 	Wesley:
-		personal food: ¤0.00
-		shared food share: ¤24.29
+		personal food: 0
+		shared food share: 24.29
 		tax, tip, and discounts share: %25
-		tax, tip, and discounts share: ¤0.18
-		total raw share ¤24.48
+		tax, tip, and discounts share: 0.185
+		total raw share 24.475
 	Zoe:
-		personal food: ¤0.00
-		shared food share: ¤24.29
+		personal food: 0
+		shared food share: 24.29
 		tax, tip, and discounts share: %25
-		tax, tip, and discounts share: ¤0.18
-		total raw share ¤24.48
+		tax, tip, and discounts share: 0.185
+		total raw share 24.475
 	Carena:
-		personal food: ¤0.00
-		shared food share: ¤24.29
+		personal food: 0
+		shared food share: 24.29
 		tax, tip, and discounts share: %25
-		tax, tip, and discounts share: ¤0.18
-		total raw share ¤24.48
+		tax, tip, and discounts share: 0.185
+		total raw share 24.475
 
 Splitting debts between payers:
 	Austin owes the following people money:
-		¤24.48 to Austin
+		24.475 to Austin
 	Wesley owes the following people money:
-		¤24.48 to Austin
+		24.475 to Austin
 	Zoe owes the following people money:
-		¤24.48 to Austin
+		24.475 to Austin
 	Carena owes the following people money:
-		¤24.48 to Austin
+		24.475 to Austin
 
-Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+Debts hard fractional pennies, so the fractional amount will be redistributed in a round-robbin fashion until no more fractional pennies remain:
 	Austin owes Austin an extra penny
 	Wesley owes Austin an extra penny
 
@@ -144,33 +146,33 @@ totalBillValue: ¤201.46
 
 First add up each person's share of the bill, splitting shared food items equally:
 	Wesley:
-		personal food: ¤22.00
-		shared food share: ¤18.33
+		personal food: 22
+		shared food share: 18.333333333333332
 		tax, tip, and discounts share: %25.937834941050376
-		tax, tip, and discounts share: ¤11.92
-		total raw share ¤52.25
+		tax, tip, and discounts share: 11.921028938906751
+		total raw share 52.25436227224009
 	Austin:
-		personal food: ¤48.00
-		shared food share: ¤18.33
+		personal food: 48
+		shared food share: 18.333333333333332
 		tax, tip, and discounts share: %42.658092175777064
-		tax, tip, and discounts share: ¤19.61
-		total raw share ¤85.94
+		tax, tip, and discounts share: 19.605659163987138
+		total raw share 85.93899249732047
 	Zoe:
-		personal food: ¤30.50
-		shared food share: ¤18.33
+		personal food: 30.5
+		shared food share: 18.333333333333332
 		tax, tip, and discounts share: %31.404072883172564
-		tax, tip, and discounts share: ¤14.43
-		total raw share ¤63.27
+		tax, tip, and discounts share: 14.43331189710611
+		total raw share 63.266645230439444
 
 Splitting debts between payers:
 	Wesley owes the following people money:
-		¤52.25 to Zoe
+		52.25436227224009 to Zoe
 	Austin owes the following people money:
-		¤85.94 to Zoe
+		85.93899249732047 to Zoe
 	Zoe owes the following people money:
-		¤63.27 to Zoe
+		63.266645230439444 to Zoe
 
-Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+Debts hard fractional pennies, so the fractional amount will be redistributed in a round-robbin fashion until no more fractional pennies remain:
 	Austin owes Zoe an extra penny
 	Zoe owes Zoe an extra penny
 
@@ -187,41 +189,41 @@ totalBillValue: ¤181.90
 
 First add up each person's share of the bill, splitting shared food items equally:
 	Wesley:
-		personal food: ¤34.45
-		shared food share: ¤2.25
+		personal food: 34.45
+		shared food share: 2.25
 		tax, tip, and discounts share: %26.16755793226381
-		tax, tip, and discounts share: ¤10.90
-		total raw share ¤47.60
+		tax, tip, and discounts share: 10.898787878787878
+		total raw share 47.59878787878788
 	Austin:
-		personal food: ¤39.10
-		shared food share: ¤2.25
+		personal food: 39.1
+		shared food share: 2.25
 		tax, tip, and discounts share: %29.48306595365419
-		tax, tip, and discounts share: ¤12.28
-		total raw share ¤53.63
+		tax, tip, and discounts share: 12.27969696969697
+		total raw share 53.62969696969697
 	Carena:
-		personal food: ¤27.75
-		shared food share: ¤2.25
+		personal food: 27.75
+		shared food share: 2.25
 		tax, tip, and discounts share: %21.390374331550802
-		tax, tip, and discounts share: ¤8.91
-		total raw share ¤38.91
+		tax, tip, and discounts share: 8.909090909090908
+		total raw share 38.90909090909091
 	Zoe:
-		personal food: ¤29.95
-		shared food share: ¤2.25
+		personal food: 29.95
+		shared food share: 2.25
 		tax, tip, and discounts share: %22.959001782531193
-		tax, tip, and discounts share: ¤9.56
-		total raw share ¤41.76
+		tax, tip, and discounts share: 9.562424242424242
+		total raw share 41.76242424242424
 
 Splitting debts between payers:
 	Wesley owes the following people money:
-		¤47.60 to Austin
+		47.59878787878788 to Austin
 	Austin owes the following people money:
-		¤53.63 to Austin
+		53.62969696969697 to Austin
 	Carena owes the following people money:
-		¤38.91 to Austin
+		38.90909090909091 to Austin
 	Zoe owes the following people money:
-		¤41.76 to Austin
+		41.76242424242424 to Austin
 
-Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+Debts hard fractional pennies, so the fractional amount will be redistributed in a round-robbin fashion until no more fractional pennies remain:
 	Austin owes Austin an extra penny
 	Carena owes Austin an extra penny
 	Wesley owes Austin an extra penny
@@ -240,41 +242,41 @@ totalBillValue: ¤334.50
 
 First add up each person's share of the bill, splitting shared food items equally:
 	Austin:
-		personal food: ¤62.00
-		shared food share: ¤7.75
+		personal food: 62
+		shared food share: 7.75
 		tax, tip, and discounts share: %27.140077821011673
-		tax, tip, and discounts share: ¤21.03
-		total raw share ¤90.78
+		tax, tip, and discounts share: 21.033560311284045
+		total raw share 90.78356031128405
 	Wesley:
-		personal food: ¤47.00
-		shared food share: ¤7.75
+		personal food: 47
+		shared food share: 7.75
 		tax, tip, and discounts share: %21.30350194552529
-		tax, tip, and discounts share: ¤16.51
-		total raw share ¤71.26
+		tax, tip, and discounts share: 16.5102140077821
+		total raw share 71.26021400778211
 	Zoe:
-		personal food: ¤52.00
-		shared food share: ¤7.75
+		personal food: 52
+		shared food share: 7.75
 		tax, tip, and discounts share: %23.249027237354085
-		tax, tip, and discounts share: ¤18.02
-		total raw share ¤77.77
+		tax, tip, and discounts share: 18.01799610894942
+		total raw share 77.76799610894942
 	Carena:
-		personal food: ¤65.00
-		shared food share: ¤7.75
+		personal food: 65
+		shared food share: 7.75
 		tax, tip, and discounts share: %28.30739299610895
-		tax, tip, and discounts share: ¤21.94
-		total raw share ¤94.69
+		tax, tip, and discounts share: 21.938229571984433
+		total raw share 94.68822957198444
 
 Splitting debts between payers:
 	Austin owes the following people money:
-		¤90.78 to Austin
+		90.78356031128405 to Austin
 	Wesley owes the following people money:
-		¤71.26 to Austin
+		71.26021400778211 to Austin
 	Zoe owes the following people money:
-		¤77.77 to Austin
+		77.76799610894942 to Austin
 	Carena owes the following people money:
-		¤94.69 to Austin
+		94.68822957198444 to Austin
 
-Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+Debts hard fractional pennies, so the fractional amount will be redistributed in a round-robbin fashion until no more fractional pennies remain:
 	Carena owes Austin an extra penny
 	Zoe owes Austin an extra penny
 
@@ -292,41 +294,41 @@ totalBillValue: ¤388.14
 
 First add up each person's share of the bill, splitting shared food items equally:
 	Austin:
-		personal food: ¤39.00
-		shared food share: ¤39.50
+		personal food: 39
+		shared food share: 39.5
 		tax, tip, and discounts share: %26.610169491525426
-		tax, tip, and discounts share: ¤24.78
-		total raw share ¤103.28
+		tax, tip, and discounts share: 24.78471186440678
+		total raw share 103.28471186440679
 	Wesley:
-		personal food: ¤39.00
-		shared food share: ¤39.50
+		personal food: 39
+		shared food share: 39.5
 		tax, tip, and discounts share: %26.610169491525426
-		tax, tip, and discounts share: ¤24.78
-		total raw share ¤103.28
+		tax, tip, and discounts share: 24.78471186440678
+		total raw share 103.28471186440679
 	Zoe:
-		personal food: ¤20.00
-		shared food share: ¤39.50
+		personal food: 20
+		shared food share: 39.5
 		tax, tip, and discounts share: %20.16949152542373
-		tax, tip, and discounts share: ¤18.79
-		total raw share ¤78.29
+		tax, tip, and discounts share: 18.785864406779663
+		total raw share 78.28586440677967
 	Carena:
-		personal food: ¤39.00
-		shared food share: ¤39.50
+		personal food: 39
+		shared food share: 39.5
 		tax, tip, and discounts share: %26.610169491525426
-		tax, tip, and discounts share: ¤24.78
-		total raw share ¤103.28
+		tax, tip, and discounts share: 24.78471186440678
+		total raw share 103.28471186440679
 
 Splitting debts between payers:
 	Austin owes the following people money:
-		¤103.28 to Austin
+		103.28471186440679 to Austin
 	Wesley owes the following people money:
-		¤103.28 to Austin
+		103.28471186440679 to Austin
 	Zoe owes the following people money:
-		¤78.29 to Austin
+		78.28586440677967 to Austin
 	Carena owes the following people money:
-		¤103.28 to Austin
+		103.28471186440679 to Austin
 
-Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:
+Debts hard fractional pennies, so the fractional amount will be redistributed in a round-robbin fashion until no more fractional pennies remain:
 	Zoe owes Austin an extra penny
 	Austin owes Austin an extra penny
 
