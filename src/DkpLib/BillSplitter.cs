@@ -173,17 +173,17 @@ namespace Austin.DkpLib
 
                 double personSubtotal = SharedFood;
                 personSubtotal /= mParty.Count;
-                log.WriteLine($"\t\tpersonal food: {p.Amount / 100:c}");
-                log.WriteLine($"\t\tshared food share: {personSubtotal / 100:c}");
+                log.WriteLine($"\t\tpersonal food: {p.Amount / 100}");
+                log.WriteLine($"\t\tshared food share: {personSubtotal / 100}");
                 personSubtotal += p.Amount;
                 var ratio = personSubtotal / pool;
                 log.WriteLine($"\t\ttax, tip, and discounts share: %{ratio * 100}");
                 var taxTipShare = ratio * (Tax + Tip - Discount);
-                log.WriteLine($"\t\ttax, tip, and discounts share: {taxTipShare / 100:c}");
+                log.WriteLine($"\t\ttax, tip, and discounts share: {taxTipShare / 100}");
                 var total = personSubtotal + taxTipShare;
 
                 amountSpent.Add(new Debt(p.Debtor, total));
-                log.WriteLine($"\t\ttotal raw share {total / 100:c}");
+                log.WriteLine($"\t\ttotal raw share {total / 100}");
             }
             checkTotal(totalBillValue, amountSpent.Select(tup => tup.Amount).Sum());
             log.WriteLine();
@@ -203,7 +203,7 @@ namespace Austin.DkpLib
                 foreach (var birthdayPerson in birthdayPeople)
                 {
                     var amount = birthdayPerson.Amount / (amountSpent.Count - 1);
-                    log.WriteLine($"\t{birthdayPerson.Debtor}'s birthday happiness cost each other person {amount / 100:c}.");
+                    log.WriteLine($"\t{birthdayPerson.Debtor}'s birthday happiness cost each other person {amount / 100}.");
                     amountSpent = amountSpent
                         .Select(tup => new Debt(tup.Debtor, tup.Amount + (tup.Debtor == birthdayPerson.Debtor ? 0 : amount)))
                         .ToList();
@@ -219,13 +219,13 @@ namespace Austin.DkpLib
             if (freeloadersFound.Count != 0)
             {
                 var freeloaderSum = freeloadersFound.Select(p => p.Amount).Sum();
-                log.WriteLine($"{freeloadersFound.Count} freeloaders found, owing a total of {freeloaderSum / 100:c}:");
+                log.WriteLine($"{freeloadersFound.Count} freeloaders found, owing a total of {freeloaderSum / 100}:");
                 foreach (var freeloader in freeloadersFound)
                 {
-                    log.WriteLine($"\t{freeloader.Debtor.FullName}: {freeloader.Amount / 100:c}");
+                    log.WriteLine($"\t{freeloader.Debtor.FullName}: {freeloader.Amount / 100}");
                 }
                 var extraPerPerson = freeloaderSum / nonFreeLoaderCount;
-                log.WriteLine($"adding {extraPerPerson / 100:c} to each non-freeloader's debts");
+                log.WriteLine($"adding {extraPerPerson / 100} to each non-freeloader's debts");
                 amountSpent = amountSpent
                     .Where(p => !mFreeLoaders.Contains(p.Debtor))
                     .Select(p => new Debt(p.Debtor, p.Amount + freeloaderSum / nonFreeLoaderCount))
@@ -243,7 +243,7 @@ namespace Austin.DkpLib
             var debtsToPayers = SplitDebtsBetweenPayers(amountSpent, log);
             checkTotal(totalBillValue, debtsToPayers.SelectMany(p => p.debts).Sum(p => p.amount));
 
-            //Take all the fractional pennies and distrubte them to each debtor, round robin to each payer.
+            //Take all the fractional pennies and distribute them to each debtor, round robin to each payer.
             var pennySplits = SplitPennies(debtsToPayers, log);
             checkTotal(totalBillValue, pennySplits.Sum(p => p.pennies.ToPennies()));
 
@@ -279,7 +279,7 @@ namespace Austin.DkpLib
                 {
                     var amount = p.Amount / mPayer.Length;
                     creditors.Add((payer, amount));
-                    logger.WriteLine($"\t\t{amount / 100:c} to {payer.FullName}");
+                    logger.WriteLine($"\t\t{amount / 100} to {payer.FullName}");
                 }
                 ret.Add((p.Debtor, creditors));
             }
@@ -293,7 +293,7 @@ namespace Austin.DkpLib
         /// <returns>Item1 owes Item2 Item3 pennies</returns>
         /// <remarks>
         /// Over the course of splitting a bill people can end up owing a fractional number of pennies.
-        /// Thie method rounds peoples debts to the nearest penny, while preserving the invarient that
+        /// This method rounds peoples debts to the nearest penny, while preserving the invariant that
         /// the total amount owed in this group of debts does not change.
         /// </remarks>
         List<(SplitPerson debtor, SplitPerson creditor, Money pennies)> SplitPennies(MultiCreditorDebtList amountSpent, TextWriter logger)
@@ -320,7 +320,7 @@ namespace Austin.DkpLib
             if (totalPennies != 0)
             {
                 logger.WriteLine();
-                logger.WriteLine("Rounding of fractional debts did not add up to the total bill value, distrubting pennies between debtors to make everythign add up:");
+                logger.WriteLine("Debts hard fractional pennies, so the fractional amount will be redistributed in a round-robbin fashion until no more fractional pennies remain:");
             }
 
             int payerNdx = 0;
