@@ -6,8 +6,27 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 BIN=$SCRIPT_DIR/cloud-sql-proxy
 
 if [[ ! -f $BIN ]] ; then
-  echo "Downloading Cloud SQL Proxy..."
-  curl -o $BIN https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.21.1/cloud-sql-proxy.darwin.arm64
+  OS=$(uname | tr '[:upper:]' '[:lower:]')
+  ARCH=$(uname -m)
+  case $ARCH in
+    x86_64)
+        ARCH=amd64
+        ;;
+    aarch64)
+        ARCH=arm64
+        ;;
+    amd64)
+        ;;
+    arm64)
+        ;;
+    *)
+        echo "Unsupported architecture: $ARCH"
+        exit 1
+        ;;
+  esac
+  echo "Downloading Cloud SQL Proxy for $OS $ARCH..."
+  curl -f -o $BIN.tmp "https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.21.1/cloud-sql-proxy.${OS}.${ARCH}"
+  mv $BIN.tmp $BIN
   chmod +x $BIN
 fi
 
