@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/" />
+  <Folder Name="/src/">
+    <Project Path="src/DkpLib/DkpLib.csproj" />
+    <Project Path="src/DkpWeb.Blazor/DkpWeb.Blazor.csproj" />
+    <Project Path="src/DkpWeb/DkpWeb.csproj" />
+    <Project Path="src/PulumiInfra/PulumiInfra.csproj" />
+  </Folder>
+</Solution>
