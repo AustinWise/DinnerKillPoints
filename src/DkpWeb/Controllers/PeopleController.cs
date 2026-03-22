@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace DkpWeb.Controllers
 {
-    [Authorize(Roles = "DKP")]
+    [Authorize]
     public class PeopleController : Controller
     {
         private ApplicationDbContext mData;
@@ -47,7 +47,7 @@ namespace DkpWeb.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         public ActionResult DeletePaymentIdentity(int id)
         {
             var ident = mData.PaymentIdentity.Single(i => i.Id == id);
@@ -56,7 +56,7 @@ namespace DkpWeb.Controllers
             return RedirectToAction("Detail", new { id = ident.PersonId });
         }
 
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         public ActionResult AddPaymentIdentity(int id)
         {
             ViewBag.Methods = mData.PaymentMethod;
@@ -64,7 +64,7 @@ namespace DkpWeb.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AddPaymentIdentity(int id, AddPaymentMethodModel model)
         {

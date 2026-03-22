@@ -39,9 +39,10 @@ namespace DkpWeb
                 options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddDefaultUI()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            // TODO: consider adding a config switch for switching between ASP.NET Identity and IAP
+            // services.AddIdentity<ApplicationUser, IdentityRole>()
+            //     .AddDefaultUI()
+            //     .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -75,20 +76,27 @@ namespace DkpWeb
                 var dpSection = Configuration.GetSection("DataProtection");
                 services.AddDataProtection().PersistKeysToGoogleCloudStorage(dpSection["Bucket"], dpSection["ObjectName"]);
             }
+
+            services.AddIap();
+            services.AddAuthentication().AddIap();
         }
 
         public void Configure(WebApplication app, IWebHostEnvironment env)
         {
             app.UseHealthChecks("/healthz");
 
+#if DEBUG
             if (env.IsDevelopment())
             {
+                app.UseIapSimulator();
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
                 app.UseWebAssemblyDebugging();
             }
             else
+#endif
             {
+                app.UseIap();
                 app.UseExceptionHandler("/Home/Error");
 
                 // Use forwarded headers from Cloud Run

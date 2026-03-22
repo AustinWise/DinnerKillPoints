@@ -3,24 +3,27 @@ kind: Service
 metadata:
   annotations:
     run.googleapis.com/client-name: gcloud
-    run.googleapis.com/client-version: 455.0.0
+    run.googleapis.com/client-version: 561.0.0
+    run.googleapis.com/iap-enabled: 'true'
     run.googleapis.com/ingress: all
     run.googleapis.com/ingress-status: all
-    run.googleapis.com/operation-id: 18568986-7216-4bc4-a9ae-a51794ebf3f7
+    run.googleapis.com/invoker-iam-disabled: 'true'
+    run.googleapis.com/operation-id: 412f6ac7-c520-41b2-8072-85e11ee1b280
+    run.googleapis.com/urls: '["https://dkpweb-216611213396.us-central1.run.app","https://dkpweb-cvempurorq-uc.a.run.app"]'
     serving.knative.dev/creator: austinwise@gmail.com
     serving.knative.dev/lastModifier: 216611213396@cloudbuild.gserviceaccount.com
   creationTimestamp: '2023-07-09T19:53:12.930459Z'
-  generation: 75
+  generation: 206
   labels:
     cloud.googleapis.com/location: us-central1
-    commit-sha: c44d1900a36f2fca17b3bd4919e569a2f5e5156d
-    gcb-build-id: 22ce94e9-dd04-4cd2-b492-b75d64ff1bca
-    gcb-trigger-id: 622a5ef0-2695-4cda-90f0-901d2dbbab0d
+    commit-sha: 384a831224a3cc2ed11dbecaa79af309164c8279
+    gcb-build-id: 27947083-1eaf-413e-a359-b569e5500a67
+    gcb-trigger-id: 382f9163-3e5c-406d-8694-38650839fccd
     gcb-trigger-region: global
     managed-by: gcp-cloud-build-deploy-cloud-run
   name: dkpweb
   namespace: '216611213396'
-  resourceVersion: AAYLTH9t2NM
+  resourceVersion: AAZNo49rC5A
   selfLink: /apis/serving.knative.dev/v1/namespaces/216611213396/services/dkpweb
   uid: 83053708-04d8-4a54-981f-77c2ed887ef2
 spec:
@@ -29,14 +32,14 @@ spec:
       annotations:
         autoscaling.knative.dev/maxScale: '3'
         run.googleapis.com/client-name: gcloud
-        run.googleapis.com/client-version: 455.0.0
+        run.googleapis.com/client-version: 561.0.0
         run.googleapis.com/execution-environment: gen2
         run.googleapis.com/startup-cpu-boost: 'true'
       labels:
-        client.knative.dev/nonce: vdepecqshj
-        commit-sha: c44d1900a36f2fca17b3bd4919e569a2f5e5156d
-        gcb-build-id: 22ce94e9-dd04-4cd2-b492-b75d64ff1bca
-        gcb-trigger-id: 622a5ef0-2695-4cda-90f0-901d2dbbab0d
+        client.knative.dev/nonce: oayqxkdqcy
+        commit-sha: 384a831224a3cc2ed11dbecaa79af309164c8279
+        gcb-build-id: 27947083-1eaf-413e-a359-b569e5500a67
+        gcb-trigger-id: 382f9163-3e5c-406d-8694-38650839fccd
         gcb-trigger-region: global
         managed-by: gcp-cloud-build-deploy-cloud-run
         run.googleapis.com/startupProbeType: Custom
@@ -53,7 +56,7 @@ spec:
         - name: ConnectionStrings__Postgres
           value: host=127.0.0.1; database=dkp; username=dkp-service-account@dinnerkillpoints.iam;
             password=test;
-        image: us-central1-docker.pkg.dev/dinnerkillpoints/cloud-run-source-deploy/dinnerkillpoints/dkpweb:c44d1900a36f2fca17b3bd4919e569a2f5e5156d
+        image: us-central1-docker.pkg.dev/dinnerkillpoints/cloud-run-source-deploy/dinnerkillpoints/dkpweb:384a831224a3cc2ed11dbecaa79af309164c8279
         name: dkp
         ports:
         - containerPort: 8080
@@ -97,20 +100,20 @@ status:
   address:
     url: https://dkpweb-cvempurorq-uc.a.run.app
   conditions:
-  - lastTransitionTime: '2023-11-29T15:50:43.508756Z'
+  - lastTransitionTime: '2026-03-22T21:25:41.429136Z'
     status: 'True'
     type: Ready
-  - lastTransitionTime: '2023-11-29T15:50:26.515787Z'
+  - lastTransitionTime: '2026-03-22T21:25:29.386987Z'
     status: 'True'
     type: ConfigurationsReady
-  - lastTransitionTime: '2023-11-29T15:50:43.589331Z'
+  - lastTransitionTime: '2026-03-22T21:25:41.397834Z'
     status: 'True'
     type: RoutesReady
-  latestCreatedRevisionName: dkpweb-00072-7rn
-  latestReadyRevisionName: dkpweb-00072-7rn
-  observedGeneration: 75
+  latestCreatedRevisionName: dkpweb-00202-mws
+  latestReadyRevisionName: dkpweb-00202-mws
+  observedGeneration: 206
   traffic:
   - latestRevision: true
     percent: 100
-    revisionName: dkpweb-00072-7rn
+    revisionName: dkpweb-00202-mws
   url: https://dkpweb-cvempurorq-uc.a.run.app

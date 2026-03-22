@@ -30,7 +30,15 @@ if [[ ! -f $BIN ]] ; then
   chmod +x $BIN
 fi
 
+IAM_CREDENTIALS=~/.dkp/dkp-service-account.json
+mkdir -p ~/.dkp
+if [[ ! -f "${IAM_CREDENTIALS}" ]] ; then
+    gcloud iam service-accounts keys create "${IAM_CREDENTIALS}" \
+        --iam-account=dkp-service-account@dinnerkillpoints.iam.gserviceaccount.com
+fi
+
 $BIN --address 127.0.0.1 --port 5432 --http-address 127.0.0.1 --http-port 9191 --health-check \
+  --auto-iam-authn -c "${IAM_CREDENTIALS}" \
   "austinsql:us-central1:austinsql" &
 BGPID=$!
 
@@ -46,4 +54,4 @@ trap cleanup EXIT
 # wait for the proxy to start up
 $BIN wait --http-address 127.0.0.1 --http-port 9191
 
-psql "host=127.0.0.1 sslmode=disable dbname=dkp user=postgres"
+psql "host=127.0.0.1 sslmode=disable dbname=dkp user=dkp-service-account@dinnerkillpoints.iam password=test"

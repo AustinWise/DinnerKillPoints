@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace DkpWeb.Controllers
 {
-    [Authorize(Roles = "DKP")]
+    [Authorize]
     public class MyDebtController : Controller
     {
         readonly ApplicationDbContext mData;

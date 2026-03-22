@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DkpWeb.Controllers
 {
-    [Authorize(Roles = "DKP")]
+    [Authorize]
     public class BillSplitController : Controller
     {
         readonly ApplicationDbContext mData;
@@ -53,7 +53,7 @@ namespace DkpWeb.Controllers
         // POST: /BillSplit/Delete/5
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {

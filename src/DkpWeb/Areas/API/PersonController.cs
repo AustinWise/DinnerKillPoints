@@ -7,7 +7,7 @@ namespace DkpWeb.Areas.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "DKP")]
+    [Authorize]
     public class PersonController : ControllerBase
     {
         private readonly IBillSplitterServices mData;

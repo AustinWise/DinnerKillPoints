@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DkpWeb.Controllers
 {
-    [Authorize(Roles = "DKP")]
+    [Authorize]
     public class TransactionController : Controller
     {
         //
@@ -82,7 +82,7 @@ namespace DkpWeb.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Guid id)
         {

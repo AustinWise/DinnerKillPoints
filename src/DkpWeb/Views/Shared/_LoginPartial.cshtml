@@ -1,3 +1,10 @@
+<ul class="nav navbar-nav navbar-right">
+    <li class="nav-item">
+        Hello @User.FindFirst(System.Security.Claims.ClaimTypes.Email).Value
+    </li>
+</ul>
+
+@*
 @using Microsoft.AspNetCore.Identity
 @using DkpWeb.Models
 
@@ -26,3 +33,4 @@
         </li>
     }
 </ul>
+*@
