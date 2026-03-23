@@ -36,7 +36,10 @@ namespace DkpWeb
 
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("Postgres")));
+            {
+                string connectionString = Configuration.GetConnectionString("Postgres");
+                options.UseNpgsql(connectionString);
+            });
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             // TODO: consider adding a config switch for switching between ASP.NET Identity and IAP

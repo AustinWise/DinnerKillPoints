@@ -53,8 +53,8 @@ namespace DkpWeb
                 var justinShih = GetPerson(30);
 
 
-                WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
-                WriteData(db, false, db.Person.ToArray());
+                // WriteData(db, true, db.Person.Where(p => !p.IsDeleted).ToArray());
+                // WriteData(db, false, db.Person.ToArray());
 
                 return;
             }
