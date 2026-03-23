@@ -53,7 +53,7 @@ namespace DkpWeb.Controllers
         // POST: /BillSplit/Delete/5
 
         [HttpPost]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {

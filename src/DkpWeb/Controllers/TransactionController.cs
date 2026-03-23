@@ -82,7 +82,7 @@ namespace DkpWeb.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Guid id)
         {

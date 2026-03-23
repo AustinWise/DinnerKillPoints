@@ -1,4 +1,7 @@
-﻿using Austin.DkpLib;
+﻿#nullable enable
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Austin.DkpLib;
 using DkpWeb.Config;
 using DkpWeb.Data;
 using DkpWeb.Models;
@@ -9,6 +12,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +41,7 @@ namespace DkpWeb
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                string connectionString = Configuration.GetConnectionString("Postgres");
+                string? connectionString = Configuration.GetConnectionString("Postgres");
                 options.UseNpgsql(connectionString);
             });
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -82,6 +86,7 @@ namespace DkpWeb
 
             services.AddIap();
             services.AddAuthentication().AddIap();
+            services.AddSingleton<AddSomeExtraRolesMiddleware>();
         }
 
         public void Configure(WebApplication app, IWebHostEnvironment env)
@@ -119,6 +124,7 @@ namespace DkpWeb
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseMiddleware<AddSomeExtraRolesMiddleware>();
             app.UseAuthorization();
 
             app.MapDefaultControllerRoute()
@@ -126,6 +132,31 @@ namespace DkpWeb
 
             app.MapRazorPages()
                 .WithStaticAssets();
+        }
+    }
+
+    // This is for backwards compatibility with the ASP.NET Core Identity version of authentication.
+    class AddSomeExtraRolesMiddleware : IMiddleware
+    {
+        public Task InvokeAsync(HttpContext context, RequestDelegate next)
+        {
+            var user = context.User;
+
+            if (user is not null)
+            {
+                var identity = user.Identity as ClaimsIdentity;
+                if (identity != null)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, "DKP", ClaimValueTypes.String, "DKP", "DKP", identity));
+                    // TODO: a better way to assign roles to people
+                    if (user.FindFirst(ClaimTypes.Email)?.Value == "austinwise@gmail.com")
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Role, "Admin", ClaimValueTypes.String, "DKP", "DKP", identity));
+                    }
+                }
+            }
+
+            return next(context);
         }
     }
 }
