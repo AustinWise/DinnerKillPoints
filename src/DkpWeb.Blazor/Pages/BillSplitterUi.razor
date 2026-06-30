@@ -92,6 +92,7 @@ else
         }
     </ul>
     <form @onsubmit="SaveBillSplit">
+        <AntiforgeryToken />
         <button type="submit" class="@(mBillOk ? string.Empty : "d-none")">Save</button>
     </form>
     <h3>Split Log</h3>
