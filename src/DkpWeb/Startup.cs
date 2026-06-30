@@ -56,6 +56,8 @@ namespace DkpWeb
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddScoped<IBillSplitterServices, InProcessBillSplitterServices>();
 
+            services.AddAntiforgery();
+
             services.AddBootstrapPagerGenerator(options =>
             {
                 // Use default pager options.
@@ -117,6 +119,7 @@ namespace DkpWeb
 
             }
             app.UseHttpsRedirection();
+            app.UseAntiforgery();
 
             app.UseBlazorFrameworkFiles();
             app.MapStaticAssets();
