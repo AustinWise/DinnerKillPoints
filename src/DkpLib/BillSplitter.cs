@@ -269,7 +269,7 @@ namespace Austin.DkpLib
 
         MultiCreditorDebtList SplitDebtsBetweenPayers(List<Debt> amountSpent, TextWriter logger)
         {
-            Console.WriteLine("Splitting debts between payers:");
+            logger.WriteLine("Splitting debts between payers:");
             var ret = new MultiCreditorDebtList();
             foreach (var p in amountSpent)
             {

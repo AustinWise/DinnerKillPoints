@@ -26,7 +26,12 @@ public sealed class HttpBillSplitterServices : IBillSplitterServices
         var request = new HttpRequestMessage(HttpMethod.Post, "api/BillSplit");
         if (antiforgery is not null)
         {
+            Console.WriteLine($"AntiforgeryStateProvider is not null. FormFieldName: {antiforgery.FormFieldName} Token: {antiforgery.Value}");
             request.Headers.Add("RequestVerificationToken", antiforgery.Value);
+        }
+        else
+        {
+            Console.WriteLine("AntiforgeryStateProvider was null!?");
         }
         JsonContent content = JsonContent.Create(result);
         request.Content = content;
