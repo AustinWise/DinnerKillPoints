@@ -31,6 +31,8 @@ RUN --mount=type=cache,target=/root/.nuget/packages,sharing=locked \
         --no-self-contained
 
 FROM base AS final
+ARG DKP_COMMIT_SHA=unknown
+ENV DKP_COMMIT_SHA=$DKP_COMMIT_SHA
 WORKDIR /app
 COPY --from=build /app/publish .
 USER $APP_UID

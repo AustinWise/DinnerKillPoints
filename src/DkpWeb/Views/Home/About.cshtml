@@ -1,5 +1,7 @@
 ﻿@{
+    #nullable enable
     ViewData["Title"] = "About";
+    string dkpCommitSha = Environment.GetEnvironmentVariable("DKP_COMMIT_SHA") ?? "UNKNOWN";
 }
 <h2>@ViewData["Title"]</h2>
 <h3>Version Info</h3>
@@ -13,4 +15,5 @@
     <li>Process Architecture: @System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture</li>
     <li>CorLib location: @typeof(object).Assembly.Location</li>
     <li>Entry Location: @System.Reflection.Assembly.GetEntryAssembly().Location</li>
+    <li>Commit SHA: @dkpCommitSha</li>
 </ul>
