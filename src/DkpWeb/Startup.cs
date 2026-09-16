@@ -101,7 +101,6 @@ namespace DkpWeb
                 app.UseIapSimulator();
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
-                app.UseWebAssemblyDebugging();
             }
             else
 #endif
