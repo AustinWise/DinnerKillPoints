@@ -59,14 +59,6 @@ namespace DkpWeb
                 return;
             }
 
-            if (cfg["sendmail"] != null)
-            {
-                using var scope = app.Services.CreateScope();
-                var mail = scope.ServiceProvider.GetRequiredService<MailMerge>();
-                await mail.Send(1);
-                return;
-            }
-
             string port = Environment.GetEnvironmentVariable("PORT");
 
             if (!string.IsNullOrEmpty(port))

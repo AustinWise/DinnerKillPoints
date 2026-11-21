@@ -52,8 +52,6 @@ namespace DkpWeb
             //     .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddScoped<IBillSplitterServices, InProcessBillSplitterServices>();
 
             services.AddAntiforgery();
@@ -63,8 +61,6 @@ namespace DkpWeb
                 // Use default pager options.
                 options.ConfigureDefault();
             });
-
-            services.AddTransient<MailMerge>();
 
             if (env.IsDevelopment())
             {
